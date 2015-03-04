@@ -44,11 +44,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4190141" vertical-offset="4404" max-vertical-offset="4972">
-              <caret line="211" column="27" selection-start-line="211" selection-start-column="27" selection-end-line="211" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="4068" max-vertical-offset="4972">
+              <caret line="191" column="24" selection-start-line="191" selection-start-column="24" selection-end-line="191" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="measure_check.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/measure_check.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="61.032257" vertical-offset="2046" max-vertical-offset="8360">
+              <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -57,8 +67,8 @@
       <file leaf-file-name="measure.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/measure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4370" max-vertical-offset="6402">
-              <caret line="205" column="38" selection-start-line="205" selection-start-column="38" selection-end-line="205" selection-end-column="38" />
+            <state vertical-scroll-proportion="-8.117647" vertical-offset="4960" max-vertical-offset="6248">
+              <caret line="245" column="28" selection-start-line="245" selection-start-column="28" selection-end-line="245" selection-end-column="28" />
               <folding>
                 <marker date="1425395017329" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
                 <marker date="1425395017329" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
@@ -114,8 +124,8 @@
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2794" max-vertical-offset="3410">
-              <caret line="127" column="37" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1914" max-vertical-offset="3388">
+              <caret line="97" column="34" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -166,11 +176,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="forms.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="21538" max-vertical-offset="30800">
-              <caret line="979" column="31" selection-start-line="979" selection-start-column="31" selection-end-line="979" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.36920223" vertical-offset="23473" max-vertical-offset="30470">
+              <caret line="1091" column="58" selection-start-line="1091" selection-start-column="58" selection-end-line="1091" selection-end-column="58" />
               <folding>
                 <marker date="1425362662104" expanded="true" signature="1230:1321" placeholder="SELECT Quest..QCQuestion..." />
                 <marker date="1425362662104" expanded="true" signature="3045:3109" placeholder="select typen..sklcc_employeeno_type..." />
@@ -204,6 +214,7 @@
                 <marker date="1425362662104" expanded="true" signature="22978:23152" placeholder="SELECT DISTI..sklcc_employee..." />
                 <marker date="1425362662104" expanded="true" signature="22978:22985" placeholder="SELECT a.emp..sklcc_employee..." />
                 <marker date="1425362662104" expanded="true" signature="22978:25391" placeholder="SELECT a.emp..." />
+                <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
                 <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
                 <marker date="1425362662104" expanded="true" signature="23735:23838" placeholder="select sum( ..sklcc_record..." />
                 <marker date="1425362662104" expanded="true" signature="24358:24505" placeholder="select emplo..sklcc_recheck_bald..." />
@@ -1234,16 +1245,16 @@
     <frame x="1674" y="-36" width="1932" height="1092" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32719395" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270242" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3533123" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32719395" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270242" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976446" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17628993" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21573876" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12837838" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3602866" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35962147" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32922733" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34777898" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1444,6 +1455,7 @@
             <marker date="1425362662104" expanded="true" signature="22978:23152" placeholder="SELECT DISTI..sklcc_employee..." />
             <marker date="1425362662104" expanded="true" signature="22978:22985" placeholder="SELECT a.emp..sklcc_employee..." />
             <marker date="1425362662104" expanded="true" signature="22978:25391" placeholder="SELECT a.emp..." />
+            <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
             <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
             <marker date="1425362662104" expanded="true" signature="23735:23838" placeholder="select sum( ..sklcc_record..." />
             <marker date="1425362662104" expanded="true" signature="24358:24505" placeholder="select emplo..sklcc_recheck_bald..." />
@@ -2600,86 +2612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2794" max-vertical-offset="3410">
-          <caret line="127" column="37" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="21538" max-vertical-offset="30800">
-          <caret line="979" column="31" selection-start-line="979" selection-start-column="31" selection-end-line="979" selection-end-column="31" />
-          <folding>
-            <marker date="1425362662104" expanded="true" signature="1230:1321" placeholder="SELECT Quest..QCQuestion..." />
-            <marker date="1425362662104" expanded="true" signature="3045:3109" placeholder="select typen..sklcc_employeeno_type..." />
-            <marker date="1425362662104" expanded="true" signature="3593:3653" placeholder="select Produ..ProduceMaster..." />
-            <marker date="1425362662104" expanded="true" signature="3781:3863" placeholder="select SlowT..ProduceStyle..." />
-            <marker date="1425362662104" expanded="true" signature="4063:4098" placeholder="SELECT bald_..sklcc_config..." />
-            <marker date="1425362662104" expanded="true" signature="4245:4283" placeholder="SELECT bald_..sklcc_config..." />
-            <marker date="1425362662104" expanded="true" signature="5056:5329" placeholder="select seria..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="6120:6406" placeholder="select seria..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="6994:7084" placeholder="select sampl..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="7611:7737" placeholder="select depar..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="8253:8327" placeholder="select disti..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="8464:8557" placeholder="select depar..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="8983:9096" placeholder="select disti..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="9538:9643" placeholder="select quest..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="12009:12085" placeholder="SELECT DISTI..sklcc_employee_authority..." />
-            <marker date="1425362662104" expanded="true" signature="12251:12310" placeholder="select emplo..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="12503:12664" placeholder="SELECT sum( ..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="13081:13124" placeholder="SELECT TOP 1..." />
-            <marker date="1425362662104" expanded="true" signature="13591:13641" placeholder="select disti..sklcc_form11_config..." />
-            <marker date="1425362662104" expanded="true" signature="14130:14387" placeholder="select left(..." />
-            <marker date="1425362662104" expanded="true" signature="15610:15777" placeholder="select type_..sklcc_form11_config..." />
-            <marker date="1425362662104" expanded="true" signature="16491:16545" placeholder="delete from ..." />
-            <marker date="1425362662104" expanded="true" signature="16880:17180" placeholder="select Numbe..." />
-            <marker date="1425362662104" expanded="true" signature="17782:18062" placeholder="select type_..." />
-            <marker date="1425362662104" expanded="true" signature="18952:19006" placeholder="delete from ..." />
-            <marker date="1425362662104" expanded="true" signature="19141:19612" placeholder="insert into ..." />
-            <marker date="1425362662104" expanded="true" signature="19869:19961" placeholder="select seria..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="20264:20342" placeholder="select sum( ..sklcc_info..." />
-            <marker date="1425362662104" expanded="true" signature="22978:23343" placeholder="SELECT emplo..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="22978:23152" placeholder="SELECT DISTI..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="22978:22985" placeholder="SELECT a.emp..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="22978:25391" placeholder="SELECT a.emp..." />
-            <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="23735:23838" placeholder="select sum( ..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="24358:24505" placeholder="select emplo..sklcc_recheck_bald..." />
-            <marker date="1425362662104" expanded="true" signature="25552:25718" placeholder="select total..sklcc_recheck_bald..." />
-            <marker date="1425362662104" expanded="true" signature="26981:27032" placeholder="SELECT TOP 1..." />
-            <marker date="1425362662104" expanded="true" signature="27424:27722" placeholder="select inspe..sklcc_info..." />
-            <marker date="1425362662104" expanded="true" signature="29314:29694" placeholder="select inspe..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="31761:32191" placeholder="select sum(s..contentid..." />
-            <marker date="1425362662104" expanded="true" signature="31822:32031" placeholder="select disti..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="32684:32766" placeholder="select real_..sklcc_effciency..." />
-            <marker date="1425362662104" expanded="true" signature="33454:34336" placeholder="select reche..recheckor_no..." />
-            <marker date="1425362662104" expanded="true" signature="33536:33802" placeholder="select reche..contentid..." />
-            <marker date="1425362662104" expanded="true" signature="33606:33802" placeholder="select disti..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="34538:34810" placeholder="select a.rec..timex..." />
-            <marker date="1425362662104" expanded="true" signature="34599:34715" placeholder="select disti..sklcc_recheck_bald..." />
-            <marker date="1425362662104" expanded="true" signature="35585:35687" placeholder="update sklcc..." />
-            <marker date="1425362662104" expanded="true" signature="37540:37587" placeholder="SELECT emplo..sklcc_employee..." />
-            <marker date="1425362662104" expanded="true" signature="37978:38081" placeholder="select sum( ..sklcc_record..." />
-            <marker date="1425362662104" expanded="true" signature="39609:39959" placeholder="select disti..sklcc_return_check..." />
-            <marker date="1425362662104" expanded="true" signature="40517:40604" placeholder="select quest..sklcc_return_check..." />
-            <marker date="1425362662104" expanded="true" signature="40952:41272" placeholder="select disti..sklcc_return_check..." />
-            <marker date="1425362662104" expanded="true" signature="41790:41861" placeholder="select sum( ..sklcc_recheck_content..." />
-            <marker date="1425362662104" expanded="true" signature="42017:42104" placeholder="select quest..sklcc_return_check..." />
-            <marker date="1425362662104" expanded="true" signature="42521:42598" placeholder="select effci..sklcc_effciency..." />
-            <marker date="1425362662104" expanded="true" signature="43466:43659" placeholder="select disti..sklcc_employee_authority..." />
-            <marker date="1425362662104" expanded="true" signature="43581:43657" placeholder="select disti..sklcc_employee_authority..." />
-            <marker date="1425362662104" expanded="true" signature="44716:44868" placeholder="select disti..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="45514:45692" placeholder="select disti..sklcc_recheck_info..." />
-            <marker date="1425362662104" expanded="true" signature="46069:46467" placeholder="select sum( ..." />
-            <marker date="1425362662104" expanded="true" signature="47827:48071" placeholder="select left(..." />
-            <marker date="1425362662104" expanded="true" signature="48631:48764" placeholder="select disti..sklcc_recheck_info..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/pad.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="18218" max-vertical-offset="19910">
@@ -2747,29 +2679,6 @@
             <marker date="1425195868100" expanded="true" signature="4042:4118" placeholder="select disti..sklcc_employee_authority..." />
             <marker date="1425195868100" expanded="true" signature="4555:4629" placeholder="select disti..sklcc_info..." />
             <marker date="1425195868100" expanded="true" signature="4905:4959" placeholder="select retur..sklcc_table..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sklcc/measure.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4370" max-vertical-offset="6402">
-          <caret line="205" column="38" selection-start-line="205" selection-start-column="38" selection-end-line="205" selection-end-column="38" />
-          <folding>
-            <marker date="1425395017329" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
-            <marker date="1425395017329" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
-            <marker date="1425395017329" expanded="true" signature="2537:2722" placeholder="SELECT * FRO..sklcc_measure_record..." />
-            <marker date="1425395017329" expanded="true" signature="2537:11347" placeholder="SELECT * FRO..sklcc_measure_record..." />
-            <marker date="1425395017329" expanded="true" signature="2537:2871" placeholder="SELECT inspe..sklcc_measure_record..." />
-            <marker date="1425395017329" expanded="true" signature="4138:4251" placeholder="select disti..." />
-            <marker date="1425395017329" expanded="true" signature="4584:4707" placeholder="select disti..." />
-            <marker date="1425395017329" expanded="true" signature="6323:6506" placeholder="insert into ..." />
-            <marker date="1425395017329" expanded="true" signature="6706:6877" placeholder="insert into ..." />
-            <marker date="1425395017329" expanded="true" signature="7168:7407" placeholder="insert into ..." />
-            <marker date="1425395017329" expanded="true" signature="8237:8289" placeholder="delete from ..." />
-            <marker date="1425395017329" expanded="true" signature="8330:8384" placeholder="delete from ..." />
-            <marker date="1425395017329" expanded="true" signature="10556:10654" placeholder="select state..sklcc_measure_record..." />
-            <marker date="1425395017329" expanded="true" signature="11185:11286" placeholder="update sklcc..." />
           </folding>
         </state>
       </provider>
@@ -3214,9 +3123,121 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4190141" vertical-offset="4404" max-vertical-offset="4972">
-          <caret line="211" column="27" selection-start-line="211" selection-start-column="27" selection-end-line="211" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4068" max-vertical-offset="4972">
+          <caret line="191" column="24" selection-start-line="191" selection-start-column="24" selection-end-line="191" selection-end-column="24" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/measure_check.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="61.032257" vertical-offset="2046" max-vertical-offset="8360">
+          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sklcc/measure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.117647" vertical-offset="4960" max-vertical-offset="6248">
+          <caret line="245" column="28" selection-start-line="245" selection-start-column="28" selection-end-line="245" selection-end-column="28" />
+          <folding>
+            <marker date="1425395017329" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425395017329" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425395017329" expanded="true" signature="2537:2722" placeholder="SELECT * FRO..sklcc_measure_record..." />
+            <marker date="1425395017329" expanded="true" signature="2537:11347" placeholder="SELECT * FRO..sklcc_measure_record..." />
+            <marker date="1425395017329" expanded="true" signature="2537:2871" placeholder="SELECT inspe..sklcc_measure_record..." />
+            <marker date="1425395017329" expanded="true" signature="4138:4251" placeholder="select disti..." />
+            <marker date="1425395017329" expanded="true" signature="4584:4707" placeholder="select disti..." />
+            <marker date="1425395017329" expanded="true" signature="6323:6506" placeholder="insert into ..." />
+            <marker date="1425395017329" expanded="true" signature="6706:6877" placeholder="insert into ..." />
+            <marker date="1425395017329" expanded="true" signature="7168:7407" placeholder="insert into ..." />
+            <marker date="1425395017329" expanded="true" signature="8237:8289" placeholder="delete from ..." />
+            <marker date="1425395017329" expanded="true" signature="8330:8384" placeholder="delete from ..." />
+            <marker date="1425395017329" expanded="true" signature="10556:10654" placeholder="select state..sklcc_measure_record..." />
+            <marker date="1425395017329" expanded="true" signature="11185:11286" placeholder="update sklcc..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1914" max-vertical-offset="3388">
+          <caret line="97" column="34" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36920223" vertical-offset="23473" max-vertical-offset="30470">
+          <caret line="1091" column="58" selection-start-line="1091" selection-start-column="58" selection-end-line="1091" selection-end-column="58" />
+          <folding>
+            <marker date="1425362662104" expanded="true" signature="1230:1321" placeholder="SELECT Quest..QCQuestion..." />
+            <marker date="1425362662104" expanded="true" signature="3045:3109" placeholder="select typen..sklcc_employeeno_type..." />
+            <marker date="1425362662104" expanded="true" signature="3593:3653" placeholder="select Produ..ProduceMaster..." />
+            <marker date="1425362662104" expanded="true" signature="3781:3863" placeholder="select SlowT..ProduceStyle..." />
+            <marker date="1425362662104" expanded="true" signature="4063:4098" placeholder="SELECT bald_..sklcc_config..." />
+            <marker date="1425362662104" expanded="true" signature="4245:4283" placeholder="SELECT bald_..sklcc_config..." />
+            <marker date="1425362662104" expanded="true" signature="5056:5329" placeholder="select seria..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="6120:6406" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="6994:7084" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="7611:7737" placeholder="select depar..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="8253:8327" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="8464:8557" placeholder="select depar..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="8983:9096" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="9538:9643" placeholder="select quest..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="12009:12085" placeholder="SELECT DISTI..sklcc_employee_authority..." />
+            <marker date="1425362662104" expanded="true" signature="12251:12310" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="12503:12664" placeholder="SELECT sum( ..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="13081:13124" placeholder="SELECT TOP 1..." />
+            <marker date="1425362662104" expanded="true" signature="13591:13641" placeholder="select disti..sklcc_form11_config..." />
+            <marker date="1425362662104" expanded="true" signature="14130:14387" placeholder="select left(..." />
+            <marker date="1425362662104" expanded="true" signature="15610:15777" placeholder="select type_..sklcc_form11_config..." />
+            <marker date="1425362662104" expanded="true" signature="16491:16545" placeholder="delete from ..." />
+            <marker date="1425362662104" expanded="true" signature="16880:17180" placeholder="select Numbe..." />
+            <marker date="1425362662104" expanded="true" signature="17782:18062" placeholder="select type_..." />
+            <marker date="1425362662104" expanded="true" signature="18952:19006" placeholder="delete from ..." />
+            <marker date="1425362662104" expanded="true" signature="19141:19612" placeholder="insert into ..." />
+            <marker date="1425362662104" expanded="true" signature="19869:19961" placeholder="select seria..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="20264:20342" placeholder="select sum( ..sklcc_info..." />
+            <marker date="1425362662104" expanded="true" signature="22978:23343" placeholder="SELECT emplo..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="22978:23152" placeholder="SELECT DISTI..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="22978:22985" placeholder="SELECT a.emp..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="22978:25391" placeholder="SELECT a.emp..." />
+            <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="23168:23343" placeholder="SELECT DISTI..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="23735:23838" placeholder="select sum( ..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="24358:24505" placeholder="select emplo..sklcc_recheck_bald..." />
+            <marker date="1425362662104" expanded="true" signature="25552:25718" placeholder="select total..sklcc_recheck_bald..." />
+            <marker date="1425362662104" expanded="true" signature="26981:27032" placeholder="SELECT TOP 1..." />
+            <marker date="1425362662104" expanded="true" signature="27424:27722" placeholder="select inspe..sklcc_info..." />
+            <marker date="1425362662104" expanded="true" signature="29314:29694" placeholder="select inspe..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="31761:32191" placeholder="select sum(s..contentid..." />
+            <marker date="1425362662104" expanded="true" signature="31822:32031" placeholder="select disti..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="32684:32766" placeholder="select real_..sklcc_effciency..." />
+            <marker date="1425362662104" expanded="true" signature="33454:34336" placeholder="select reche..recheckor_no..." />
+            <marker date="1425362662104" expanded="true" signature="33536:33802" placeholder="select reche..contentid..." />
+            <marker date="1425362662104" expanded="true" signature="33606:33802" placeholder="select disti..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="34538:34810" placeholder="select a.rec..timex..." />
+            <marker date="1425362662104" expanded="true" signature="34599:34715" placeholder="select disti..sklcc_recheck_bald..." />
+            <marker date="1425362662104" expanded="true" signature="35585:35687" placeholder="update sklcc..." />
+            <marker date="1425362662104" expanded="true" signature="37540:37587" placeholder="SELECT emplo..sklcc_employee..." />
+            <marker date="1425362662104" expanded="true" signature="37978:38081" placeholder="select sum( ..sklcc_record..." />
+            <marker date="1425362662104" expanded="true" signature="39609:39959" placeholder="select disti..sklcc_return_check..." />
+            <marker date="1425362662104" expanded="true" signature="40517:40604" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425362662104" expanded="true" signature="40952:41272" placeholder="select disti..sklcc_return_check..." />
+            <marker date="1425362662104" expanded="true" signature="41790:41861" placeholder="select sum( ..sklcc_recheck_content..." />
+            <marker date="1425362662104" expanded="true" signature="42017:42104" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425362662104" expanded="true" signature="42521:42598" placeholder="select effci..sklcc_effciency..." />
+            <marker date="1425362662104" expanded="true" signature="43466:43659" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425362662104" expanded="true" signature="43581:43657" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425362662104" expanded="true" signature="44716:44868" placeholder="select disti..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="45514:45692" placeholder="select disti..sklcc_recheck_info..." />
+            <marker date="1425362662104" expanded="true" signature="46069:46467" placeholder="select sum( ..." />
+            <marker date="1425362662104" expanded="true" signature="47827:48071" placeholder="select left(..." />
+            <marker date="1425362662104" expanded="true" signature="48631:48764" placeholder="select disti..sklcc_recheck_info..." />
+          </folding>
         </state>
       </provider>
     </entry>
