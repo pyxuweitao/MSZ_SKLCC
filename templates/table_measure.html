@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        .table-header {
+            min-width: 100px;
+        }
+    </style>
+    <title>测量结果记录表</title>
+    <meta content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% load staticfiles %}
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+    <link href='{% static "css/style.css" %}' rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+    <script>
+        window.onload = function () {
+
+            var serialno = window.location.search.split('?')[1].split('=')[1];
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/table_measure_data/?serialno=' + serialno, false);
+            xhr.onload = function () {
+                console.log(xhr.responseText);
+                var res = eval(xhr.responseText.toString());
+                build_page(res);
+            };
+            xhr.send();
+        };
+        function build_page(data) {
+            var header = document.getElementById('header');
+            var body = document.getElementById('body');
+            var partition_map = [];
+            if (data.length == 0) {
+                return;
+            }
+            if (data[0].data.length == 0) {
+                return;
+            }
+
+            var datas = [];
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data[i].data.length; j++) {
+                    if (i == 0) {
+                        datas.push([]);
+                    }
+                    for (var k = 0; k < data[i].data[j].res.length; k++) {
+                        datas[j].push({
+                            size_res: data[i].data[j].res[k],
+                            barcode: data[i].barcode
+                        });
+                    }
+                }
+            }
+            for (var i = 0; i < data[0].data.length; i++) {
+                partition_map.push({
+                    name: data[0].data[i].partition_name,
+                    standard_size: data[0].data[i].standard,
+                    common_difference: data[0].data[i].common_difference,
+                    balanced_error: data[0].data[i].symmetry,
+                    has_balanced_error: data[0].data[i].has_balance_error,
+                    res: datas[i]
+                });
+            }
+            for (var i = 0; i < partition_map[0].res.length; i++) {
+                var th = document.createElement("th");
+                th.style.minWidth = '100px';
+                th.setAttribute('colspan', 2);
+                th.innerHTML = i + 1;
+                var a = document.createElement('a');
+                a.innerHTML = '修改';
+                if (window.location.hash=='#second'){
+                    a.href='/recheck/?content_id='+partition_map[0].res[i].barcode+'&dept='+document.getElementById('dept').innerHTML.split('：')[1]+'&inspectorno='+3;
+                }else{
+                    a.href='/url_dataentry/#'+partition_map[0].res[i].barcode;
+                    a.target = '_blank';
+                    th.appendChild(a);
+                }
+                
+                th.setAttribute('barcode', partition_map[0].res[i].barcode);
+                header.appendChild(th);
+            }
+            for (var i = 0; i < partition_map.length; i++) {
+                var tr = document.createElement("tr");
+                var partition_name = document.createElement("td");
+                partition_name.innerHTML = partition_map[i].name;
+                partition_name.style.position = 'fixed';
+                partition_name.style.minWidth = '100px';
+                partition_name.style.borderTop = 'none';
+                partition_name.style.backgroundColor = 'rgba(238, 238, 238, 0.8)';
+                var standard_size = document.createElement("td");
+                standard_size.innerHTML = partition_map[i].standard_size;
+                var common_difference = document.createElement("td");
+                common_difference.innerHTML = '±'+partition_map[i].common_difference;
+                var balanced_error = document.createElement("td");
+                balanced_error.innerHTML = partition_map[i].balanced_error;
+                tr.appendChild(partition_name);
+                tr.appendChild(standard_size);
+                tr.appendChild(common_difference);
+                tr.appendChild(balanced_error);
+                for (var j = 0; j < partition_map[i].res.length; j++) {
+                    if (partition_map[i].has_balanced_error == 'true') {
+                        var td0 = document.createElement('td');
+                        td0.innerHTML = partition_map[i].res[j].size_res[0].toFixed(2);
+                        //td.setAttribute('colspan',2);
+                        tr.appendChild(td0);
+                        var td1 = document.createElement('td');
+                        td1.innerHTML = partition_map[i].res[j].size_res[1].toFixed(2);
+                        //td.setAttribute('colspan',2);
+                        tr.appendChild(td1);
+                    } else {
+                        var td = document.createElement('td');
+                        td.innerHTML = partition_map[i].res[j].size_res[0].toFixed(2);
+                        td.setAttribute('colspan',2);
+                        tr.appendChild(td);
+                        console.log('appended');
+                    }
+                }
+                body.appendChild(tr);
+            }
+            console.log(JSON.stringify(partition_map));
+        }
+    </script>
+</head>
+
+<body>
+<div class="container" style="">
+    <div class="row clearfix">
+        <h3>
+            <center>尺寸测量结果</center>
+        </h3>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-3" id='dept'>
+            组别：{{ department }}
+        </div>
+        <div class="col-md-3" id='count'>
+            检验数量：{{ measure_count }}
+        </div>
+        <div class="col-md-3">
+            日期：{{ createtime }}
+        </div>
+        <div class="col-md-3" id='batch'>
+            批号：{{ batch }}
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12" style="overflow: auto">
+            <table class="table table-bordered" style="width: 100px">
+                <thead>
+                <tr id="header">
+                    <th class="table-header">部位名</th>
+                    <th class="table-header">标准尺寸</th>
+                    <th class="table-header">公差</th>
+                    <th class="table-header">对称误差</th>
+                </tr>
+                </thead>
+                <tbody id="body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row clearfix" style="margin-top: 10px">
+        <div class="col-md-3" id='inspector'>
+            检验员：{{ inspector }}
+        </div>
+        <div class="col-md-3">
+            尺码：{{ size }}
+        </div>
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-default pull-right" onclick="commit()">提交</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function commit(){
+    if (confirm("确定要提交数据？")) {
+            var res = "xml=<xml><info><state>";
+            //alert(input.parentNode.getAttribute('no'));
+            res += '0</state>' + '<no>' + window.location.search.split('&')[0].split('=')[1] + '</no>' + '</info></xml>';
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    alert('提交成功');
+                    window.opener.location.reload(true);
+                    window.close();
+
+                }
+            };
+
+            //console.log(type);
+            xmlhttp.open("POST", '/commit_table/?is_measure='+1, false);
+            xmlhttp.setRequestHeader("Content-type", "text/xml");
+            //console.log(input);
+            xmlhttp.send(res);
+            //alert('k');
+        }
+}
+
+</script>
+</div>
+</body>
+</html>

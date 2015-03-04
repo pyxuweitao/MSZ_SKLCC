@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% block title %}疵点堆积柱状图{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link rel="stylesheet" type="text/css" href='{% static "css/select2.css" %}'/>
+<link rel="stylesheet" type="text/css" href='{% static "css/select2-bootstrap.css" %}'/>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/select2.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/select2_locale_zh-CN.js" %}'></script>
+<script type="text/javascript" src='{% static "js/highcharts.js" %}'></script>
+<script>
+    var random_col = ['#ab691a', '#1f99fb', '#0280aa', '#c2b51b', '#2aa265', '#020e52', '#7162ce', '#99c7aa', '#84a381', '#2861f8', '#1264fd', '#bd36d7', '#95158b', '#e653d6', '#da2d50', '#726dd0', '#1ab88a', '#533d96', '#c93e35', '#6e6de8', '#a3991b', '#12c516', '#8af90c', '#64fa7c', '#31b839', '#aa5ec1', '#ce9459', '#d0bc76', '#cecca2', '#275b22', '#ce9a18', '#255186', '#80899f', '#c2731c', '#2d3b61', '#4b9dcd', '#d601ea', '#c29f3d', '#777ea8', '#f59bdd', '#b7a657', '#bf9312', '#697e62', '#d5adf8', '#b6de5b', '#0c2c01', '#d2507b', '#f22d05', '#ffa63b', '#6bc368', '#bbd548', '#d78844', '#b9b089', '#2e1ec2', '#03acbd', '#b2858c', '#2751e8', '#f2ab62', '#097405', '#8e0529', '#574ab6', '#20810d', '#9d47a7', '#f6c8a3', '#2ab7c0', '#ca8e4a', '#ca6ea9', '#bd39b7', '#5248af', '#cf04b8', '#a2a93d', '#319a3d'];
+    function get_max(data) {
+        var count_all = [];
+        for (var i = 0; i < data[0].value.length; i++) {
+            count_all[i] = 0;
+        }
+        for (var i = 0; i < count_all.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                count_all[i] += data[j].value[i];
+            }
+        }
+        var max = 0;
+        for (var k = 0; k < count_all.length; k++) {
+            if (count_all[k] > max) {
+                max = count_all[k];
+            }
+        }
+        console.log(count_all);
+        console.log(max);
+        return max;
+    }
+    window.onload = function () {
+        //alert(document.getElementById('canvasDiv').offsetWidth);
+        $("#question_list").select2({
+            placeholder: '此栏为空则统计所有的疵点'
+            //maximumSelectionSize: 5
+        });
+        $("#dept_list").select2({
+            placeholder: '此栏为空则统计所有的组别'
+        });
+        var data = [];
+        var label = [];
+        var datas = document.getElementById('data').getElementsByTagName('data_item');
+
+        for (var i = 0; i < datas.length; i++) {
+            //data_all[i] = 0;
+            var temp_value = [];
+            for (var j = 0; j < datas[i].getElementsByTagName('v').length; j++) {
+                if (parseInt(datas[i].getElementsByTagName('v')[j].innerHTML)){
+                    temp_value.push(parseInt(datas[i].getElementsByTagName('v')[j].innerHTML));
+                    //data_all[i]+=parseInt(datas[i].getElementsByTagName('v')[j].innerHTML);
+                }else{
+                    temp_value.push(0);
+                }
+                console.log(temp_value[temp_value.length-1]+datas[i].getAttribute('name'));
+            }
+            var temp = {
+                name: datas[i].getAttribute('name'),
+                //color: random_col[Math.floor(Math.random()*(random_col.length))],
+                data: temp_value
+            };
+            data.push(temp);
+        }
+        console.log(data);
+        var depts = document.getElementById('deptlist').getElementsByTagName('data_item');
+        for (var i = 0; i < depts.length; i++) {
+            var c_temp = '';
+            var s_temp = ($.trim(depts[i].innerHTML));
+            label.push(s_temp);
+            //alert(c_temp);
+        }
+       
+    $('#canvasDiv').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '各组疵点统计'
+        },
+        xAxis: {
+            categories: label
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '疵点（个）'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -70,
+            verticalAlign: 'top',
+            y: -10,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.x +'</b><br/>'+
+                    this.series.name +': '+ this.y +'<br/>'+
+                    '本组合计: '+ this.point.stackTotal;
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false,
+                    color: 'black'
+                }
+            }
+        },
+        credits:{
+            enabled:false,
+            text:'meishanzi',
+            href:'#'
+        },
+        series: data
+    });
+    console.log(data);
+    };
+</script>
+{% endblock %}
+{% block other %}
+<div class="row clearfix">
+    <datalist id="data">
+        {% for temp in res %}
+        <data_item name="{{temp.name}}" color="{{temp.color}}">
+            {%for tempc in temp.value %}
+            <v>{{tempc}}</v>
+            {% endfor %}
+        </data_item>
+        {% endfor %}
+    </datalist>
+    <datalist id="deptlist">
+        {% for temp in departmentname_list %}
+        <data_item>
+            {{ temp }}
+        </data_item>
+        {% endfor %}
+    </datalist>
+    <div class="col-md-2">
+        <form id="form">
+            统计时间从：<br/>
+            <input required='required' type="date" class="form-control" value="{{ start }}" id="start" name="start"/><br/>
+            到：<br/>
+            <input required='required' type="date" class="form-control" value="{{ end }}" id="end" name="end"/><br/>
+
+            <div style="max-height: 200px;overflow-y: auto">
+                <a style='cursor:pointer' onclick='cc_mistake(this)'>清空已选疵点</a>
+                <select id="question_list" multiple style="width: 99%;" name="question">
+                    <!--<option value="all" style="display: none" selected></option>-->
+                    <optgroup label="致命不良">
+                        {% for temp in question_strong %}
+                        {% ifequal temp.ischosen 1 %}
+                        <option value="{{temp.questionno}}" selected="selected">{{temp.questionname}}</option>
+                        {% else %}
+                        <option value="{{temp.questionno}}">{{temp.questionname}}</option>
+                        {% endifequal %}
+                        {% endfor %}
+                    </optgroup>
+                    <optgroup label="严重不良">
+                        {% for temp in question_bad %}
+                        {% ifequal temp.ischosen 1 %}
+                        <option value="{{temp.questionno}}" selected="selected">{{temp.questionname}}</option>
+                        {% else %}
+                        <option value="{{temp.questionno}}">{{temp.questionname}}</option>
+                        {% endifequal %}
+                        {% endfor %}
+                    </optgroup>
+                    <optgroup label="轻微不良">
+                        {% for temp in question_weak %}
+                        {% ifequal temp.ischosen 1 %}
+                        <option value="{{temp.questionno}}" selected="selected">{{temp.questionname}}</option>
+                        {% else %}
+                        <option value="{{temp.questionno}}">{{temp.questionname}}</option>
+                        {% endifequal %}
+                        {% endfor %}
+                    </optgroup>
+                </select>
+            
+            </div>
+            <div style="max-height: 200px;overflow-y: auto;margin-top: 10px">
+                <a style='cursor:pointer' onclick='cc_dept(this)'>清空已选组别</a>
+                <select id="dept_list" multiple style="width: 99%; margin-top:10px" name="department">
+                    {% for temp in department_list %}
+                    {% ifequal temp.ischosen 1 %}
+                    <option value="{{temp.departmentno}}" selected="selected">{{temp.departmentname}}</option>
+                    {% else %}
+                    <option value="{{temp.departmentno}}">{{temp.departmentname}}</option>
+                    {% endifequal %}
+
+                    {% endfor %}
+                </select>
+               
+            </div>
+            <button class="btn btn-success" style="width:99%;margin-top:10px" type="button" id="search">查询</button>
+        </form>
+    </div>
+    <div class="col-md-10" id="canvasDiv"></div>
+</div>
+<script>
+    function cc_dept(n){
+        $("#dept_list").select2("val", ""); 
+    }
+    function cc_mistake(n){
+        $("#question_list").select2("val", ""); 
+    }
+    $('#search').click(function(){
+        //alert(document.getElementById('question_list').value);
+        if (document.getElementById('question_list').value == ''){
+            document.getElementById('question_list').innerHTML = '<option selected value="all"></oprion>';
+        }
+        if (document.getElementById('dept_list').value == ''){
+            $('#dept_list option').each(function(){
+                this.selected = true;
+            });
+        }
+        document.getElementById('form').submit();
+    });
+</script>
+<!--加入筛选功能-->
+</body>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block title %}二检重大不良汇总{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link href='{% static "css/multi-select.css" %}' rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href='{% static "css/jquery.dataTables.min.css" %}'/>
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.battatech.excelexport.min.js" %}'></script>
+<script>
+    var day_length_1 = 0;
+    function compare_date() {
+        var start = window.location.search.toString().split('&')[0].split('=')[1];
+        var end = window.location.search.toString().split('&')[1].split('=')[1];
+        //alert(start);
+        document.getElementById("start").value = start;
+        document.getElementById("end").value = end;
+        document.getElementById("table_title").innerHTML = '二检人员发现重大疵点记录 时间：' + start + '--' + end;
+
+    }
+    window.onload = function () {
+        try {
+            compare_date();
+        } catch (e) {
+
+        }
+        document.getElementsByTagName('body')[0].style.overflow = 'auto';
+        var line_count = 0;
+        $('#recheckor_list data').each(function (i) {
+            // body...
+            var trs = document.getElementById('tar').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            //alert();
+            var td = document.createElement('td');
+            td.setAttribute('rowspan', this.getAttribute('rowspan'));
+            td.innerHTML = this.getAttribute('name');
+            trs[line_count].insertBefore(td, trs[line_count].getElementsByTagName('td')[0]);
+            line_count += parseInt(this.getAttribute('rowspan'));
+        });
+        $('#tar tbody tr').each(function (i) {
+            var td0 = this.getElementsByTagName('td');
+
+            var tempcount = 0;
+            for (var i = 0; i < td0.length - 1; i++) {
+                if (parseInt(td0[i].innerHTML) > 0){
+                    tempcount += parseInt(td0[i].innerHTML);
+                }
+            }
+            td0[td0.length - 1].innerHTML = tempcount;
+        });
+//        var table = $('#tar').DataTable({
+//            "oLanguage": {
+//                "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
+//                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录", "sInfoEmtpy": "找不到相关数据",
+//                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+//                "sProcessing": "正在加载中...",
+//                "sSearch": "搜索",
+//                "sUrl": "",
+//                "oPaginate": {
+//                    "sFirst": "第一页",
+//                    "sPrevious": " 上一页 ",
+//                    "sNext": " 下一页 ",
+//                    "sLast": " 最后一页 " }
+//            }
+//        });
+        var copy = document.createElement("table");
+        copy.innerHTML = document.getElementById("tar").innerHTML;
+        copy.setAttribute('border', 1);
+        copy.style.display = 'none';
+        copy.id = 'copy';
+        document.getElementsByTagName('body')[0].appendChild(copy);
+        $('#copy tbody tr').each(function () {
+            var tex = this.getElementsByTagName('td');
+            for (var i = 0; i <= 1; i++) {
+                tex[i].setAttribute('style', 'mso-number-format:"\@"');
+            }
+        });
+        // var table = $('#tar').DataTable({
+        //     "oLanguage": {
+        //         "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
+        //         "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录", "sInfoEmtpy": "找不到相关数据",
+        //         "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+        //         "sProcessing": "正在加载中...",
+        //         "sSearch": "搜索",
+        //         "sUrl": "",
+        //         "oPaginate": {
+        //             "sFirst": "第一页",
+        //             "sPrevious": " 上一页 ",
+        //             "sNext": " 下一页 ",
+        //             "sLast": " 最后一页 " }
+        //     }
+        // });
+        $("#download").on('click', function () {
+            document.getElementById('copy').style.display = 'block';
+            var uri = $("#copy").btechco_excelexport({
+                containerid: "copy", datatype: $datatype.Table, returnUri: true
+            });
+            $(this).attr('download', '下载.xls').attr('href', uri).attr('target', '_blank');
+            document.getElementById('copy').style.display = 'none';
+        });
+    }
+</script>
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <form class="form form-inline" action="/form11/">
+                    <div class="form-group">
+                        <label for="start">开始日期(含)：</label>
+                        <input required='required' class="form-control" id="start" name="start" style="width:200px;"
+                               type="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end">结束日期(含)：</label>
+                        <input required='required' class="form-control" id="end" name="end" style="width:200px;"
+                               type="date">
+                    </div>
+                    <button class="btn btn-primary pull-right" type="submit">
+                        查询
+                    </button>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row clearfix">
+            <div class="col-md-12 column" style="overflow-x: auto">
+                <table id="tar" style="width:100%" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>二检</th>
+                        <th>一检</th>
+                        <th style="min-width:130px">疵点</th>
+                        {% for temp in not_have_year_date_list %}
+                        <th>{{temp}}</th>
+                        {% endfor %}
+                        <th>汇总</th>
+                    </tr>
+                    <tbody>
+                    {% for recheckor in data %}
+                    {% for inspector in recheckor.res %}
+                    {% for mistake in inspector.mistakes %}
+                    <tr>
+                        {% ifequal forloop.counter 1 %}
+                        <td rowspan="{{ inspector.rows }}">{{inspector.inspector}}</td>
+                        {% endifequal %}
+                        <td>{{mistake.name}}</td>
+                        {% for temp in mistake.res %}
+                        <td>{{temp}}</td>
+                        {% endfor %}
+                        <td></td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+                <a class="" href="#" id="download">
+                    下载报表
+                </a>
+                <datalist id="recheckor_list">
+                    {% for recheckor in data %}
+                    <data name="{{recheckor.recheckor}}" rowspan="{{recheckor.rows}}"></data>
+                    {% endfor %}
+                </datalist>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
