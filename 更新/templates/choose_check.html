@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% block title %}一检报表审批{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link rel="stylesheet" type="text/css" href='{% static "css/jquery.dataTables.min.css" %}'/>
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+<script>
+    function pass(input) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            }
+        };
+        var type = input.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML;
+        var is_measure = 0;
+        if (type=='部位测量'){
+            is_measure = 1;
+        }
+        xmlhttp.open("GET", '/pass_table?code=' + input.parentNode.getAttribute("no")+'&is_measure='+is_measure, false);
+        xmlhttp.send();
+    }
+    function submit(input) {
+        // if (confirm("确定要提交数据？")) {
+        var res = "xml=<xml><info><state>";
+        //alert(input.parentNode.getAttribute('no'));
+        res += '0</state>' + '<no>' + input.parentNode.getAttribute('no') + '</no>' + '</info></xml>';
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            }
+        };
+        // alert('hhh');
+        xmlhttp.open("POST", '/commit_table/', false);
+        xmlhttp.setRequestHeader("Content-type", "text/xml");
+        xmlhttp.send(res);
+    }
+    window.onload = function () {
+        var table = $('#tar').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录", "sInfoEmtpy": "找不到相关数据",
+                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                "sProcessing": "正在加载中...",
+                "sSearch": "搜索",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": " 上一页 ",
+                    "sNext": " 下一页 ",
+                    "sLast": " 最后一页 " }
+            },
+            bPaginate: false
+
+        });
+
+        $("#tar tfoot th").each(function (i) {
+            var select = $('<select><option value="all">不限</option></select>')
+                    .appendTo($(this).empty())
+                    .on('change', function () {
+                        if (this.value == 'all') {//修改正则表达
+                            table.column(i)
+                                    .search('[^@]', true, false)//所有非'@'字符均可
+                                    .draw();
+                        } else {
+                            table.column(i)
+                                    .search('^' + $(this).val() + '$', true, false)
+                                    .draw();
+                        }
+                    });
+            table.column(i).data().unique().sort().each(function (d, j) {
+                select.append('<option value="' + d + '">' + d + '</option>')
+            });
+        });
+        $("#tar tfoot th:gt(4)").each(function () {
+            this.innerHTML = '';
+        })
+        $("#tar tfoot th:lt(1)").each(function () {
+            this.innerHTML = '';
+        })
+        $('#tar tbody').on('click', 'td.first', function (e) {
+            e.stopPropagation();
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                this.innerHTML = '<center><a style="cursor: pointer;"><span class="glyphicon glyphicon-plus"></span></a></center>';
+                row.child.hide();
+            }
+            else {
+                // Open this row
+                this.innerHTML = '<center><a style="cursor: pointer;"><span class="glyphicon glyphicon-minus"></span></a></center>';
+                row.child('轻微：' + this.getAttribute('weak') + '<br/>' + '严重：' + this.getAttribute('bad') + '<br/>' + '致命：' + this.getAttribute('strong') + '<br/>').show();
+            }
+        });
+        $('#tar tbody').on('click', 'tr.non_sub', function () {
+            $(this).toggleClass('selected');
+        });
+    };
+    function onsubmitall() {
+        $('a.to_submit').each(function () {
+            pass(this);
+        });
+        window.location.reload(1);
+    }
+    function onsubmitchosen() {
+        $("tr.selected").each(function () {
+            //alert();
+            pass(this.getElementsByTagName('a')[1]);
+            // alert();
+        });
+        window.location.reload(1);
+    }
+</script>
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <a href="#" onclick="return onsubmitall()">通过全部</a>/
+        <a href="#" onclick="return onsubmitchosen()">通过已选</a>/
+        <a href="{{ url }}">返修活检验</a>
+
+        <table class="display" id="tar">
+            <thead>
+            <tr>
+                <th></th>
+                <th>类型</th>
+                <th>时间</th>
+                <th>状态</th>
+                <th>批号</th>
+                <th>检验员</th>
+                <th>总数</th>
+                <th>返工数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for temp in record_not_check_list %}
+            <tr class="non_sub">
+                <td class="first" weak="{{ temp.weak }}"
+                    bad='{{ temp.bad }}'
+                    strong='{{ temp.strong }}'>
+                    <center><a style="cursor: pointer"><span class="glyphicon glyphicon-plus"></span></a></center>
+                </td>
+                <td>{{temp.check_type}}</td>
+                <td>{{temp.createtime}}</td>
+                <td>未审批</td>
+                <td>{{temp.batch}}</td>
+                <td>{{temp.inspector}}</td>
+                <td>{{temp.totalnumber}}</td>
+                {% if temp.totalreturn < 0 %}
+                <td>\</td>
+                {% else %}
+                <td>{{temp.totalreturn}}</td>
+                {% endif %}
+                <td no='{{ temp.serialno }}'><a href="#" onclick="pass(this);window.location.reload(true);">通过</a>/
+                    <a href="{{ temp.url }}" target="_blank" class="to_submit">查看</a>/
+                </td>
+            </tr>
+            {% endfor %}
+            {% for temp in record_have_checked_list %}
+            <tr>
+                <td class="first" weak="{{ temp.weak }}"
+                    bad='{{ temp.bad }}'
+                    strong='{{ temp.strong }}'>
+                    <center><a style="cursor: pointer;"><span class="glyphicon glyphicon-plus"></span></a></center>
+                </td>
+                <td>{{temp.check_type}}</td>
+
+                <td>{{ temp.createtime }}</td>
+                <td>
+
+                    {% ifequal temp.state 3 %}
+                    未通过
+                    {% else %}
+                    {% ifequal temp.state 0 %}
+                    审核中
+                    {% else %}
+                    已通过
+                    {% endifequal %}
+                    {% endifequal %}
+                </td>
+                <td>{{ temp.batch }}</td>
+                <td>{{ temp.inspector }}</td>
+                <td>{{ temp.totalnumber }}</td>
+                {% if temp.totalreturn < 0 %}
+                <td>\</td>
+                {% else %}
+                <td>{{temp.totalreturn}}</td>
+                {% endif %}
+
+                <td>
+                    <a href="{{ temp.url }}" target="_blank">查看</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+</div>
+<!--加入筛选功能-->
+</body>
+{% endblock %}

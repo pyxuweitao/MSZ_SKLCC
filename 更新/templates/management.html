@@ -1,0 +1,677 @@
+{% extends 'base.html' %}
+{% block title %}权限管理{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link href='{% static "css/bootstrap-datetimepicker.min.css" %}' rel="stylesheet">
+<link rel="stylesheet" type="text/css" href='{% static "css/jquery.dataTables.min.css" %}'/>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+
+<!-- Fav and touch icons -->
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/manage_function.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap-combobox.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
+
+
+{% endblock %}
+
+</head>
+{% block other %}
+
+<body>
+
+
+<div class="row clearfix">
+<div class="col-md-12 column">
+<ul class="nav nav-tabs" id="navs">
+    <li><a href="#port_and_ip" data-toggle="tab">系统配置</a></li>
+    <li><a href="#user_management" data-toggle="tab">用户管理</a></li>
+    <!--<li><a href="#user_management" data-toggle="tab">用户管理</a></li>-->
+    <li><a href="#user_add" data-toggle="tab">增加用户</a></li>
+    <li><a href="#dept_man" data-toggle="tab">部门管理</a></li>
+    <li><a href="#authority_man" data-toggle="tab">权限管理</a></li>
+    <li><a href="#miss_reward_man" data-toggle="tab">奖惩规则管理</a></li>
+    <li><a href="#number_off_list" data-toggle="tab">报数录入工序列表</a></li>
+    <!--<li><a href="#settings" data-toggle="tab">添加</a></li>-->
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+
+<div class="tab-pane" id="port_and_ip">
+    <hr/>
+    <form role="form" action="/change_config/" method="get">
+        <div class="form-group">
+            <label for="default_days">默认记录显示天数</label>
+            <input type="text" class="form-control" id="default_days" placeholder="port" name="days"
+                   disabled="disabled" value="{{ days }}">
+
+            <p class="help-block">例:3</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">分钟单价（单位：元）</label>
+            <input type="text" class="form-control" id="default_price_permin" placeholder="port" name="price"
+                   disabled="disabled" value="{{ price_permin }}">
+
+            <p class="help-block">例:0.002442</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">肩带工价（单位：元）</label>
+            <input type="text" class="form-control" id="bald_price" placeholder="port" name="bald_price"
+                   disabled="disabled" value="{{ bald_price }}">
+
+            <p class="help-block">例:0.0068</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">肩带工时</label>
+            <input type="text" class="form-control" id="bald_slowtime" placeholder="port" name="bald_slowtime"
+                   disabled="disabled" value="{{ bald_slowtime }}">
+
+            <p class="help-block">例:5.2308</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">电子屏报警返修率(省略百分号)</label>
+            <input type="text" class="form-control" id="EQ_return_percentage" placeholder="port"
+                   name="EQ_return_percentage"
+                   disabled="disabled" value="{{ EQ_return_percentage }}">
+
+            <p class="help-block">默认:5</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">报表：相关岗位品质奖罚汇总-奖金基准(单位:元)</label>
+            <input type="text" class="form-control" id="money_standard" placeholder="port" name="form6_money_standard"
+                   disabled="disabled" value="{{ money_standard }}">
+
+            <p class="help-block">默认:400.0</p>
+        </div>
+        <div class="form-group">
+            <label for="default_days">报表：抽验工时工价汇总表-实际工作工时</label>
+            <input type="text" class="form-control" id="real_work_time" placeholder="real_work_time" name="form7_real_work_time"
+                   disabled="disabled" value="{{ real_work_time }}">
+
+            <p class="help-block">默认:27000.0</p>
+        </div>
+        <div>
+            <label for="default_days">扫描条码登录开关</label>
+            <br>
+            {% ifequal login_switch 1 %}
+            <input type="checkbox" checked name="open" disabled="disabled" style="zoom:200%;"/>
+            {% else %}
+            <input type="checkbox" name="open" disabled="disabled" style="zoom:200%;"/>
+            {% endifequal %}
+        </div>
+        <button type="button" class="btn btn-default" onclick="return ip_port_change_button(this)">修改
+        </button>
+        <button type="submit" class="btn btn-default" disabled="disabled">确定</button>
+    </form>
+</div>
+<div class="tab-pane" id="user_management">
+    <hr/>
+    <table class="table table-bordered" style="margin-top:10px">
+        <thead>
+        <tr>
+            <th>员工号</th>
+            <th>员工姓名</th>
+            <th>账号</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <!--以下内容生成时不要带空格-->
+        {% for employee in employee_list %}
+        <tr>
+            <td>{{ employee.employeeno }}</td>
+            <td>{{ employee.employee }}</td>
+
+            <td>{{ employee.username }}</td>
+            <td>
+                <button class="btn btn-info" onclick="return OnClickUserInfo(this.parentNode.parentNode)">
+                    修改
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="tab-pane" id="user_add">
+    <hr/>
+    <form role="form" action="/add_employee/" onsubmit="return validate_form(this)">
+        <div class="form-group">
+            <label for="change_user_info_name">从...复制权限</label>
+            <select id="add_user_authority_copy" class="form-control" name="authority">
+                <option value="" selected="selected"></option>
+                {% for employee in employee_list %}
+                <option value="{{ employee.username }}">{{ employee.username }}</option>
+                {% endfor %}
+            </select>
+
+            <p class="help-block">在此选择要复制权限的账户名</p>
+        </div>
+        <div class="form-group">
+            <label for="change_user_info_id">工号</label>
+            <input type="" class="form-control" id="add_user_info_id"
+                   placeholder="工号" name="id">
+
+            <p class="help-block">在此输入工号</p>
+        </div>
+        <div class="form-group">
+            <label for="change_user_info_name">姓名</label>
+            <input type="" class="form-control" id="add_user_info_name" placeholder="姓名" name="name">
+
+            <p class="help-block">在此输入姓名</p>
+        </div>
+        <div class="form-group">
+            <label for="change_user_info_passwd">密码</label>
+            <input type="" class="form-control" id="add_user_info_passwd" placeholder="填写密码"
+                   name="passwd">
+
+            <p class="help-block">在此处输入密码</p>
+        </div>
+        <div class="form-group">
+            <label for="change_user_info_name">账户名</label>
+            <input type="" class="form-control" placeholder="账户名" name="account_name" id='account_name'>
+
+            <p class="help-block">在此输入账户名</p>
+        </div>
+        <div id='checked'>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" onclick="return onclickadduser(this)">提交修改
+            </button>
+            <button type="reset" class="btn btn-default">重新填写</button>
+        </div>
+            </div>
+    </form>
+</div>
+<div class="tab-pane" id="dept_man">
+    <hr/>
+    <div class="col-md-12 column">
+
+        <table class="table table-bordered">
+            <tr>
+
+                <th>部门编号</th>
+                <th>部门名称</th>
+                <th></th>
+
+                {% for department in department_list %}
+            </tr>
+            <tr>
+                <td>{{ department.departmentno }}</td>
+                <td>{{ department.departmentname }}</td>
+                <td>
+                    <button class="btn btn-info"
+                            onclick="return onclickdeptinfo(this.parentNode.parentNode)">修改
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#adddept"
+                id="dept_add_activator" style="margin-top: 10px"
+                >
+            添加部门
+        </button>
+    </div>
+</div>
+<div class="tab-pane" id="authority_man">
+    <hr/>
+    <button class="btn btn-success pull-right" onclick="return onclickauthority_change_mass()">修改已选人员权限</button>
+    <br/>
+    <br/>
+    <table class="table table-bordered" style="margin-top:20px" id="authority_table">
+        <thead>
+        <tr>
+            <th>账户名</th>
+            <th>员工号</th>
+            <th>员工姓名</th>
+            <th>权限</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--以下内容生成时尽量不要带空格-->
+        {% for em_authority in em_authority_list %}
+        <tr>
+            <td>{{ em_authority.username }}</td>
+            <td>{{ em_authority.employeeno }}</td>
+            <td>{{ em_authority.employee }}</td>
+            <td>
+                <!--TODO: 这里的range字段代表了权限生效的范围，部门号与部门号之间用‘&’隔开，no字段代表了权限的编号,尽量不要带空格-->
+                <!--TODO: 生成列表的时候要注意，所有的用户都得显示，哪怕这个用户没有任何权限-->
+                {% for button in em_authority.button_list %}
+                <label style="display: inline-block" range="{{ button.departmentno }}"
+                       class="label label-default authority_button" no="{{ button.id }}"
+                       data-animation="true" data-html="true" data-toggle="popover"
+                       data-content="{{ button.department }}"
+                       data-trigger="hover" data-placement="right"
+                        >{{ button.name }}</label>
+                {% endfor %}
+            </td>
+            <td>
+                <button class="btn btn-info" onclick="return onclickaddauthority(this)">修改权限</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="tab-pane" id="miss_reward_man">
+    <hr/>
+    <div class="row clearfix">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <button class="btn btn-success pull-right" onclick="rule_sub()">提交</button>
+            <br/>
+            <table id="miss_reward_man_table" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>员工</th>
+                    <th>规则</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for temp in rule_list %}
+                <tr>
+                    <td no="{{temp.employeeno}}">{{ temp.employee }}</td>
+                    <td no="{{temp.typeno}}">{{temp.typename}} <a href="#" class="pull-right"
+                                                                  onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>
+                        <select class="form-control">
+                            {% for temp in not_in_employee_list %}
+                            <option value="{{ temp.employeeno }}">{{temp.employee}}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                    <th>
+                        <select class="form-control" style="display: inline;width:80px">
+                            <option value="0">文胸</option>
+                            <option value="1">小裤</option>
+                        </select>
+                        <button class="btn btn-success" onclick="return onappendreward_re(this)">添加</button>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<div id="number_off_list" class="tab-pane">
+    <hr/>
+    <div class="row clearfix">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <button class="pull-right btn btn-success" onclick="return number_off_sub()">确定</button>
+            <script>
+                function number_off_sub(){
+                    var records = document.getElementById('number_off_list_table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                    var res = '/change_check_type/?';
+                    for (var i=0;i<records.length;i++){
+                        res +='type=' + records[i].getElementsByTagName('td')[0].innerHTML+','+records[i].getElementsByTagName('td')[0].getAttribute('check_id')+'&';
+                    }
+                    //alert(res);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET',res,false);
+                    xhr.onreadystatechange = function(){
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            alert('修改成功');
+                        }
+                    };
+                    xhr.send();
+                }
+            </script>
+            <table id="number_off_list_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>工序</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for temp in check_type_list%}
+                        <tr>
+                            <td check_id="{{temp.check_id}}">{{temp.check_type}}</td>
+                            <td><a href="#" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td >
+                            <input class="form-control" style="width:100px" id="number_off_list_append_input"/>
+                        </td>
+                        <td>
+                            <button class="btn btn-success" onclick="return number_off_append()">添加</button>
+                            <script>
+                                function number_off_append(){
+                                    var v = document.getElementById('number_off_list_append_input').value;
+                                    if (v.length == 0){
+                                        alert('工序名称有误');
+                                        return ;
+                                    }
+                                    var td = document.createElement('td');
+                                    td.innerHTML = v;
+                                    var td1 = document.createElement("td");
+                                    td1.innerHTML = '<a href="#" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</a>';
+                                    var tr = document.createElement('tr');
+                                    tr.appendChild(td);
+                                    tr.appendChild(td1);
+                                    document.getElementById('number_off_list_append_input').value = '';
+                                    document.getElementById('number_off_list_table').getElementsByTagName('tbody')[0].appendChild(tr);
+                                }
+                            </script>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#changeuser" id="user_change_activater"
+        style=" display: none">
+    Launch demo modal
+</button>
+
+<div class="modal fade" id="changeuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改员工信息</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" action="/change_employee/">
+                    <div class="form-group">
+                        <label for="change_user_info_id">工号</label>
+                        <input type="email" readonly="readonly" class="form-control" id="change_user_info_id"
+                               placeholder="工号" name="id">
+
+                        <p class="help-block">在此输入工号</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="change_user_info_name">姓名</label>
+                        <input type="" class="form-control" id="change_user_info_name" placeholder="用户名"
+                               name="name">
+
+                        <p class="help-block">在此输入姓名</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="change_user_info_passwd">密码</label>
+                        <input type="" class="form-control" id="change_user_info_passwd"
+                               placeholder="此处不填写即维持原来的密码" name="passwd">
+
+                        <p class="help-block">在此处输入密码</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="change_user_info_account">账户名</label>
+                        <input type="" class="form-control" placeholder="账户名"
+                               name="account_name" id="change_user_info_account" readonly="readonly">
+
+                        <p class="help-block">在此输入账户名</p>
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="ondeleteuser(this)">删除用户</button>
+                    <button type="button" class="btn btn-default" onclick="onclickchangeuser(this)">提交修改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="change_info_dismiss"
+                        style="display: none">取消
+                </button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#changedept"
+        id="dept_change_activator" style="display: none"
+        >
+    修改部门
+</button>
+<div class="modal fade" id="changedept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id=" ">修改部门信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form" action='/change_department/' id="dept_change_form">
+                    <div class="form-group">
+                        <label for="dept_change_no">部门编号</label>
+                        <input id="dept_change_no" readonly="readonly" class="form-control" name="dept_no">
+                    </div>
+                    <div class="form-group">
+                        <label for="dept_change_name">部门名称</label>
+                        <input id="dept_change_name" class="form-control" name="dept_name">
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="return onclickdeletedept()">删除部门</button>
+
+                    <button type="button" class="btn btn-default" onclick="return onclickchangedept()">提交修改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        style="display: none">取消
+                </button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="adddept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="  ">添加部门信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form" action='\add_department\' id="dept_add_form">
+                    <div class="form-group">
+                        <label for="dept_add_no">部门编号</label>
+                        <input id="dept_add_no" class="form-control" name="dept_no">
+                    </div>
+                    <div class="form-group">
+                        <label for="dept_add_name">部门名称</label>
+                        <input id="dept_add_name" class="form-control" name="dept_name">
+                    </div>
+
+                    <button type="button" class="btn btn-default" onclick="return onclickadddept()">提交修改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        style="display: none">取消
+                </button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<button class="btn btn-primary" data-toggle="modal" data-target="#changeauthority"
+        id="authority_change_activater" style="display: none"
+        >
+    修改权限
+</button>
+<div class="modal fade" id="changeauthority" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="">权限修改</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form" action='/change_authority/' id="authority_change_form">
+                    <div class="form-group">
+                        <label for="authority_change_username">账户名</label>
+                        <input id="authority_change_username" readonly="readonly" class="form-control" name="username">
+                    </div>
+
+                    {% for auth in authority_list %}
+                    <div class="form-group">
+                        <label> {{ auth.name }} </label>
+                        <hr style="margin-top: -4px; margin-bottom: 3px"/>
+                        <div class="well well-sm">
+                            <!--<input value="{{ auth.id}}" style="display: none" name="auth_id">-->
+                            {% if auth.id >= 6 and auth.id < 15 %}
+                            <input type="checkbox" name="item"
+                                   value="{{ auth.id }}>201"
+                                    >拥有
+                            {% else %}
+                                {% if auth.id >= 18 or auth.id == 16 %}
+                                <input type="checkbox" name="item"
+                                   value="{{ auth.id }}>201"
+                                    >拥有
+
+                                {% else %}
+
+                                <input type="checkbox" onclick="return onchooseall(this)">全选
+                                <br/>
+                                {% for department in department_list %}
+                                <div style="float: left; min-width: 100px;max-width: 100px">
+                                    <input type="checkbox" name="item"
+                                           value="{{ auth.id }}>{{ department.departmentno }}"
+                                            >{{department.departmentname }}
+                                </div>
+
+                                {% endfor %}
+
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                             {% endif %}
+                            {% endif %}
+                            <!--<br/>-->
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消修改</button>
+                    <button type="submit" class="btn btn-default">提交修改</button>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        style="display: none">取消
+                </button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="changeauthority_mass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">权限修改</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="authority_mass_change_form">
+                    {% for auth in authority_list %}
+                    <div class="form-group">
+                        <label> {{ auth.name }} </label>
+                        <hr style="margin-top: -4px; margin-bottom: 3px"/>
+                        <div class="well well-sm">
+                            <!--<input value="{{ auth.id}}" style="display: none" name="auth_id">-->
+
+                            {% if auth.id >= 6 and auth.id < 15 %}
+                            <input type="checkbox" name="item"
+                                   value="{{ auth.id }}>201"
+                                    >拥有
+                                 {% else %}
+                                {% if auth.id >= 18 or auth.id == 16 %}
+                                <input type="checkbox" name="item"
+                                   value="{{ auth.id }}>201"
+                                    >拥有
+
+                                {% else %}
+                            <input type="checkbox" onclick="return onchooseall(this)">全选
+                            <br/>
+                            {% for department in department_list %}
+                            <div style="float: left; min-width: 100px;max-width: 100px">
+                                <input type="checkbox" name="item"
+                                       value="{{ auth.id }}>{{ department.departmentno }}"
+                                        >{{department.departmentname }}
+                            </div>
+
+                            {% endfor %}
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            {% endif %}
+                        {% endif %}
+                            <!--<br/>-->
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <button type="button" class="btn btn-success" onclick="return change_mass_auth_sub()">提交修改</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消修改</button>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        style="display: none">取消
+                </button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script>
+    $('div.switch').bootstrapSwitch();
+</script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %}阶段返修记录{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<style type="text/css">
+    .format {
+    }
+</style>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href='{% static "css/jquery.dataTables.min.css" %}'/>
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.battatech.excelexport.min.js" %}'></script>
+<!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.min.js" %}'></script>-->
+<!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.zh-CN.js" %}'></script>-->
+<script>
+    var days_length = 0;
+    function compare_date() {
+        var start = window.location.search.toString().split('&')[0].split('=')[1];
+        var end = window.location.search.toString().split('&')[1].split('=')[1];
+        var day_start = new Date(start);
+        var day_end = new Date(end);
+        days_length = Math.floor((day_end.getTime() - day_start.getTime()) / (3600 * 24 * 1000));
+        document.getElementById("start").value = start;
+        document.getElementById("end").value = end;
+        document.getElementById("table_title").innerHTML = '阶段返修记录 时间：' + start + '--' + end;
+        document.getElementById("table_title").setAttribute('colspan', days_length + 4);
+    }
+    $(document).ready(function () {
+        document.getElementsByTagName('body')[0].style.overflow = 'auto';
+        compare_date();
+        var copy = document.createElement("table");
+        copy.style.display = 'none';
+        copy.border = '1';
+        copy.innerHTML = document.getElementById("tar").innerHTML;
+        //copy.removeChild(copy.getElementsByTagName('tfoot')[0]);
+        copy.id = 'copy';
+        document.getElementsByTagName('body')[0].appendChild(copy);
+        $('#copy tbody tr').each(function () {
+            var tex = this.getElementsByTagName('td');
+            for (var i = 0; i <= 1; i++) {
+                tex[i].setAttribute('style', 'mso-number-format:"\@"');
+            }
+        });
+        var rows = document.getElementById("tar").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        for (var i = 2; i < days_length + 4; i++) {
+            var count = 0;
+            for (var m=0;m<rows.length;m++){
+                count += parseInt(rows[m].getElementsByTagName('td')[i].innerHTML);
+            }
+            var tfoot = document.createElement('th');
+            tfoot.innerHTML = count;
+            var tfoot_cpy = document.createElement('th');
+            tfoot_cpy.innerHTML = count;
+            document.getElementById("tar").getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].appendChild(tfoot_cpy);
+            document.getElementById("copy").getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].appendChild(tfoot);
+        }
+        var table = $('#tar').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录", "sInfoEmtpy": "找不到相关数据",
+                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                "sProcessing": "正在加载中...",
+                "sSearch": "搜索",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": " 上一页 ",
+                    "sNext": " 下一页 ",
+                    "sLast": " 最后一页 " }
+            }
+            //sScrollX: '100%'
+        });
+
+        $("#download").on('click', function () {
+            document.getElementById('copy').style.display = 'block';
+            var uri = $("#copy").btechco_excelexport({
+                containerid: "copy", datatype: $datatype.Table, returnUri: true
+            });
+            $(this).attr('download', document.getElementById('table_title').innerHTML+'.xls').attr('href', uri).attr('target', '_blank');
+            document.getElementById('copy').style.display = 'none';
+        });
+    });
+
+</script>
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <form class="form form-inline" action="/form4/">
+                    <div class="form-group">
+                        <label for="start">开始日期(含)：</label>
+                        <input required='required' class="form-control" id="start" name="start" style="width:200px;" type="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end">结束日期(含)：</label>
+                        <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
+                    </div>
+
+                    <button class="btn btn-primary pull-right" type="submit">
+                        查询
+                    </button>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <table style="" style="width:100%" id="tar" class="display cell-border">
+                    <thead>
+                    <tr>
+                        <th colspan="10" id="table_title"></th>
+                    </tr>
+                    <tr>
+                        {% for temp in distance_not_have_year %}
+                        <th>{{ temp }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cata in employee_stage_repair_list %}
+                    <tr>
+                        <td>{{ cata.employeeno }}</td>
+                        <td>{{ cata.employee }}</td>
+                        <td>{{ cata.totalnumber }}</td>
+                        {% for i in cata.dayreturn %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="2">合计</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <a class="" href="#" id="download">
+                    下载报表
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--加入筛选功能-->
+</body>
+{% endblock %}

@@ -1,0 +1,700 @@
+{% extends 'base.html' %}
+{% block title %}报数录入{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link href='{% static "css/buttons.css" %}' rel="stylesheet" type='text/css'>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script>
+    var search_employee_input = document.createElement('input');
+    search_employee_input.id = 'search_employee_input';
+    search_employee_input.style.width = '60px';
+    search_employee_input.placeholder = '工号';
+    search_employee_input.onfocus = function () {
+        number = this;
+    };
+    var search_employee_input_copy = document.createElement('input');
+    search_employee_input_copy.id = 'search_employee_input_copy';
+    search_employee_input_copy.style.width = '60px';
+    search_employee_input_copy.placeholder = '工号';
+    search_employee_input_copy.onfocus = function () {
+        number = this;
+    };
+    var total_num = 10000;
+    var number;
+    function tooltip_convert() {
+        alert();
+        return this.innerHTML;
+    }
+    function reset_hint() {
+        document.getElementById('hint_employee').innerHTML = '';
+        document.getElementById('hint_mistake').innerHTML = '';
+        search_employee_input.value = '';
+    }
+    window.onload = function () {
+        onchangeslelction();
+        $('button.pop').tooltip({
+            animation: true,
+            trigger: 'hover',
+            html: true,
+            title: function () {
+                return '<label style="font-size: 20px">' + this.innerHTML + '</label>';
+            }
+        });
+        $('button.mistake').click(function (e) {
+            document.getElementById('hint_mistake').innerHTML = e.target.innerHTML;
+            document.getElementById('hint_mistake').setAttribute('no', e.target.getAttribute('no'));
+            document.getElementById('hint_employee').innerHTML = '';
+            document.getElementById('hint_employee').appendChild(search_employee_input);
+            search_employee_input.focus();
+        });
+        $('tr').each(function () {
+            this.style.textAlign = 'center';
+        });
+        document.getElementById('inspector').appendChild(search_employee_input_copy);
+        number = search_employee_input_copy;
+        var inspector_no = document.getElementById('session_inspector').getElementsByTagName('data')[0].getAttribute('value');
+        document.getElementById('search_employee_input_copy').value = inspector_no;
+        document.getElementById('scan_in').click();
+    };
+</script>
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix">
+    <div class="col-md-12">
+        <form class="form-inline form-horizontal" role="form">
+            <div class="form-group" style="padding-left:40px ">
+                <label for="department">组别</label>
+                <select class="" id="department" onchange="return onchangeslelction()"
+                        style="width: 150px">
+                    {% for department in department_list %}
+                    <option value="{{department.departmentno}}">{{ department.departmentname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" style="padding-left:40px ">
+                <label for="type">检验工序</label>
+                <select class="" id="type"
+                        style="width: 150px">
+                    {% for temp in check_type_list %}
+                    <option value="{{temp.check_id}}">{{ temp.check_type}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" style="padding-left:40px ">
+                <input type="checkbox" id="is_clear" onchange="onchangeslelction()"/>清款
+            </div>
+            <div class="form-group" style="padding-left:40px ">
+                <label for="batch">批号</label>
+                <select class="" id="batch" style="width: 150px">
+                    {% for batch in batch_list %}
+                    <option>{{ batch }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" style="padding-left:40px;">
+                <label style="float: left">检验员:</label>
+
+                <div id="inspector" style="float: left;min-width: 50px">
+
+                </div>
+            </div>
+            <div class="form-group" style="padding-left:40px ">
+                <label for="total_num">检验数</label>
+                <input id="total_num" class="" placeholder="批量" onfocus="number = this"
+                       style="width: 70px"/>
+            </div>
+            <div class="form-group" style="padding-left:40px ">
+                <label for="serial_month">批号过滤月份</label>
+                <select id="serial_month" onchange="onchangeslelction()">
+                    <option value="3">3</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+        </form>
+        <script>
+            function onchangeslelction() {
+                var department = $("#department").find("option:selected").text();
+                //var batch = $("#batch").find("option:selected").text();
+                var jsonhttp = new XMLHttpRequest();
+                jsonhttp.onreadystatechange = function () {
+                    if (jsonhttp.readyState == 4 && jsonhttp.status == 200) {
+                        document.getElementById('batch').innerHTML = '';
+                        var jsonfile = jsonhttp.responseText.toString();
+                        var json = eval('(' + jsonfile + ')');
+                        for (var i = 0; i < json.batch.length; i++) {
+                            var temp = document.createElement("option");
+                            temp.innerHTML = json.batch[i].batch;
+                            temp.value = json.batch[i].batch;
+                            //alert(temp.innerHTML);
+                            document.getElementById("batch").appendChild(temp);
+                        }
+
+                    }
+                };
+                jsonhttp.open("GET", '/recheck_update_batch_and_inspector/?' + 'department=' + department + '&is_clear=' + document.getElementById('is_clear').checked.toString() + '&month=' + document.getElementById("serial_month").value, true);
+                jsonhttp.send();
+
+            }
+        </script>
+    </div>
+</div>
+<hr style='margin-top:0'/>
+<div class="row clearfix" style='margin-top:-10px'>
+<div class="col-md-8">
+    <ul class="nav nav-tabs " id="explorer_index">
+        <li><a href="#weak_mistake" data-toggle="tab">轻微不良</a></li>
+        <li><a href="#bad_mistake" data-toggle="tab">严重不良</a></li>
+        <li><a href="#strong_mistake" data-toggle="tab">致命不良</a></li>
+        <li><a href="#search_res" data-toggle="tab" id="search_index">搜索结果</a></li>
+    </ul>
+    <div class="tab-content" id="explorer_content">
+        <div class="tab-pane active" id="weak_mistake" style="max-height: 500px;overflow: auto">
+            <div class="well" style="height: 450px;margin-top:10px">
+                {% for temp in question_weak %}
+                <div style="width:70px;float:left;margin-left: 10px;margin-top: 10px">
+                    <button class="button button-rounded button-flat-primary button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    <label style="width:70px;text-align: center">{{temp.questionno}}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane" id="bad_mistake">
+            <div class="well" style="height: 450px;margin-top:10px">
+                {% for temp in question_bad %}
+                <div style="width:70px;float:left;margin-left: 10px;margin-top: 10px">
+                    <button class="button button-rounded button-flat-highlight button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    <label style="width:70px;text-align: center">{{temp.questionno}}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane" id="strong_mistake">
+            <div class="well" style="height: 450px;margin-top:10px">
+                {% for temp in question_strong %}
+                <div style="width:70px;float:left;margin-left: 10px;margin-top: 10px">
+                    <button class="button button-rounded button-flat-caution button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    <label style="width:70px;text-align: center">{{temp.questionno}}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane" id="search_res">
+            <div class="well" style="height: 450px;margin-top:10px">
+                {% for temp in question_list %}
+                <div style="width:70px;float:left;margin-left: 10px;margin-top: 10px">
+                    {% ifequal temp.questiontype 0 %}
+                    <button class="button button-rounded button-flat-primary button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    {% endifequal %}
+                    {% ifequal temp.questiontype 1 %}
+                    <button class="button button-rounded button-flat-caution button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    {% endifequal %}
+                    {% ifequal temp.questiontype 2 %}
+                    <button class="button button-rounded button-flat-highlight button-tiny pop mistake"
+                            style="width:70px;height:45px" no="{{temp.questionno}}">
+                        {{ temp.questionname }}
+                    </button>
+                    {% endifequal %}
+                    <label style="width:70px;text-align: center">{{temp.questionno}}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-4">
+<div class="row clearfix">
+    <div class="col-md-12">
+        <div class="btn-group btn-group-justified">
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:40px">0
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:40px">1
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:40px">2
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:40px">3
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:40px">4
+            </a>
+        </div>
+        <div class="btn-group btn-group-justified">
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:50px">5
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:50px">6
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:50px">7
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:50px">8
+            </a>
+            <a class="btn  btn-default"
+               onclick="return OnClickNum(this)" style="width:50px">9
+            </a>
+        </div>
+        <div class="btn-group btn-group-justified">
+            <a class="btn  btn-default "
+               onclick="return OnClickNumConfirm()" id="scan_in" style="width:50px">输入
+            </a>
+            <a class="btn  btn-default "
+               onclick="return onclicknumclear()" id="numclears" style="width:50px">清空
+            </a>
+            <a class="btn  btn-default "
+               onclick="return OnClickSearchDel()" id="numdelete" style="width:50px">删除
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function flush_search() {
+        $('#search_res button').each(function () {
+            console.log(document.getElementById('search_label').value);
+            if (this.getAttribute('no').indexOf(document.getElementById('search_label').value) != -1 || document.getElementById('search_label').value.length == 0) {
+                this.parentNode.style.display = 'block';
+            } else {
+                this.parentNode.style.display = 'none';
+            }
+        });
+        document.getElementById('search_index').click();
+    }
+    function OnClickNum(n) {
+        number.value += $.trim(n.innerHTML);
+        number.focus();
+        if (number.id == 'search_label') {
+            flush_search();
+        }
+    }
+    function OnClickNumConfirm() {
+        if (number.id == 'search_employee_input') {
+            //alert('sss');
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('GET', '/get_employee/?group=&no=' + number.value, false);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var parnode = search_employee_input.parentNode;
+                    if (xmlhttp.responseText.toString().split('@')[0] == '1') {
+
+                        parnode.innerHTML = '<a>' + xmlhttp.responseText.toString().split('@')[1] + '</a>';
+                        parnode.setAttribute('no', search_employee_input.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input);
+                            search_employee_input.focus();
+                        };
+                        search_employee_input.value = '';
+                    } else if (xmlhttp.responseText.toString() == '0') {
+                        parnode.innerHTML = '<a>' + search_employee_input.value + '</a>';
+                        parnode.setAttribute('no', search_employee_input.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input);
+                            search_employee_input.focus();
+                        };
+                        search_employee_input.value = '';
+
+                    }
+                }
+            };
+            xmlhttp.send();
+        } else if (number.id == 'search_employee_input_copy') {
+            //alert('sss');
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('GET', '/get_employee/?group=&no=' + number.value, false);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var parnode = search_employee_input_copy.parentNode;
+                    if (xmlhttp.responseText.toString().split('@')[0] == '1') {
+                        parnode.innerHTML = '<a>' + xmlhttp.responseText.toString().split('@')[1] + '</a>';
+                        parnode.setAttribute('no', search_employee_input_copy.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input_copy);
+                            search_employee_input_copy.focus();
+                        };
+                        search_employee_input_copy.value = '';
+                    } else if (xmlhttp.responseText.toString() == '0') {
+
+                        parnode.innerHTML = '<a>' + search_employee_input_copy.value + '</a>';
+                        parnode.setAttribute('no', search_employee_input_copy.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input_copy);
+                            search_employee_input_copy.focus();
+                        };
+                        search_employee_input_copy.value = '';
+                    }
+                }
+            };
+            xmlhttp.send();
+        }
+    }
+    function onclicknumclear() {
+        number.value = '';
+        number.focus();
+        if (number.id == 'search_label') {
+            flush_search();
+        }
+    }
+
+    function OnClickSearchDel() {
+        number.value = number.value.slice(0, -1);
+        number.focus();
+        if (number.id == 'search_label') {
+            flush_search();
+        }
+    }
+</script>
+<div class="row clearfix">
+    <div class="col-md-12" style="margin-bottom: 10px ;font-size: 15px;align-content: center;margin-top: 10px">
+        <label style="float: left;margin-left: 30px;font-size: 20px">疵点快速搜索: </label>
+        <input class="form-control center-block"
+               style="float: left;width:150px"
+               id="search_label" onfocus="number = this">
+    </div>
+</div>
+<hr/>
+<div class="row clearfix">
+    <div class="col-md-12" style="margin-top: 10px">
+        <table class="table-bordered" style="width:100%;font-size: 15px">
+            <tr>
+                <td>
+                    <center>责任人</center>
+                </td>
+                <td>
+                    <center>疵点</center>
+                </td>
+                <td>
+                    <center>数量</center>
+                </td>
+            </tr>
+            <tr>
+                <td style="overflow: hidden;width:72px" id="hint_employee"></td>
+                <td style="overflow: hidden;width:72px" id="hint_mistake"></td>
+                <td style="width:80px;">
+                    <button class="btn btn-default" style="height:30px;display: inline;width:30px"
+                            onclick="return OnClickMinus()">-
+                    </button>
+                    <input class="form-control" type="text"
+                           style="height:30px;width:35px ;text-align: center;display: inline"
+                           value='1'
+                           id="number" onfocus="number = this"/>
+                    <button class="btn btn-default" style="height:30px;display: inline; width:30px;margin-right: 0px"
+                            onclick="return OnClickPlus()">+
+                    </button>
+                    <script>
+                        function OnClickPlus() {
+                            if (parseInt(document.getElementById('number').value)) {
+                                document.getElementById('number').value = parseInt(document.getElementById('number').value) + 1;
+                            } else {
+                                document.getElementById('number').value = 1;
+                            }
+                            document.getElementById('number').focus();
+                        }
+                        function OnClickMinus() {
+                            if (parseInt(document.getElementById('number').value)) {
+                                document.getElementById('number').value = parseInt(document.getElementById('number').value) - 1;
+                            } else {
+                                document.getElementById('number').value = 0;
+                            }
+                            document.getElementById('number').focus();
+                        }
+                    </script>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row clearfix" style="margin-top: 5px" style="width:98%">
+    <div class="col-md-4">
+        <button class="btn btn-default  btn-block pop" type="button"
+                onclick="return OnClickDeleteRecord()" data-toggle="tooltip"
+                data-placement="top" title id="del_button"
+                data-original-title="<label style = 'font-size:20px'>删除已选择的记录<label>"><span
+                class="glyphicon glyphicon-minus"></span>
+            删除
+        </button>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <button class="btn btn-default  btn-block pop" type="button" style=""
+                onclick="return OnClickInsert()" data-toggle="tooltip"
+                data-placement="top" title id="add_button"
+                data-original-title="<label style = 'font-size:20px'>添加这条记录</label>"><span
+                class="glyphicon glyphicon-plus"></span>
+            添加
+        </button>
+    </div>
+    <script>
+        function OnClickDeleteRecord() {
+            $('#status tbody tr').each(function () {
+                if (this.getAttribute("is_selected") == 'true') {
+                    this.parentNode.removeChild(this);
+                }
+            });
+            flush_status();
+        }
+        function OnClickInsert() {
+            if (document.getElementById('hint_employee').innerText == '' || document.getElementById('hint_mistake').innerText == '') {
+                alert('请选择责任人和疵点之后添加');
+                return;
+            }
+            var exist = false;
+            var trs = document.getElementById('status').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            for (var i = 0; i < trs.length; i++) {
+                var no_employee = trs[i].getElementsByTagName('td')[0].getAttribute('no');
+                var no_mistake = trs[i].getElementsByTagName('td')[1].getAttribute('no');
+                if (no_employee == document.getElementById('hint_employee').getAttribute('no') && no_mistake == document.getElementById('hint_mistake').getAttribute('no')) {
+                    var count = parseInt(trs[i].getElementsByTagName('td')[2].innerHTML) + parseInt(document.getElementById('number').value);
+                    if (count > total_num) {
+                        alert('疵点数量超出检验数量');
+                        return;
+                    } else {
+                        trs[i].getElementsByTagName('td')[2].innerHTML = count;
+                    }
+                    exist = true;
+                }
+            }
+            if (!exist) {
+                if (parseInt(document.getElementById('number').value) > total_num) {
+                    alert('疵点数量超出检验数量');
+                    return;
+                }
+                var tr = document.createElement('tr');
+                var td0 = document.createElement('td');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                td0.innerHTML = document.getElementById('hint_employee').getElementsByTagName('a')[0].innerHTML;
+                td0.setAttribute('no', document.getElementById('hint_employee').getAttribute('no'));
+                td1.innerHTML = document.getElementById('hint_mistake').innerHTML;
+                td1.setAttribute('no', document.getElementById('hint_mistake').getAttribute('no'));
+                td2.innerHTML = document.getElementById('number').value;
+                tr.appendChild(td0);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.style.textAlign = 'center';
+                tr.setAttribute('is_selected', 'false');
+                document.getElementById('status').getElementsByTagName('tbody')[0].appendChild(tr);
+
+            }
+            tr.onclick = function () {
+                if (this.getAttribute('is_selected') == 'true') {
+                    this.style.background = '#fff';
+                    tr.setAttribute('is_selected', 'false');
+                } else {
+                    this.style.background = '#0099FF';
+                    tr.setAttribute('is_selected', 'true');
+                }
+            };
+            reset_hint();
+            flush_status();
+        }
+        function flush_status() {
+            var count = 0;
+            var trs = document.getElementById('status').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            for (var i = 0; i < trs.length; i++) {
+                count += parseInt(trs[i].getElementsByTagName('td')[2].innerHTML);
+            }
+            document.getElementById('status_total').innerHTML = '<center>' + count.toString() + '</center>';
+        }
+    </script>
+</div>
+<div class="row clearfix" style="margin-top: 10px;max-height: 100px;padding-right:15px">
+    <div class="col-md-12" style="max-height: 100px;overflow: auto;padding-right: 0px">
+        <table style="font-size: 15px; top:10px;width:100%;" class="table-bordered"
+               id="status">
+            <thead>
+            <tr>
+                <th>
+                    <center>责任人</center>
+                </th>
+                <th>
+                    <center>疵点</center>
+                </th>
+                <th>
+                    <center>数量</center>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="2">
+                    <center>合计</center>
+                </th>
+                <th id="status_total"></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div class="row clearfix" style="margin-top: 5px">
+    <div class="col-md-4">
+        <button class="btn btn-default btn-block pop" type="button" style="width:100%; margin-top:10px"
+                onclick="return OnClickClear()"
+                data-toggle="tooltip"
+                data-placement="top" data-original-title="<label style = 'font-size:20px'>清空记录</label>"><span
+                class="glyphicon glyphicon-remove"></span>
+            清空
+        </button>
+
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <button class="btn btn-default btn-block pop" type="button" style="width:100%; margin-top:10px"
+                onclick="return OnCommit()"
+                data-toggle="tooltip"
+                data-placement="top" title data-original-title="<label style = 'font-size:20px'>提交记录</label>">
+            <span class="glyphicon glyphicon-ok"></span>
+            完成
+        </button>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    function OnClickClear() {
+        if (confirm('确定清空？')) {
+            document.getElementById("status").getElementsByTagName('tbody')[0].innerHTML = '';
+            flush_status();
+        }
+    }
+    function commit_is_legal() {
+        if (document.getElementById('batch').value == '') {
+            alert('批次号未选择');
+            return false;
+        }
+        if (!parseInt(document.getElementById('total_num').value)) {
+            alert('数量不合法');
+            return false;
+        }
+        if (document.getElementById('inspector').getElementsByTagName('input').length != 0) {
+            alert('请输入员工号再提交');
+            return false;
+        }
+        var flag = true;
+        $('#status tbody tr').each(function () {
+            if (parseInt(this.getElementsByTagName('td')[2].innerHTML) > parseInt(document.getElementById('total_num').value)) {
+                alert('有疵点的数量超过检验数');
+                flag = false;
+            }
+        });
+        return flag;
+    }
+    function OnCommit() {
+        if (!commit_is_legal()) {
+            return;
+        }
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", '/commit_res/', true);
+        xmlhttp.setRequestHeader("Content-type", "text/xml");
+        //var hs = document.getElementById("scan_input");
+        var resultxml = '';
+        resultxml += 'batch=' + document.getElementById('batch').value + '&';
+        resultxml += 'codenumber=null&';
+        resultxml += 'count=' + document.getElementById('total_num').value + '&';
+        resultxml += 'group=' + document.getElementById('department').value + '&';
+        resultxml += 'inspectorno=' + document.getElementById('inspector').getAttribute('no') + '&';
+        resultxml += 'inspectorname=' + document.getElementById('inspector').getElementsByTagName('a')[0].innerHTML + '&';
+        resultxml += 'type=' + document.getElementById('type').value + '&';
+        resultxml += 'xml=<xml><res>';
+        $('#status tbody tr').each(function () {
+            resultxml += '<re mist="' + this.getElementsByTagName('td')[1].getAttribute('no') + '" ';
+            resultxml += 'prog="0" count="' + this.getElementsByTagName('td')[2].innerHTML + '" ';
+            resultxml += 'employeeno="' + this.getElementsByTagName('td')[0].getAttribute('no') + '" ';
+            resultxml += 'employee="' + this.getElementsByTagName('td')[0].innerHTML + '"/>';
+        });
+        resultxml = resultxml + "</res></xml>";
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                alert('提交成功');
+            }
+        };
+        //alert(resultxml);
+        xmlhttp.send(resultxml);
+        reset_hint();
+        document.getElementById("status").getElementsByTagName('tbody')[0].innerHTML = '';
+        flush_status();
+    }
+    {% ifequal login_switch 1 %}
+    var keyup_s = '';
+    $('body').keyup(function(event){
+        keyup_s += String.fromCharCode(event.which);
+        if (event.which == 13){
+            if (keyup_s.length < 10){
+                console.log(keyup_s.slice(1,-1));
+                change_user(keyup_s.slice(-6,-1));//需要工号的格式
+            }
+        }
+    });
+    function change_user (account){
+        var xml = new XMLHttpRequest();
+        xml.open('GET','/logout/?username='+account+'&no_redirect=True',false);
+        xml.send();
+        console.log('注销完成');
+        xml2 = new XMLHttpRequest();
+        xml2.onreadystatechange = function(){
+            if (xml2.readyState == 4 && xml2.status == 200){
+
+            }
+        };
+        xml2.open('GET','/submit_id/?username='+account,false);
+        xml2.send();
+        console.log('登陆完毕');
+        window.location.reload(1);
+    }
+    {% endifequal %}
+</script>
+</div>
+</body>
+{% endblock %}

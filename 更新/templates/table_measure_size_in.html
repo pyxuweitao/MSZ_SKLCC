@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}工艺员录入情况{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href='{% static "css/jquery.dataTables.min.css" %}'/>
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.battatech.excelexport.min.js" %}'></script>
+<!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.min.js" %}'></script>-->
+<!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.zh-CN.js" %}'></script>-->
+<script>
+    function compare_date() {
+        var start = window.location.search.toString().split('&')[0].split('=')[1];
+        var end = window.location.search.toString().split('&')[1].split('=')[1];
+
+        document.getElementById("start").value = start;
+        document.getElementById("end").value = end;
+        document.getElementById("table_title").innerHTML = '工艺员录入情况 时间：' + start + '--' + end;
+    }
+    $(document).ready(function () {
+        compare_date();
+        var copy = document.createElement("table");
+        copy.style.display = 'none';
+        copy.border = '1';
+        copy.innerHTML = document.getElementById("tar").innerHTML;
+        //copy.removeChild(copy.getElementsByTagName('tfoot')[0]);
+        copy.id = 'copy';
+        document.getElementsByTagName('body')[0].appendChild(copy);
+        var rows = document.getElementById("tar").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        for (var i = 3; i <= 4; i++) {
+            var count = 0;
+            for (var m=0;m<rows.length;m++){
+                count += parseInt(rows[m].getElementsByTagName('td')[i].innerHTML);
+            }
+            var tfoot = document.createElement('th');
+            tfoot.innerHTML = count;
+            var tfoot_cpy = document.createElement('th');
+            tfoot_cpy.innerHTML = count;
+            //document.getElementById("tar").getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].appendChild(tfoot_cpy);
+            //document.getElementById("copy").getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].appendChild(tfoot);
+        }
+        document.getElementById("tar").getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].appendChild(document.createElement('th'));
+         var table = $('#tar').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录", "sInfoEmtpy": "找不到相关数据",
+                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                "sProcessing": "正在加载中...",
+                "sSearch": "搜索",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "第一页",
+                    "sPrevious": " 上一页 ",
+                    "sNext": " 下一页 ",
+                    "sLast": " 最后一页 " }
+            },
+            bPaginate: false
+
+        });
+        // $("#tar tfoot th").each(function (i) {
+        //     if (i>=3){
+        //         return;
+        //     }
+        //     var select = $('<select><option value="all">不限</option></select>')
+        //             .appendTo($(this).empty())
+        //             .on('change', function () {
+        //                 if (this.value == 'all') {//修改正则表达
+        //                     table.column(i)
+        //                             .search('[^@]', true, false)//所有非'@'字符均可
+        //                             .draw();
+        //                 } else {
+        //                     table.column(i)
+        //                             .search('^' + $(this).val() + '$', true, false)
+        //                             .draw();
+        //                 }
+        //             });
+        //     table.column(i).data().unique().sort().each(function (d, j) {
+        //         select.append('<option value="' + d + '">' + d + '</option>')
+        //     });
+        // });
+
+        $("#download").on('click', function () {
+            document.getElementById('copy').style.display = 'block';
+            var uri = $("#copy").btechco_excelexport({
+                containerid: "copy", datatype: $datatype.Table, returnUri: true
+            });
+            $(this).attr('download', document.getElementById("table_title").innerHTML+'.xls').attr('href', uri).attr('target', '_blank');
+            document.getElementById('copy').style.display = 'none';
+        });
+    });
+
+</script>
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <form class="form form-inline" action="/form13/">
+                    <div class="form-group">
+                        <label for="start">开始日期(含)：</label>
+                        <input class="form-control" id="start" name="start" style="width:200px;" type="date" required='required'>
+                    </div>
+                    <div class="form-group">
+                        <label for="end">结束日期(含)：</label>
+                        <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
+                    </div>
+
+                    <button class="btn btn-primary pull-right" type="submit">
+                        查询
+                    </button>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <table style="width:100%" id="tar" class="display cell-border">
+                    <thead>
+                    <tr>
+                        <th colspan="5" id="table_title">  </th>
+                    </tr>
+                    <tr>
+                        <th>工号</th>
+                        <th>姓名</th>
+                        <th>款号</th>
+                        <th>时间</th>
+                        <th>查看</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for temp in res %}
+                        <tr>
+                            <td>{{temp.employeeno}}</td>
+                            <td>{{temp.employee}}</td>
+                            <td>{{temp.styleno}}</td>
+                            <td>{{temp.time}}</td>
+                            <td><a href="{{temp.url}}">查看详情</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <a class="" href="#" id="download">
+                    在excel中打开
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--加入筛选功能-->
+</body>
+{% endblock %}

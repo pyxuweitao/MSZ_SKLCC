@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}检验员返修活汇总表{% endblock %}
+{% block staticfiles %}
+    {% load staticfiles %}
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+    <link href='{% static "css/style.css" %}' rel="stylesheet">
+
+    <link href='{% static "css/bootstrap-datetimepicker.min.css" %}' rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href= '{% static "img/apple-touch-icon-144-precomposed.png" %}'>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href='{% static "img/apple-touch-icon-114-precomposed.png" %}'>
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href='{% static "img/apple-touch-icon-72-precomposed.png" %}'>
+    <link rel="apple-touch-icon-precomposed" href='{% static "img/apple-touch-icon-57-precomposed.png" %}' >
+    <link rel="shortcut icon" href='{% static "img/favicon.png" %}'>
+
+    <script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/form_0.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.min.js" %}'></script>
+
+    <script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.zh-CN.js" %}'></script>
+{% endblock %}
+
+{% block other %}
+    <div class="row clearfix">
+        <div class="col-md-2 column" >
+            <div class="btn-group" style = "display: none">
+                <button type="button" class="btn btn-default" id="department_hint">所有部门</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" value = '1' onclick="return onclickdepart(this)">所有部门</a></li>
+                    <li><a href="#" value = '1' onclick="return onclickdepart(this)">生产部27组</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-2 column">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" id="drop_hint">选择月份</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" value = '1' onclick="return onclickmonth(this)">一月</a></li>
+                    <li><a href="#" value = '2' onclick="return onclickmonth(this)">二月</a></li>
+                    <li><a href="#" value = '3' onclick="return onclickmonth(this)">三月</a></li>
+                    <li><a href="#" value = '4' onclick="return onclickmonth(this)">四月</a></li>
+                    <li><a href="#" value = '5' onclick="return onclickmonth(this)">五月</a></li>
+                    <li><a href="#" value = '6' onclick="return onclickmonth(this)">六月</a></li>
+                    <li><a href="#" value = '7' onclick="return onclickmonth(this)">七月</a></li>
+                    <li><a href="#" value = '8' onclick="return onclickmonth(this)">八月</a></li>
+                    <li><a href="#" value = '9' onclick="return onclickmonth(this)">九月</a></li>
+                    <li><a href="#" value = '10' onclick="return onclickmonth(this)">十月</a></li>
+                    <li><a href="#" value = '11' onclick="return onclickmonth(this)">十一月</a></li>
+                    <li><a href="#" value = '12' onclick="return onclickmonth(this)">十二月</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-3 column">
+            <div class="input-group">
+                <span class="input-group-addon">起始</span>
+                <input type="text" class="form-control" placeholder="start" readonly id="start_time">
+            </div>
+        </div>
+        <div class="col-md-3 column">
+            <div class="input-group pull-right">
+                <span class="input-group-addon">结束</span>
+                <input type="text" class="form-control" placeholder="end" readonly id="end_time">
+            </div>
+        </div>
+        <div class="col-md-2 column">
+            <button class="btn btn-primary pull-right" onclick="onclickconfirm()" id="confirm">确定</button>
+        </div>
+    </div>
+    <hr/>
+    <div class="row clearfix" style="top:10px">
+        <div class="col-md-12 column">
+            <table class="table table-bordered table-hover">
+                <thead id="content_head">
+                <tr>
+                    <th onclick='return order_by_no(this)' state='0'>
+                        工号
+                    </th>
+                    <th>
+                        姓名
+                    </th>
+                    <th onclick='return order_by_count(this)' state='0'>
+                        数量
+                    </th>
+                    <th onclick='return order_by_time(this)' state='0'>
+                        工时
+                    </th>
+                    <th onclick='return order_by_pertime(this)' state='0'>
+                        分钟单价
+                    </th>
+                    <th onclick='return order_by_total(this)' state='0'>
+                        合计（元）
+                    </th>
+
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}

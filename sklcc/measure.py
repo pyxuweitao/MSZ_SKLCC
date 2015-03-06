@@ -59,7 +59,7 @@ def get_measure_data_by_serialno( serialno, one_style ):
 							one['data'].append( [target[4]] )
 							break
 
-def get_inspector_measure_data( inspector_no, date,  batch = None, size = None ):
+def get_inspector_measure_data( inspector_no, date,  batch = None, size = None, contentid = None ):
 	#measure_force兼容
 	if batch == None:
 		styleno = None
@@ -68,36 +68,63 @@ def get_inspector_measure_data( inspector_no, date,  batch = None, size = None )
 	Raw          = Raw_sql()
 	res_list     = []
 	styleno_list = []
-	#TODO:二检
-
-	Raw.sql = """SELECT inspector_no, batch, a.styleno, a.size, partition, measure_res,
-				symmetry1, symmetry2, count_id, measure_type, a.serialno FROM sklcc_measure_record a JOIN sklcc_measure_info b
+	#二检
+	if contentid != None:
+		res = []
+		Raw.sql = """SELECT partition, measure_res, symmetry1, symmetry2, count_id, measure_type
+ 				FROM sklcc_measure_record a JOIN sklcc_measure_info b
 				ON a.serialno = b.serialno
-				WHERE inspector_no = '%s' AND left( a.createtime, 10 ) = '%s'
-				ORDER BY a.styleno, a.size, count_id, partition"""%( inspector_no, date )
-	raw_data = Raw.query_all()
-	if raw_data != False:
-		for i, data in enumerate( raw_data ):
-			if  { 'model':data[1], 'size':data[3], 'serialno': data[10] } not in styleno_list:
-				styleno_list.append( { 'model':data[1], 'size':data[3], 'serialno':data[10] } )
-				res_list.append( get_measure_info_by_styleno_and_size( data[2], data[3] ) )
-			#因为res_list新增的尾部列表中的dict按styleno, size,partition排过序，所以此处的Partition必为第0个dict
-			partition_no = len( res_list[-1] )
-			if data[9] == 1:
-				res_list[-1][i % partition_no]['data'].append( [ data[6], data[7] ] )
-			else:
-				res_list[-1][i % partition_no ]['data'].append( [data[5]] )
-		if styleno != None:
+				WHERE inspector_no = '%s' AND left( a.createtime, 10 ) = '%s' AND contentid = '%s' AND a.size = '%s'
+				AND a.styleno = '%s'
+				ORDER BY count_id"""%( inspector_no, date, contentid, size, styleno )
+		target_list = Raw.query_all()
+		if target_list != False:
+			count_id = 1
+			#第count_id次测量
+			temp = []
+			for target in target_list:
+				if target[4] != count_id:
+					count_id = target[4]
+					res.append( deepcopy(temp) )
+					temp = []
+				partition = {}
+				partition['name']=target[0]
+				#measure_type=1表示对称
+				partition['value']=[target[1]] if target[5] == 0 else [target[2], target[3]]
+				temp.append(deepcopy(partition))
+			res.append( temp )
 
-			for i,one in enumerate( styleno_list ):
-				if styleno == one['model'].split('-')[0] and size == one['size']:
-					styleno_list.insert( 0, styleno_list.pop( i ) )
-					res_list.insert( 0, res_list.pop( i ) )
-					return res_list, styleno_list
-	if styleno != None:
-		styleno_list.insert( 0, { 'model':batch, 'size':size, 'serialno':uuid.uuid1() } )
-		res_list.insert( 0, get_measure_info_by_styleno_and_size( styleno, size ) )
-	return res_list, styleno_list
+		return res
+	#一检
+	else:
+		Raw.sql = """SELECT inspector_no, batch, a.styleno, a.size, partition, measure_res,
+					symmetry1, symmetry2, count_id, measure_type, a.serialno FROM sklcc_measure_record a JOIN sklcc_measure_info b
+					ON a.serialno = b.serialno
+					WHERE inspector_no = '%s' AND left( a.createtime, 10 ) = '%s'
+					ORDER BY a.styleno, a.size, count_id, partition"""%( inspector_no, date )
+		raw_data = Raw.query_all()
+		if raw_data != False:
+			for i, data in enumerate( raw_data ):
+				if  { 'model':data[1], 'size':data[3], 'serialno': data[10] } not in styleno_list:
+					styleno_list.append( { 'model':data[1], 'size':data[3], 'serialno':data[10] } )
+					res_list.append( get_measure_info_by_styleno_and_size( data[2], data[3] ) )
+				#因为res_list新增的尾部列表中的dict按styleno, size,partition排过序，所以此处的Partition必为第0个dict
+				partition_no = len( res_list[-1] )
+				if data[9] == 1:
+					res_list[-1][i % partition_no]['data'].append( [ data[6], data[7] ] )
+				else:
+					res_list[-1][i % partition_no ]['data'].append( [data[5]] )
+			if styleno != None:
+
+				for i,one in enumerate( styleno_list ):
+					if styleno == one['model'].split('-')[0] and size == one['size']:
+						styleno_list.insert( 0, styleno_list.pop( i ) )
+						res_list.insert( 0, res_list.pop( i ) )
+						return res_list, styleno_list
+		if styleno != None:
+			styleno_list.insert( 0, { 'model':batch, 'size':size, 'serialno':uuid.uuid1() } )
+			res_list.insert( 0, get_measure_info_by_styleno_and_size( styleno, size ) )
+		return res_list, styleno_list
 
 
 def get_inspector_measure_data_OLD( inspector_no, date ):
@@ -168,24 +195,25 @@ def written_into_measure_info( info ):
 	Raw = Raw_sql()
 	if info['measure_type'] == 1:
 		Raw.sql = "insert into sklcc_measure_info( serialno, styleno, createtime, partition," \
-	          "measure_type, symmetry1, symmetry2, count_id ) values( '%s', '%s', '%s', '%s', %d, %f, %f, %d)"\
+	          "measure_type, symmetry1, symmetry2, count_id, contentid ) values( '%s', '%s', '%s', '%s', %d, %f, %f, %d, '%s')"\
 		          %( info['serialno'], info['styleno'], info['createtime'], info['partition'],
-		             info['measure_type'], info['symmetry1'], info['symmetry2'], info['id'] )
+		             info['measure_type'], info['symmetry1'], info['symmetry2'], info['id'], info['contentid'] )
+
 	else:
 		Raw.sql = "insert into sklcc_measure_info( serialno, styleno, createtime, partition," \
-	          "measure_res, measure_type, count_id ) values( '%s', '%s', '%s', '%s', %f, %d, %d )"\
+	          "measure_res, measure_type, count_id, contentid ) values( '%s', '%s', '%s', '%s', %f, %d, %d, '%s' )"\
 		          %( info['serialno'], info['styleno'], info['createtime'],
-	                   info['partition'], info['measure_res'], info['measure_type'], info['id'] )
+	                   info['partition'], info['measure_res'], info['measure_type'], info['id'], info['contentid'] )
 	Raw.update()
 	return info
 
 def written_into_measure_record( info, is_first_check = 'True' ):
 	Raw = Raw_sql()
 	Raw.sql = "insert into sklcc_measure_record( serialno, createtime, inspector_no, inspector, batch, styleno, size, " \
-		          "measure_count, state, is_first_check ) values( '%s', '%s', '%s', '%s', '%s', '%s', '%s'" \
-		          ", %d, 2, '%s' )"%( info['serialno'], info['createtime'], info['inspector_no'],
+		          "measure_count, state, is_first_check, departmentno ) values( '%s', '%s', '%s', '%s', '%s', '%s', '%s'" \
+		          ", %d, 2, '%s', '%s' )"%( info['serialno'], info['createtime'], info['inspector_no'],
 	                                        info['inspector'], info['batch'], info['styleno'], info['size'],
-	                                        info['measure_count'], is_first_check )
+	                                        info['measure_count'], is_first_check, info['departmentno'] )
 	Raw.update()
 
 def measure_commit( request ):
@@ -196,44 +224,58 @@ def measure_commit( request ):
 		T            = Current_time()
 		createtime   = T.time_str
 		json         = request.POST['JSON']
+		#contentid = False
+		contentid    = request.POST['contentid'] if 'contentid' in request.POST else False
 		inspector_no = request.session['employeeno']
 		inspector    = request.session['employee']
 		data         = simplejson.loads( json )
 		for one in data:
 			batch    = one['model']
+			Raw.sql  = "SELECT TOP 1 departmentno FROM producemaster WHERE batch = '%s'"%batch
+			target   = Raw.query_one('MSZ')
+			departmentno = ""
+			if target != False:
+				departmentno = target[0]
 			size     = one['size']
 			styleno  = batch.split('-')[0]
 			serialno = one['serialno']
 			res      = one['res']
 
-			Raw.sql = "delete from sklcc_measure_info where serialno = '%s'"%serialno
-			Raw.update()
-			Raw.sql = "delete from sklcc_measure_record where serialno = '%s'"%serialno
-			Raw.update()
-
+			if contentid == False:
+				Raw.sql = "delete from sklcc_measure_info where serialno = '%s'"%serialno
+				Raw.update()
+				Raw.sql = "delete from sklcc_measure_record where serialno = '%s'"%serialno
+				Raw.update()
+			else:
+				Raw.sql = "delete from sklcc_measure_info where contentid = '%s'"%contentid
+				Raw.update()
+				Raw.sql = "select top 1 * from sklcc_measure_info where serialno = '%s'"%serialno
+				if Raw.query_all() == False:
+					Raw.sql = "delete from sklcc_measure_record where serialno = '%s'"%serialno
+					Raw.update()
 
 			count_flag = res[0]['name'] if len( res ) != 0 else ""
 			count_id   = 0
 			if len( res ) != 0:
-				for one in res:
-					if one['name'] == count_flag:
+				for part in res:
+					if part['name'] == count_flag:
 						count_id += 1
-					partition   = one['name']
-					data        = one['data']
-
+					partition   = part['name']
+					data        = part['data']
 					if len( data ) == 1:
 						measure_res = float( data[0] )
+
 						insert = dict( serialno = serialno, styleno = styleno, createtime = createtime, partition = partition,
-						               measure_res = measure_res, measure_type = 0, id = count_id )
+						               measure_res = measure_res, measure_type = 0, id = count_id, contentid = contentid )
 					else:
 						symmetry1 = float( data[0] )
 						symmetry2 = float( data[1] )
 						insert = dict( serialno = serialno, styleno = styleno, createtime = createtime, partition = partition,
-						               symmetry1 = symmetry1, symmetry2 = symmetry2, measure_type = 1, id = count_id )
+						               symmetry1 = symmetry1, symmetry2 = symmetry2, measure_type = 1, id = count_id, contentid = contentid )
+
 					written_into_measure_info( insert )
 				written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
-			                                   batch = batch, styleno = styleno, size = size, measure_count = count_id ) )
-
+			                                   batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ) )
 		return HttpResponse()
 	except Exception,e:
 		print e
@@ -253,8 +295,15 @@ def measure_check( request ):
 		dept_list.append( {'no':one,'name':find_department_name( one ) ,} )
 
 	if 'date' in request.GET.keys() and 'department_no' in request.GET.keys():
-		inspector_list = find_inspector_by_department_authority( request.GET['department_no'], 0 )
+		inspector_list = []
 		today = request.GET['date']
+		departmentno = request.GET['department_no']
+		Raw.sql = "SELECT distinct inspector_no, inspector FROM sklcc_measure_record WHERE " \
+		          "left( createtime, 10 ) = '%s' AND departmentno = '%s'"%( today, departmentno )
+		target_list = Raw.query_all()
+		if target_list != False:
+			for target in target_list:
+				inspector_list.append( {'employeeno':target[0], 'employee':target[1]} )
 		measure_list = []
 		measure_info_list = []
 		ok                = []
@@ -272,7 +321,6 @@ def measure_check( request ):
 			measure_list.append( deepcopy( ok ) )
 			measure_info_list.append( deepcopy( info_list ) )
 
-
 	return TemplateResponse( request, html, locals() )
 
 def measure_check_pass( request ):
@@ -283,3 +331,22 @@ def measure_check_pass( request ):
 	Raw.sql = "update sklcc_measure_record set state = 1 where inspector_no = '%s' and left( createtime, 10 ) = '%s'"%( inspector_no, date )
 	Raw.update()
 	return HttpResponse()
+
+def measure_force_recheck( request ):
+	try:
+		em_number    = request.session['employeeno']
+		employeename = request.session['employee']
+		html         = get_template( "measure_force_recheck.html" )
+		inspector_no = request.session['employeeno']
+		Raw   = Raw_sql()
+		T     = Current_time()
+		today = T.get_date()
+		measure_data = get_inspector_measure_data( inspector_no, today )
+		res_list  = measure_data[0]
+		info_list = measure_data[1]
+		ok = []
+		for one in res_list:
+			ok.append( toTypehorizon(one) )
+		return TemplateResponse( request, html, locals() )
+	except Exception,e:
+		print e

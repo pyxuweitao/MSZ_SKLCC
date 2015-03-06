@@ -1,0 +1,477 @@
+{% extends 'base.html' %}
+{% block title %}测量公差数据设定{% endblock %}
+
+{% block staticfiles %}
+{% load staticfiles %}
+<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+<link href='{% static "css/style.css" %}' rel="stylesheet">
+<link href='{% static "css/select2.css" %}' rel="stylesheet">
+<style>
+    .table-input {
+        border: none;
+        width: 80%
+    }
+</style>
+<script type="text/javascript" src='{% static "js/jquery.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/select2.min.js" %}'></script>
+<script>
+    var partition_list;
+    window.onload = function () {
+        state = '{{state}}';
+        if (state == '1') {
+            $('span.glyphicon-plus-sign').each(function () {
+                this.click();
+            });
+        }
+        partition_list = eval('(' + document.getElementById('json').innerHTML + ')');
+        console.log(partition_list);
+
+        document.getElementsByTagName("body")[0].style.overflow = 'auto';
+        $('#add_column').tooltip({
+            animation: true,
+            title: '点击添加一列'
+        });
+        $('#add_row').tooltip({
+            animation: true,
+            title: '点击添加一行'
+        });
+        document.getElementById('style_input').value = window.location.search.length != 0 ? window.location.search.split('?')[1].split('=')[1] : '';
+        if ($.trim(document.getElementById('style_input').value) == '') {
+            document.getElementById("btn-sub").disabled = true;
+        }
+
+        $("#tar select").each(function(){
+            var se = this;
+            var v = this.parentNode.getAttribute("value");
+            $(se).val(v);
+        });
+        var is_mine = parseInt(document.getElementById("changeable").getAttribute("value"));
+        if (!is_mine){
+             document.getElementById("btn-sub").disabled = true;
+             document.getElementById("btn-sub").innerHTML = "您无权修改此单据";
+             $("#scroll_div input").attr("readonly", "readonly");
+             $("#scroll_div a").remove();
+             $("#scroll_div select").attr("disabled","disabled");
+             $(":checkbox").each(function(){
+                this.disabled = true;
+             });
+        }
+        on_change_quick_add(document.getElementById("quick_add_selection"));
+    };
+    function div_update(){
+        document.getElementById('scroll_div').scrollTo(100000000,10000000);
+    }
+    function remove_col(n) {
+        n.parentNode.setAttribute('marked', '1');
+        var index = 0;
+        var ths = document.getElementById('tar').getElementsByTagName('th');
+        for (var i = 0; i < ths.length; i++) {
+            if (ths[i].getAttribute('marked') == '1') {
+                index = i;
+            }
+        }
+        document.getElementById("tar").getElementsByTagName('tr')[0].removeChild(n.parentNode);
+        $('#tar tbody tr').each(function () {
+            this.removeChild(this.getElementsByTagName('td')[index]);
+        });
+    }
+    function add_col() {
+        function calc_value(node,value){
+            if (value > 0){
+                //console.log(node);
+                var pre = $(node).prev()[0];
+                console.log(pre);
+                if(parseFloat(pre.getElementsByTagName("input")[0].value)>0) {
+                    node.getElementsByTagName("input")[0].value = (parseFloat(pre.getElementsByTagName("input")[0].value) + value).toFixed(1);
+                }
+            }
+        }
+        var thead = document.getElementById('tar').getElementsByTagName('tr')[0];
+        var td = document.createElement('th');
+        td.style.border = '1px solid #ddd';
+        td.style.minWidth = '110px';
+        td.style.maxWidth = '110px';
+        td.innerHTML = '<a style="cursor:pointer;display: inline" class="remove_col" onclick="return remove_col(this)"> <span class="glyphicon glyphicon-minus-sign"> </span></a><input PLACEHOLDER="尺码" class="table-input" style="display: inline;width:60%;MARGIN-LEFT:5PX"/>';
+        var th = thead.getElementsByTagName('th')[thead.getElementsByTagName('th').length - 1];
+        th.style.display = 'none';
+        $(th).slideDown('slow');
+        thead.insertBefore(td, th);
+        $('a.remove_col').tooltip({
+            animation: true,
+            title: '点击删除此列'
+        });
+        $('#tar tbody tr').each(function () {
+            var td = document.createElement('td');
+            td.innerHTML = '<input class="table-input" placeholder="/"/>';
+            var th = this.getElementsByTagName('td')[thead.getElementsByTagName('th').length - 2];
+            this.insertBefore(td, th);
+            calc_value(td,parseFloat(th.getElementsByTagName("input")[0].value));
+        });
+    }
+    function add_row(name) {
+        var length = document.getElementById("tar").getElementsByTagName('th').length - 3;
+        var tr = document.createElement("tr");
+        var td = document.createElement('td');
+        td.innerHTML = '<a style="cursor:pointer;display: inline" class="remove_row" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)"> <span class="glyphicon glyphicon-minus-sign"> </span></a>';
+        var select = document.createElement('input');
+        select.type = 'text';
+        select.setAttribute('list', 'partition_list_data');
+        select.style.marginLeft = '10px';
+        select.style.width = '70%';
+        select.value = name;
+        td.appendChild(select);
+        var check = document.createElement('input');
+
+        check.type = 'checkbox';
+        check.style.marginLeft = '10px';
+        check.innerHTML = "3";
+        td.style.position = 'absolute';
+        td.style.width = '150px';
+        td.style.height = '39px';
+        td.style.backgroundColor = 'rgba(238, 238, 238, 0.8)';
+        tr.appendChild(td);
+        var td2 = document.createElement("td");
+        td2.appendChild(check);
+        var span = document.createElement("span");
+        span.innerHTML = "测量";
+        td2.appendChild(span);
+        tr.appendChild(td2);
+
+        for (var i = 0; i <= length; i++) {
+            var td = document.createElement("td");
+
+            
+            if(i == length){
+                td.innerHTML += '<input class="table-input" placeholder="均差"/>';
+            }else if (i == 0 || i==1){
+                td.innerHTML = '<select name="" id=""><option value=""></option><option >0.1</option><option >0.2</option><option >0.3</option><option >0.4</option><option >0.5</option><option >0.6</option><option >0.7</option><option >0.8</option><option >0.9</option><option >1.0</option><option >1.1</option><option >1.2</option><option >1.3</option><option >1.4</option><option >1.5</option></select>';
+            }else {
+                td.innerHTML += '<input class="table-input" placeholder="/"/>';
+            }
+            tr.appendChild(td);
+        }
+        document.getElementById("tar").getElementsByTagName('tbody')[0].appendChild(tr);
+        $('a.remove_row').tooltip({
+            animation: true,
+            title: '点击删除此行'
+        });
+        check.checked = true;
+        console.log(check.checked);
+    }
+    var temp_id = 1;
+    function get_id() {
+        return temp_id += 1;
+    }
+    function submit() {
+        var size_map = [];
+        var size_row = document.getElementById('tar').getElementsByTagName('th');
+        if (size_row.length <= 5) {
+            alert('请添加至少一个尺码的尺寸');
+            return;
+        }
+        for (var i = 5; i < size_row.length - 1; i++) {
+            if ($.trim(size_row[i].getElementsByTagName('input')[0].value) == '') {
+                alert('有尺码不明确，请填写完整后提交');
+                return;
+            }
+            for (var j = 0; j < size_map.length; j++) {
+                if ($.trim(size_row[i].getElementsByTagName('input')[0].value) == size_map[j]) {
+                    alert('有尺码重复');
+                    return;
+                }
+            }
+            size_map.push($.trim(size_row[i].getElementsByTagName('input')[0].value));
+        }
+        var data;
+        var partions = [];
+        var is_legal = true;
+        $('#tar tbody tr').each(function (e,i) {
+            for (var i = 0; i < partions.length; i++) {
+                if (this.getElementsByTagName('input')[0].value == partions[i].name) {
+                    is_legal = false;
+                }
+            }
+            var is_need = this.getElementsByTagName('input')[1].checked;
+            var balance_error = $.trim(this.getElementsByTagName('select')[1].value) != '' ? $.trim(this.getElementsByTagName('select')[1].value) : null;
+            var common_difference = $.trim(this.getElementsByTagName('select')[0].value) != '' ? $.trim(this.getElementsByTagName('select')[0].value) : null;
+            var res = [];
+            var set_res = this.getElementsByTagName('input');
+            for (var i = 3; i < set_res.length; i++) {
+                res.push({
+                    'size': size_map[i - 3],
+                    'data': $.trim(set_res[i].value) != '' ? $.trim(set_res[i].value) : null
+                });
+            }
+            partions.push({
+                'name': this.getElementsByTagName('input')[0].value,
+                'is_need': is_need,
+                'balance_error': balance_error,
+                'common_difference': common_difference,
+                'hint': $.trim(set_res[2].value),
+                'index':e,
+                'res': res
+
+            });
+        });
+        for (var i = 0; i < partions.length; i++) {
+            if (partions[i].name == '') {
+                alert('有部位名为空');
+                return;
+            }
+        }
+        if (!is_legal) {
+            alert('部位存在重复');
+            return;
+        }
+        data = {
+            'new_style': document.getElementById('style_input').value,
+            'old_style': window.location.search.split('?')[1].split('=')[1] ? window.location.search.split('?')[1].split('=')[1] : null,
+            'type_id': null,
+            'data': partions
+        };
+        if (data.new_style == '') {
+            alert('请填写款号');
+            return;
+        }
+        $.ajax({
+            success: function (e) {
+                if (e == '0'){
+                    alert('已存在此款号');
+                }else if (e == '1'){
+                    alert('提交成功');
+                }
+            },
+            error: function (e) {
+                console.log(e);
+                alert('系统发生错误，请稍后再试，频繁出现请联系管理员');
+            },
+            url: '/submit_style_measure/',
+            type: 'POST',
+            data: 'json=' + JSON.stringify(data),
+            timeout: 5000
+        });
+    }
+</script>
+
+{% endblock %}
+
+{% block other %}
+<div class="row clearfix area">
+    <datalist id="json">
+        {{measure_list_json}}
+    </datalist>
+ 
+    <div class="col-md-2">
+        产品款号：
+        <form action="/style_measure/" style="display: inline">
+
+            <input name="style" class="form-control" style="width:100px;display: inline" id="style_input"/>
+
+        </form>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-info" onclick="query_style()">查询</button>
+    </div>
+    <script>
+        function query_style() {
+            document.getElementsByTagName('form')[0].submit();
+        }
+        function on_change_quick_add(n){
+            document.getElementById("partition_list_data").innerHTML = document.getElementById(n.value).innerHTML;
+        }
+    </script>
+
+    <div class="col-md-1">
+        <select class="form-control" id="quick_add_selection" onchange="on_change_quick_add(this)">
+            {% for temp in measure_list %}
+            <option>{{temp.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-1">
+        {% ifequal state 0 %}
+            <button disabled="disabled" onclick="quick_append_partition()" class="btn btn-primary">快速添加部位</button>
+        {% else %}
+            <button  class="btn btn-primary" onclick="quick_append_partition()">快速添加部位</button>
+        {% endifequal %}
+    </div>
+    <script>
+        function quick_append_partition(){
+            if (state == '1'){
+                $('a.remove_row').each(function(){
+                    this.click();
+                });
+            }
+            var target = document.getElementById("quick_add_selection").value;
+            $('#partition_list_data option').each(function(){
+               if (this.getAttribute('label') == target){
+                   add_row(this.value);
+               }
+            });
+        }
+    </script>
+    <div class="col-md-1">
+        <datalist id="changeable" value="{{is_mine}}"></datalist>
+    </div>
+    <div class="col-md-1">
+        <select name="" id="quick_size_choose" class="form-control">
+            <option value="">选择尺码</option>
+            {% for temp in common_size_list %}
+                <option value="{{temp.value}}">{{temp.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary" onclick="quick_add_size()">快速添加尺码</button>
+    </div>
+    <script>
+        function quick_add_size () {
+            // body...
+            var list = document.getElementById("quick_size_choose").value.split(",");
+            for (var i=0;i<list.length;i++){
+                var th = document.getElementById("tar").getElementsByTagName("th")[document.getElementById("tar").getElementsByTagName("th").length -2];
+                if (th.getElementsByTagName("input")[0].value == ""){
+                    th.getElementsByTagName("input")[0].value = list[i];
+                }else{
+                    document.getElementById("add_column").click();
+                    th = document.getElementById("tar").getElementsByTagName("th")[document.getElementById("tar").getElementsByTagName("th").length -2];
+                    th.getElementsByTagName("input")[0].value = list[i];
+                }
+            }
+        }
+    </script>
+    <div class="col-md-3">
+        
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-success" id="btn-sub" onclick="return submit()">提交修改</button>
+    </div>
+</div>
+<div class="area" id="scroll_div" style="margin-top: 20px;overflow-x: auto">
+    <div>
+        <div class="" style="">
+            <table class="table table-bordered" style="border: none;max-width: 10000px;width: 100px;" id="tar">
+                <thead>
+                <tr>
+                    <th class="table-h"
+                        style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:130px;min-width: 150px;height: 39px">部位名
+                    </th>
+                    <th class="table-h"
+                        style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:80px;min-width: 80px">要求
+                    </th>
+                    <th class="table-h"
+                        style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:60px;min-width: 60px">公差
+                    </th>
+                    <th class="table-h"
+                        style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:60px;min-width: 60px">对称
+                    </th>
+                    <th class="table-h"
+                        style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:150px;min-width: 150px">备注
+                    </th>
+                    {% for temp in size_list %}
+                    <th style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;min-width: 110px;max-width: 110px">
+                        <a style="cursor:pointer;display: inline" class="remove_col" onclick="return remove_col(this)">
+                            <span class="glyphicon glyphicon-minus-sign col_miu"> </span></a>
+                        <input class="table-input" value="{{temp}}" style="width:60%"/>
+                    </th>
+                    {% endfor %}
+                    <th class="table-h" style="border: none;min-width:50px"><a id="add_column" style="cursor: pointer"
+                                                                onclick="return add_col()"><span
+                            class="glyphicon glyphicon-plus-sign"></span></a></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for temp in res %}
+                <tr>
+
+                    <td style="background-color: rgba(238, 238, 238, 0.8);position: absolute;max-width: 150px;height: 39px">
+                        <a style="cursor:pointer;display: inline" class="remove_col"
+                           onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">
+                            <span class="glyphicon glyphicon-minus-sign row_miu"> </span>
+                        </a>
+                        <input class="" style="width:70%;margin-left: 5px;" list="partition_list_data"
+                               value="{{temp.partition}}" type="text"/>
+                    </td>
+                    <td>
+                        {% ifequal temp.measure_or_not 1 %}
+                        <div><input type="checkbox" style="margin-left: 10px" checked="checked"/>测量</div>
+                        {% else %}
+                        <div><input type="checkbox" style="margin-left: 10px"/>测量</div>
+                        {% endifequal %}
+                    </td>
+                    <td value = "{{temp.common}}">
+                        <!-- <input class="table-input" value="{{temp.common}}"/> -->
+                        <select name="" id="">
+                            <option value=""></option>
+                            <option >0.1</option>
+                            <option >0.2</option>
+                            <option >0.3</option>
+                            <option >0.4</option>
+                            <option >0.5</option>
+                            <option >0.6</option>
+                            <option >0.7</option>
+                            <option >0.8</option>
+                            <option >0.9</option>
+                            <option >1.0</option>
+                            <option >1.1</option>
+                            <option >1.2</option>
+                            <option >1.3</option>
+                            <option >1.4</option>
+                            <option >1.5</option>
+                        </select>
+                    </td>
+                    <td value = "{{temp.symmetry}}">
+                        <!-- <input class="table-input" value="{{temp.symmetry}}"/> -->
+                        <select name="" id="">
+                            <option value=""></option>
+                            <option >0.1</option>
+                            <option >0.2</option>
+                            <option >0.3</option>
+                            <option >0.4</option>
+                            <option >0.5</option>
+                            <option >0.6</option>
+                            <option >0.7</option>
+                            <option >0.8</option>
+                            <option >0.9</option>
+                            <option >1.0</option>
+                            <option >1.1</option>
+                            <option >1.2</option>
+                            <option >1.3</option>
+                            <option >1.4</option>
+                            <option >1.5</option>
+                        </select>
+                    </td>
+                    <td><input class="table-input" value="{{temp.hint}}"/></td>
+                    {% for data in temp.data %}
+                    <td><input class="table-input" value="{{data.no}}"/></td>
+                    {% endfor %}
+                    <td><input class="table-input" type="text" placeholder="均差"/></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td style="border:none"><a id="add_row" style="cursor: pointer" onclick="add_row('')"><span
+                            class="glyphicon glyphicon-plus-sign"></span></a></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+<datalist id="partition_list_data">
+
+</datalist>
+
+{% for temp in measure_list %}
+    <datalist id="{{temp.name}}">
+        {% for i in temp.partition_list %}
+            <option value="{{i}}" label="{{temp.name}}">{{i}}</option>
+        {% endfor %}
+    </datalist>
+{% endfor %}
+</body>
+{% endblock %}

@@ -36,7 +36,7 @@
             animation: true,
             title: '点击添加一行'
         });
-        document.getElementById('style_input').value = window.location.search.split('?')[1].split('=')[1] ? window.location.search.split('?')[1].split('=')[1] : '';
+        document.getElementById('style_input').value = window.location.search.length != 0 ? window.location.search.split('?')[1].split('=')[1] : '';
         if ($.trim(document.getElementById('style_input').value) == '') {
             document.getElementById("btn-sub").disabled = true;
         }
@@ -46,7 +46,18 @@
             var v = this.parentNode.getAttribute("value");
             $(se).val(v);
         });
-
+        var is_mine = parseInt(document.getElementById("changeable").getAttribute("value"));
+        if (!is_mine){
+             document.getElementById("btn-sub").disabled = true;
+             document.getElementById("btn-sub").innerHTML = "您无权修改此单据";
+             $("#scroll_div input").attr("readonly", "readonly");
+             $("#scroll_div a").remove();
+             $("#scroll_div select").attr("disabled","disabled");
+             $(":checkbox").each(function(){
+                this.disabled = true;
+             });
+        }
+        on_change_quick_add(document.getElementById("quick_add_selection"));
     };
     function div_update(){
         document.getElementById('scroll_div').scrollTo(100000000,10000000);
@@ -79,8 +90,8 @@
         var thead = document.getElementById('tar').getElementsByTagName('tr')[0];
         var td = document.createElement('th');
         td.style.border = '1px solid #ddd';
-        td.style.minWidth = '100px';
-        td.style.maxWidth = '100px';
+        td.style.minWidth = '110px';
+        td.style.maxWidth = '110px';
         td.innerHTML = '<a style="cursor:pointer;display: inline" class="remove_col" onclick="return remove_col(this)"> <span class="glyphicon glyphicon-minus-sign"> </span></a><input PLACEHOLDER="尺码" class="table-input" style="display: inline;width:60%;MARGIN-LEFT:5PX"/>';
         var th = thead.getElementsByTagName('th')[thead.getElementsByTagName('th').length - 1];
         th.style.display = 'none';
@@ -250,7 +261,7 @@
     <datalist id="json">
         {{measure_list_json}}
     </datalist>
-
+ 
     <div class="col-md-2">
         产品款号：
         <form action="/style_measure/" style="display: inline">
@@ -266,10 +277,13 @@
         function query_style() {
             document.getElementsByTagName('form')[0].submit();
         }
+        function on_change_quick_add(n){
+            document.getElementById("partition_list_data").innerHTML = document.getElementById(n.value).innerHTML;
+        }
     </script>
 
     <div class="col-md-1">
-        <select class="form-control" id="quick_add_selection">
+        <select class="form-control" id="quick_add_selection" onchange="on_change_quick_add(this)">
             {% for temp in measure_list %}
             <option>{{temp.name}}</option>
             {% endfor %}
@@ -297,19 +311,57 @@
             });
         }
     </script>
-    <div class="col-md-1">
 
+    <div class="col-md-1">
+        <select name="" id="quick_size_choose" class="form-control">
+            <option value="">选择尺码</option>
+            {% for temp in common_size_list %}
+                <option value="{{temp.value}}">{{temp.name}}</option>
+            {% endfor %}
+        </select>
     </div>
-    <div class="col-md-5">
-        {% ifequal state 1 %}
-        <p class="">*此款系第一次修改</p>
-        {% endifequal %}
-        {% ifequal state 0 %}
-        <p class="">*如果要录新的款号的数据请务必先查询</p>
-        {% endifequal %}
-        {% ifequal state 2 %}
-        <p class="">*此单之前已经录入过</p>
-        {% endifequal %}
+    <div class="col-md-1">
+        <button class="btn btn-primary" onclick="quick_add_size()">快速添加尺码</button>
+    </div>
+    <script>
+        function quick_fill_data(){
+            $("#tar tbody tr").each(function(){
+                var inputs = this.getElementsByTagName("input");
+                var base = parseFloat(inputs[inputs.length-1].value);
+                var start = parseFloat(inputs[3].value);
+                for (var i = 4;i<inputs.length-1;i++){
+
+                    if (inputs[3].value == "" || inputs[inputs.length-1].value == ""){
+                        //
+                    }else{
+                        inputs[i].value = ((i-3)*base+start).toFixed(1);
+                    }
+                }
+            });
+        }
+    </script>
+    <div class="col-md-1">
+        <datalist id="changeable" value="{{is_mine}}"></datalist>
+        <button class="btn btn-primary" id="quick_fill_data" onclick="quick_fill_data()">均差填充</button>
+    </div>
+    <script>
+        function quick_add_size () {
+            // body...
+            var list = document.getElementById("quick_size_choose").value.split(",");
+            for (var i=0;i<list.length;i++){
+                var th = document.getElementById("tar").getElementsByTagName("th")[document.getElementById("tar").getElementsByTagName("th").length -2];
+                if (th.getElementsByTagName("input")[0].value == ""){
+                    th.getElementsByTagName("input")[0].value = list[i];
+                }else{
+                    document.getElementById("add_column").click();
+                    th = document.getElementById("tar").getElementsByTagName("th")[document.getElementById("tar").getElementsByTagName("th").length -2];
+                    th.getElementsByTagName("input")[0].value = list[i];
+                }
+            }
+        }
+    </script>
+    <div class="col-md-3">
+        
     </div>
     <div class="col-md-1">
         <button class="btn btn-success" id="btn-sub" onclick="return submit()">提交修改</button>
@@ -337,7 +389,7 @@
                         style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;width:150px;min-width: 150px">备注
                     </th>
                     {% for temp in size_list %}
-                    <th style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;min-width: 100px;max-width: 100px">
+                    <th style="border-bottom:1px solid #ddd;border-top:1px solid #ddd;min-width: 110px;max-width: 110px">
                         <a style="cursor:pointer;display: inline" class="remove_col" onclick="return remove_col(this)">
                             <span class="glyphicon glyphicon-minus-sign col_miu"> </span></a>
                         <input class="table-input" value="{{temp}}" style="width:60%"/>
@@ -430,13 +482,15 @@
 </div>
 </div>
 <datalist id="partition_list_data">
-    {% for temp in measure_list %}
-    <!--<optgroup class="" label="{{temp.name}}">-->
-    {% for i in temp.partition_list %}
-    <option value="{{i}}" label="{{temp.name}}">{{i}}</option>
-    {% endfor %}
-    <!--</optgroup>-->
-    {% endfor %}
+
 </datalist>
+
+{% for temp in measure_list %}
+    <datalist id="{{temp.name}}">
+        {% for i in temp.partition_list %}
+            <option value="{{i}}" label="{{temp.name}}">{{i}}</option>
+        {% endfor %}
+    </datalist>
+{% endfor %}
 </body>
 {% endblock %}

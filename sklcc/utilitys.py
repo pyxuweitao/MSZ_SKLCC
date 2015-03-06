@@ -17,6 +17,10 @@ class Current_time:
 		self.time_str = unicode( datetime.datetime.now() )
 
 	@classmethod
+	def get_accurate_time(cls):
+		return unicode( datetime.datetime.now() )
+
+	@classmethod
 	def get_now_date(cls):
 		date = unicode( datetime.datetime.now() ).split( ' ' )[0]
 		return date
@@ -98,7 +102,7 @@ def find_em_name( em_number ):
 
 def find_department_authority_user( username, authorityid ):
 	Raw     = Raw_sql()
-	Raw.sql = "select departmentno from sklcc_employee_authority where username = '%s' and authorityid = %d order by departmentno"%( username, int( authorityid ) )
+	Raw.sql = "select DISTINCT departmentno from sklcc_employee_authority where username = '%s' and authorityid = %d order by departmentno"%( username, int( authorityid ) )
 	target_list = Raw.query_all()
 
 	departmentno = []
