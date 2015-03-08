@@ -32,17 +32,6 @@ DATABASES = {
 	        'host_is_server':True
         }
         },
-    'ok': {
-        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
-        'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': '626107',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',
-        'OPTIONS':{
-	        'host_is_server':True
-        }
-    },
 }
 #DATABASE_OPTIONS = {
      #'driver': 'SQL Server Native Client 10.0',
