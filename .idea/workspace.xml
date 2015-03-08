@@ -44,21 +44,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4268">
               <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+=======
+            <state vertical-scroll-proportion="0.656" vertical-offset="196" max-vertical-offset="4246">
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+>>>>>>> dev
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="settings - develop.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.45257142" vertical-offset="176" max-vertical-offset="4158">
               <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+=======
+      <file leaf-file-name="settings - develop.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="176" max-vertical-offset="4158">
+              <caret line="33" column="10" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
+>>>>>>> dev
               <folding />
             </state>
           </provider>
@@ -67,9 +80,34 @@
       <file leaf-file-name="measure.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/measure.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="7394" max-vertical-offset="7854">
               <caret line="340" column="25" selection-start-line="340" selection-start-column="25" selection-end-line="340" selection-end-column="25" />
               <folding />
+=======
+            <state vertical-scroll-proportion="0.0" vertical-offset="3740" max-vertical-offset="7854">
+              <caret line="170" column="52" selection-start-line="170" selection-start-column="50" selection-end-line="170" selection-end-column="52" />
+              <folding>
+                <marker date="1425618825181" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
+                <marker date="1425618825181" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
+                <marker date="1425618825181" expanded="true" signature="2584:2901" placeholder="SELECT parti..sklcc_measure_record..." />
+                <marker date="1425618825181" expanded="true" signature="3450:3788" placeholder="SELECT inspe..sklcc_measure_record..." />
+                <marker date="1425618825181" expanded="true" signature="5077:5190" placeholder="select disti..." />
+                <marker date="1425618825181" expanded="true" signature="5523:5646" placeholder="select disti..." />
+                <marker date="1425618825181" expanded="true" signature="7262:7462" placeholder="insert into ..." />
+                <marker date="1425618825181" expanded="true" signature="7682:7870" placeholder="insert into ..." />
+                <marker date="1425618825181" expanded="true" signature="8180:8439" placeholder="insert into ..." />
+                <marker date="1425618825181" expanded="true" signature="9282:9345" placeholder="SELECT TOP 1..." />
+                <marker date="1425618825181" expanded="true" signature="9618:9670" placeholder="delete from ..." />
+                <marker date="1425618825181" expanded="true" signature="9713:9767" placeholder="delete from ..." />
+                <marker date="1425618825181" expanded="true" signature="9819:9872" placeholder="delete from ..." />
+                <marker date="1425618825181" expanded="true" signature="9916:9976" placeholder="select top 1..." />
+                <marker date="1425618825181" expanded="true" signature="10036:10090" placeholder="delete from ..." />
+                <marker date="1425618825181" expanded="true" signature="12088:12230" placeholder="SELECT disti..sklcc_measure_record..." />
+                <marker date="1425618825181" expanded="true" signature="12663:12761" placeholder="select state..sklcc_measure_record..." />
+                <marker date="1425618825181" expanded="true" signature="13291:13392" placeholder="update sklcc..." />
+              </folding>
+>>>>>>> dev
             </state>
           </provider>
         </entry>
@@ -77,8 +115,13 @@
       <file leaf-file-name="measure_in.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/measure_in.html">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="4180" max-vertical-offset="7722">
               <caret line="190" column="16" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="16" />
+=======
+            <state vertical-scroll-proportion="0.0" vertical-offset="7281" max-vertical-offset="9262">
+              <caret line="339" column="11" selection-start-line="339" selection-start-column="11" selection-end-line="339" selection-end-column="11" />
+>>>>>>> dev
               <folding />
             </state>
           </provider>
@@ -87,8 +130,13 @@
       <file leaf-file-name="utilitys.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/utilitys.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="2530" max-vertical-offset="4708">
               <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+=======
+            <state vertical-scroll-proportion="0.0" vertical-offset="3014" max-vertical-offset="4730">
+              <caret line="137" column="26" selection-start-line="137" selection-start-column="26" selection-end-line="137" selection-end-column="26" />
+>>>>>>> dev
               <folding />
             </state>
           </provider>
@@ -97,29 +145,341 @@
       <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3102" max-vertical-offset="3454">
-              <caret line="141" column="51" selection-start-line="141" selection-start-column="51" selection-end-line="141" selection-end-column="51" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="286" max-vertical-offset="3454">
+              <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="24838" max-vertical-offset="96844">
               <caret line="1129" column="9" selection-start-line="1129" selection-start-column="9" selection-end-line="1129" selection-end-column="9" />
+=======
+      <file leaf-file-name="forms.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="29577" max-vertical-offset="31768">
+              <caret line="1350" column="42" selection-start-line="1350" selection-start-column="40" selection-end-line="1350" selection-end-column="42" />
+>>>>>>> dev
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recheck.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/js/recheck.js">
+      <file leaf-file-name="pad.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sklcc/pad.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0" vertical-offset="29481" max-vertical-offset="33110">
               <caret line="1351" column="23" selection-start-line="1351" selection-start-column="23" selection-end-line="1351" selection-end-column="23" />
+=======
+            <state vertical-scroll-proportion="0.0" vertical-offset="16729" max-vertical-offset="20262">
+              <caret line="773" column="34" selection-start-line="773" selection-start-column="34" selection-end-line="773" selection-end-column="34" />
+>>>>>>> dev
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< HEAD
+      <file leaf-file-name="measure_size_set.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/measure_size_set.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-7.096774" vertical-offset="7106" max-vertical-offset="11022">
+              <caret line="333" column="86" selection-start-line="333" selection-start-column="86" selection-end-line="333" selection-end-column="86" />
+              <folding />
+=======
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sklcc/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="22716" max-vertical-offset="97064">
+              <caret line="1045" column="67" selection-start-line="1045" selection-start-column="67" selection-end-line="1045" selection-end-column="67" />
+              <folding>
+                <element signature="e#57#124#0" expanded="true" />
+                <marker date="1425793902843" expanded="true" signature="5285:5360" placeholder="select depar..sklcc_department..." />
+                <marker date="1425793902843" expanded="true" signature="5759:5810" placeholder="select Top 1..." />
+                <marker date="1425793902843" expanded="true" signature="5993:6186" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="6108:6184" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="6453:7108" placeholder="select reche..recheckor..." />
+                <marker date="1425793902843" expanded="true" signature="6521:6680" placeholder="select reche..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="7270:7421" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="7836:7988" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="8224:8375" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="11463:11562" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="11737:11868" placeholder="select sum( ..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="12354:12435" placeholder="select quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="12969:13114" placeholder="select disti..sklcc_authority..." />
+                <marker date="1425793902843" expanded="true" signature="13381:13440" placeholder="select usern..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="13577:13644" placeholder="select emplo..Employee..." />
+                <marker date="1425793902843" expanded="true" signature="13848:13917" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="14081:14159" placeholder="select workn..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="14300:14379" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="14674:14947" placeholder="select seria..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="15027:15299" placeholder="select seria..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="16152:16438" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="16518:16801" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="17378:17468" placeholder="select sampl..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="18310:18545" placeholder="select TOP 3..." />
+                <marker date="1425793902843" expanded="true" signature="20259:20326" placeholder="select usern..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="20490:20569" placeholder="select passw..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="23691:23734" placeholder="select top 1..." />
+                <marker date="1425793902843" expanded="true" signature="24223:24398" placeholder="SELECT TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="24696:24994" placeholder="SELECT TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="25972:26043" placeholder="select check..sklcc_check_type..." />
+                <marker date="1425793902843" expanded="true" signature="26428:26471" placeholder="select top 1..." />
+                <marker date="1425793902843" expanded="true" signature="27279:27542" placeholder="select parti..sklcc_measure_info..." />
+                <marker date="1425793902843" expanded="true" signature="28253:28319" placeholder="select disti..." />
+                <marker date="1425793902843" expanded="true" signature="28456:28617" placeholder="select parti..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="32002:32100" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="32845:33176" placeholder="select a.wor..producestyle..." />
+                <marker date="1425793902843" expanded="true" signature="34119:34409" placeholder="select a.ser..sklcc_info..." />
+                <marker date="1425793902843" expanded="true" signature="34678:34738" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="35180:35274" placeholder="select retur..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="35502:35607" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="35700:35798" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="35922:35993" placeholder="select total..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="36216:36262" placeholder="DELETE FROM ..." />
+                <marker date="1425793902843" expanded="true" signature="36297:36377" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="36482:36525" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="37277:37358" placeholder="select Depar..Employee..." />
+                <marker date="1425793902843" expanded="true" signature="38367:38498" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="38802:38933" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="39303:39389" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="39886:40011" placeholder="select WorkN..ProducePackProc..." />
+                <marker date="1425793902843" expanded="true" signature="40490:40591" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="41445:41557" placeholder="select retur..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="42204:42287" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="42737:42851" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="43216:43264" placeholder="select * fro..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="43754:43989" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="44301:44381" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="44537:44591" placeholder="select * fro..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="44670:44781" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="44918:45041" placeholder="select sum( ..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="45527:45618" placeholder="select commo..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="45803:45885" placeholder="select symme..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="46074:46159" placeholder="select measu..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="47931:48136" placeholder="select seria..sklcc_measure_record..." />
+                <marker date="1425793902843" expanded="true" signature="48358:48615" placeholder="SELECT TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="49061:49223" placeholder="select seria..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="49589:49998" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="50489:50633" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="51082:51365" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="51652:51758" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="51810:52021" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="51920:51981" placeholder="SELECT sum( ..sklcc_info..." />
+                <marker date="1425793902843" expanded="true" signature="52970:53114" placeholder="select seria..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="54496:54541" placeholder="select EQ_re..sklcc_config..." />
+                <marker date="1425793902843" expanded="true" signature="55381:55442" placeholder="select check..sklcc_check_type..." />
+                <marker date="1425793902843" expanded="true" signature="55605:55679" placeholder="select parti..sklcc_measure_partition..." />
+                <marker date="1425793902843" expanded="true" signature="56125:56190" placeholder="select measu..sklcc_measure_type..." />
+                <marker date="1425793902843" expanded="true" signature="56654:56724" placeholder="SELECT size,..." />
+                <marker date="1425793902843" expanded="true" signature="57105:57212" placeholder="select disti..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="57475:57674" placeholder="select commo..." />
+                <marker date="1425793902843" expanded="true" signature="58667:58900" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="59433:59487" placeholder="select * fro..sklcc_style_measure..." />
+                <marker date="1425793902843" expanded="true" signature="59642:59694" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="61022:61070" placeholder="select * fro..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="61186:61242" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="61297:61344" placeholder="select * fro..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="61457:61512" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="61567:61619" placeholder="select TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="61730:61784" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="61845:61909" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="62027:62074" placeholder="select * fro..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="62644:62673" placeholder="select days ..sklcc_config..." />
+                <marker date="1425793902843" expanded="true" signature="64274:64870" placeholder="SELECT check..." />
+                <marker date="1425793902843" expanded="true" signature="64958:65684" placeholder="SELECT check..." />
+                <marker date="1425793902843" expanded="true" signature="66658:66720" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="66825:66893" placeholder="select quest..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="67264:67336" placeholder="select isStr..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="69848:69900" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="69942:69996" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="70045:70089" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="70132:70177" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="70220:70266" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="70309:70361" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="71265:71461" placeholder="select depar..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="73809:73890" placeholder="select * fro..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="74053:74118" placeholder="select state..sklcc_table..." />
+                <marker date="1425793902843" expanded="true" signature="74203:74286" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="74505:74608" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="74715:74807" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="74981:75027" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="76752:76851" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="76978:77086" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="77576:77645" placeholder="select disti..sklcc_measure_info..." />
+                <marker date="1425793902843" expanded="true" signature="78055:78208" placeholder="select creat..." />
+                <marker date="1425793902843" expanded="true" signature="78774:78843" placeholder="select disti..sklcc_measure_info..." />
+                <marker date="1425793902843" expanded="true" signature="79255:79408" placeholder="select creat..." />
+                <marker date="1425793902843" expanded="true" signature="79884:79962" placeholder="select disti..sklcc_measure_info..." />
+                <marker date="1425793902843" expanded="true" signature="81002:81067" placeholder="select measu..sklcc_measure_type..." />
+                <marker date="1425793902843" expanded="true" signature="81251:81325" placeholder="select parti..sklcc_measure_partition..." />
+                <marker date="1425793902843" expanded="true" signature="81639:81729" placeholder="SELECT size_..." />
+                <marker date="1425793902843" expanded="true" signature="82214:82273" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="82307:82358" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="82463:82549" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="82698:82757" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="83008:83062" placeholder="DELETE FROM ..." />
+                <marker date="1425793902843" expanded="true" signature="83235:83360" placeholder="INSERT INTO ..." />
+                <marker date="1425793902843" expanded="true" signature="84008:84064" placeholder="select disti..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="84368:84448" placeholder="select disti..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="84818:84906" placeholder="select Batch..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="85571:85660" placeholder="select total..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="86192:86294" placeholder="select total..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="87402:87493" placeholder="select depar..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="87720:87796" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="88120:88237" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="88522:88640" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="88905:89064" placeholder="select total..sklcc_recheck_bald..." />
+                <marker date="1425793902843" expanded="true" signature="90032:90098" placeholder="select DISTI..." />
+                <marker date="1425793902843" expanded="true" signature="90189:90340" placeholder="select disti..." />
+                <marker date="1425793902843" expanded="true" signature="91081:91179" placeholder="select Quest..QCQuestion..." />
+                <marker date="1425793902843" expanded="true" signature="91800:91874" placeholder="select Produ..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="91961:92069" placeholder="select WorkL..ProduceStyle..." />
+                <marker date="1425793902843" expanded="true" signature="92838:92965" placeholder="select workn..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="93240:93397" placeholder="select TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="93882:94037" placeholder="SELECT TOP 1..." />
+                <marker date="1425793902843" expanded="true" signature="95093:95183" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="96686:96898" placeholder="select batch..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="97305:97403" placeholder="select disti..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="98038:98103" placeholder="select depar..sklcc_department..." />
+                <marker date="1425793902843" expanded="true" signature="99163:99228" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="99331:99503" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="99709:99765" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="104141:104231" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="104389:104603" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="104844:105057" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="105258:105355" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="105785:105839" placeholder="select * fro..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="105929:106044" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="108047:108076" placeholder="select days ..sklcc_config..." />
+                <marker date="1425793902843" expanded="true" signature="108663:108753" placeholder="select sampl..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="109476:109589" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="110533:110731" placeholder="select state..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="110950:111124" placeholder="select state..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="111360:111415" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="111456:111508" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="111549:111601" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="111801:111857" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="111899:111956" placeholder="select * fro..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="112013:112065" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="112591:112648" placeholder="select * fro..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="112732:112784" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="113616:113715" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="113858:113914" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="114009:114112" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="114215:114297" placeholder="select total..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="114516:114617" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="114982:115047" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="115240:115307" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="115345:115413" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="115909:115983" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="116120:116227" placeholder="select depar..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="116764:116889" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="117675:117780" placeholder="select quest..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="118466:118531" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="118716:118783" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="118819:118887" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="118930:118995" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="119142:119196" placeholder="select * fro..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="119270:119331" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="120333:120398" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="120583:120650" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="120686:120754" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="120797:120862" placeholder="select seria..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="121009:121070" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="121131:121211" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="121433:121494" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="121555:121635" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="121914:121975" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="122500:122557" placeholder="select emplo..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="122865:122944" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="123293:123383" placeholder="select depar..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="123908:123970" placeholder="select autho..sklcc_authority..." />
+                <marker date="1425793902843" expanded="true" signature="124435:124521" placeholder="select disti..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="124874:124949" placeholder="select depar..sklcc_department..." />
+                <marker date="1425793902843" expanded="true" signature="125276:125305" placeholder="select * fro..sklcc_authority..." />
+                <marker date="1425793902843" expanded="true" signature="125576:125739" placeholder="select top 1..." />
+                <marker date="1425793902843" expanded="true" signature="125993:126065" placeholder="select emplo..sklcc_employeeno_type..." />
+                <marker date="1425793902843" expanded="true" signature="126300:126420" placeholder="select emplo..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="126374:126418" placeholder="select emplo..sklcc_employeeno_type..." />
+                <marker date="1425793902843" expanded="true" signature="127049:127121" placeholder="select * fro..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="127212:127269" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="127381:127465" placeholder="select depar..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="127681:127781" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="128110:128188" placeholder="select * fro..sklcc_department..." />
+                <marker date="1425793902843" expanded="true" signature="128283:128332" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="128664:128722" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="128775:128848" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="128981:129047" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129103:129167" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129223:129288" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129344:129410" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129466:129538" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129594:129669" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129807:129879" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="129935:130007" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="130063:130129" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="130284:130317" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="130474:130580" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="131212:131398" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="131927:131984" placeholder="select emplo..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="132115:132165" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="132300:132382" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="132446:132545" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="133099:133158" placeholder="select usern..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="133254:133315" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="133607:133665" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="133718:133776" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="133941:134002" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="134287:134341" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="134387:134449" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="134594:134648" placeholder="select * fro..sklcc_department..." />
+                <marker date="1425793902843" expanded="true" signature="134785:134856" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="135074:135102" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="135290:135363" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="135791:135869" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="135950:136010" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="137198:137294" placeholder="select total..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="137553:137649" placeholder="select total..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="137901:138000" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="138169:138233" placeholder="select retur..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="138484:138583" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="138753:138841" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="139080:139179" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="139349:139437" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="139706:139794" placeholder="select disti..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="140043:140107" placeholder="select retur..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="140355:140454" placeholder="select seria..sklcc_recheck_info..." />
+                <marker date="1425793902843" expanded="true" signature="140624:140688" placeholder="select retur..sklcc_recheck_content..." />
+                <marker date="1425793902843" expanded="true" signature="140915:141004" placeholder="select usern..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="141310:141418" placeholder="select top 1..." />
+                <marker date="1425793902843" expanded="true" signature="141629:141729" placeholder="select disti..sklcc_employee_authority..." />
+                <marker date="1425793902843" expanded="true" signature="142138:142233" placeholder="select produ..ProduceMaster..." />
+                <marker date="1425793902843" expanded="true" signature="142371:142463" placeholder="select slowt..ProduceStyle..." />
+                <marker date="1425793902843" expanded="true" signature="142792:142915" placeholder="select sum(t..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="142964:143140" placeholder="select sum(t..sklcc_record..." />
+                <marker date="1425793902843" expanded="true" signature="146701:146758" placeholder="select passw..sklcc_employee..." />
+                <marker date="1425793902843" expanded="true" signature="147188:147251" placeholder="update sklcc..." />
+                <marker date="1425793902843" expanded="true" signature="147887:148345" placeholder="select disti..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="148972:149059" placeholder="select quest..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="149779:149833" placeholder="select * fro..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="149923:149975" placeholder="delete from ..." />
+                <marker date="1425793902843" expanded="true" signature="150159:150253" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="150490:150675" placeholder="insert into ..." />
+                <marker date="1425793902843" expanded="true" signature="151494:151928" placeholder="select sklcc..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="152574:152661" placeholder="select quest..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="153675:154173" placeholder="select sklcc..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="154866:154953" placeholder="select quest..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="156070:156513" placeholder="select sklcc..sklcc_return_check..." />
+                <marker date="1425793902843" expanded="true" signature="157225:157312" placeholder="select quest..sklcc_return_check..." />
+              </folding>
+>>>>>>> dev
             </state>
           </provider>
         </entry>
@@ -127,18 +487,8 @@
       <file leaf-file-name="measure_size_set.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/measure_size_set.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.096774" vertical-offset="7106" max-vertical-offset="11022">
-              <caret line="333" column="86" selection-start-line="333" selection-start-column="86" selection-end-line="333" selection-end-column="86" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1210" max-vertical-offset="5456">
-              <caret line="66" column="67" selection-start-line="66" selection-start-column="67" selection-end-line="66" selection-end-column="67" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="7106" max-vertical-offset="11022">
+              <caret line="333" column="16" selection-start-line="333" selection-start-column="16" selection-end-line="333" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -196,18 +546,27 @@
         <option value="db-console:/73c0f5bb/2296b1dd-469c-49a4-93c9-64036ebff984/" />
         <option value="$PROJECT_DIR$/data0.dat" />
         <option value="$PROJECT_DIR$/shuxuejianmo.py" />
-        <option value="$PROJECT_DIR$/sklcc/pad.py" />
         <option value="E:/2015-3-1更新/sklcc/views.py" />
-        <option value="$PROJECT_DIR$/sklcc/forms.py" />
-        <option value="$PROJECT_DIR$/sklcc/utilitys.py" />
         <option value="$PROJECT_DIR$/MSZ_SKLCC/urls.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/sklcc/views.py" />
         <option value="$PROJECT_DIR$/sklcc/measure.py" />
         <option value="$PROJECT_DIR$/static/js/recheck.js" />
         <option value="$PROJECT_DIR$/templates/measure_size_set.html" />
         <option value="$PROJECT_DIR$/MSZ_SKLCC/settings.py" />
         <option value="$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py" />
+=======
+        <option value="$PROJECT_DIR$/sklcc/measure.py" />
+        <option value="$PROJECT_DIR$/static/js/recheck.js" />
+        <option value="$PROJECT_DIR$/templates/measure_size_set.html" />
+        <option value="$PROJECT_DIR$/sklcc/utilitys.py" />
+        <option value="$PROJECT_DIR$/sklcc/forms.py" />
+        <option value="$PROJECT_DIR$/sklcc/pad.py" />
+        <option value="$PROJECT_DIR$/sklcc/views.py" />
+        <option value="$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py" />
+        <option value="$PROJECT_DIR$/MSZ_SKLCC/settings.py" />
+>>>>>>> dev
       </list>
     </option>
   </component>
@@ -243,7 +602,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -272,7 +630,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
+              <option name="myItemId" value="sklcc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -292,6 +650,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -607,8 +966,8 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="MSZ_SKLCC" />
       <option name="launchJavascriptDebuger" value="false" />
-      <option name="port" value="8000" />
-      <option name="host" value="" />
+      <option name="port" value="8080" />
+      <option name="host" value="192.168.135.41" />
       <option name="additionalOptions" value="" />
       <option name="browserUrl" value="" />
       <option name="runTestServer" value="false" />
@@ -674,16 +1033,25 @@
     <frame x="1674" y="-36" width="1932" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270242" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3533123" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3270242" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32698768" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35226077" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32698768" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976446" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17628993" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22376874" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12837838" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38153845" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.15364026" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25963598" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39955106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.12837838" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43533123" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+>>>>>>> dev
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32922733" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34777898" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -741,7 +1109,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4370" max-vertical-offset="6402">
           <caret line="205" column="38" selection-start-line="205" selection-start-column="38" selection-end-line="205" selection-end-column="38" />
+<<<<<<< HEAD
           <folding />
+=======
+          <folding>
+            <marker date="1425618825181" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425618825181" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425618825181" expanded="true" signature="2584:2901" placeholder="SELECT parti..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="3450:3788" placeholder="SELECT inspe..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="5077:5190" placeholder="select disti..." />
+            <marker date="1425618825181" expanded="true" signature="5523:5646" placeholder="select disti..." />
+            <marker date="1425618825181" expanded="true" signature="7262:7462" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="7682:7870" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="8180:8439" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="9282:9345" placeholder="SELECT TOP 1..." />
+            <marker date="1425618825181" expanded="true" signature="9618:9670" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9713:9767" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9819:9872" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9916:9976" placeholder="select top 1..." />
+            <marker date="1425618825181" expanded="true" signature="10036:10090" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="12088:12230" placeholder="SELECT disti..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="12663:12761" placeholder="select state..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="13291:13392" placeholder="update sklcc..." />
+          </folding>
+>>>>>>> dev
         </state>
       </provider>
     </entry>
@@ -773,6 +1164,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="18218" max-vertical-offset="19910">
           <caret line="843" column="30" selection-start-line="843" selection-start-column="30" selection-end-line="843" selection-end-column="30" />
+<<<<<<< HEAD
+=======
+          <folding />
+>>>>>>> dev
         </state>
       </provider>
     </entry>
@@ -788,7 +1183,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="6533" max-vertical-offset="9438">
           <caret line="303" column="35" selection-start-line="303" selection-start-column="35" selection-end-line="303" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -796,7 +1190,291 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="20749" max-vertical-offset="32846">
           <caret line="2431" column="48" selection-start-line="2431" selection-start-column="48" selection-end-line="2431" selection-end-column="48" />
+<<<<<<< HEAD
           <folding />
+=======
+          <folding>
+            <element signature="e#57#124#0" expanded="true" />
+            <marker date="1425793902843" expanded="true" signature="5285:5360" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="5759:5810" placeholder="select Top 1..." />
+            <marker date="1425793902843" expanded="true" signature="5993:6186" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6108:6184" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6453:7108" placeholder="select reche..recheckor..." />
+            <marker date="1425793902843" expanded="true" signature="6521:6680" placeholder="select reche..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="7270:7421" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="7836:7988" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="8224:8375" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="11463:11562" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="11737:11868" placeholder="select sum( ..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="12354:12435" placeholder="select quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="12969:13114" placeholder="select disti..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="13381:13440" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="13577:13644" placeholder="select emplo..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="13848:13917" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="14081:14159" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="14300:14379" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="14674:14947" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="15027:15299" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="16152:16438" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="16518:16801" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="17378:17468" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="18310:18545" placeholder="select TOP 3..." />
+            <marker date="1425793902843" expanded="true" signature="20259:20326" placeholder="select usern..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="20490:20569" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="23691:23734" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="24223:24398" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="24696:24994" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="25972:26043" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="26428:26471" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="27279:27542" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="28253:28319" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="28456:28617" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="32002:32100" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="32845:33176" placeholder="select a.wor..producestyle..." />
+            <marker date="1425793902843" expanded="true" signature="34119:34409" placeholder="select a.ser..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="34678:34738" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35180:35274" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="35502:35607" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35700:35798" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="35922:35993" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="36216:36262" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="36297:36377" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="36482:36525" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="37277:37358" placeholder="select Depar..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="38367:38498" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="38802:38933" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="39303:39389" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="39886:40011" placeholder="select WorkN..ProducePackProc..." />
+            <marker date="1425793902843" expanded="true" signature="40490:40591" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="41445:41557" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="42204:42287" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="42737:42851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="43216:43264" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="43754:43989" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44301:44381" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="44537:44591" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="44670:44781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44918:45041" placeholder="select sum( ..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="45527:45618" placeholder="select commo..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="45803:45885" placeholder="select symme..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="46074:46159" placeholder="select measu..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="47931:48136" placeholder="select seria..sklcc_measure_record..." />
+            <marker date="1425793902843" expanded="true" signature="48358:48615" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="49061:49223" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="49589:49998" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="50489:50633" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51082:51365" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51652:51758" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51810:52021" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="51920:51981" placeholder="SELECT sum( ..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="52970:53114" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="54496:54541" placeholder="select EQ_re..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="55381:55442" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="55605:55679" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="56125:56190" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="56654:56724" placeholder="SELECT size,..." />
+            <marker date="1425793902843" expanded="true" signature="57105:57212" placeholder="select disti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="57475:57674" placeholder="select commo..." />
+            <marker date="1425793902843" expanded="true" signature="58667:58900" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="59433:59487" placeholder="select * fro..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="59642:59694" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="61022:61070" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="61186:61242" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61297:61344" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="61457:61512" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61567:61619" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="61730:61784" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61845:61909" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="62027:62074" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="62644:62673" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="64274:64870" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="64958:65684" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="66658:66720" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="66825:66893" placeholder="select quest..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="67264:67336" placeholder="select isStr..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="69848:69900" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="69942:69996" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70045:70089" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70132:70177" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70220:70266" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70309:70361" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="71265:71461" placeholder="select depar..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="73809:73890" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74053:74118" placeholder="select state..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74203:74286" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="74505:74608" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="74715:74807" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="74981:75027" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="76752:76851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="76978:77086" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="77576:77645" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="78055:78208" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="78774:78843" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="79255:79408" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="79884:79962" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="81002:81067" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="81251:81325" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="81639:81729" placeholder="SELECT size_..." />
+            <marker date="1425793902843" expanded="true" signature="82214:82273" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="82307:82358" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82463:82549" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82698:82757" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="83008:83062" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="83235:83360" placeholder="INSERT INTO ..." />
+            <marker date="1425793902843" expanded="true" signature="84008:84064" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84368:84448" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84818:84906" placeholder="select Batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="85571:85660" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="86192:86294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="87402:87493" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="87720:87796" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="88120:88237" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88522:88640" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88905:89064" placeholder="select total..sklcc_recheck_bald..." />
+            <marker date="1425793902843" expanded="true" signature="90032:90098" placeholder="select DISTI..." />
+            <marker date="1425793902843" expanded="true" signature="90189:90340" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="91081:91179" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="91800:91874" placeholder="select Produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="91961:92069" placeholder="select WorkL..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="92838:92965" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="93240:93397" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="93882:94037" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="95093:95183" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="96686:96898" placeholder="select batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="97305:97403" placeholder="select disti..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="98038:98103" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="99163:99228" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="99331:99503" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="99709:99765" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104141:104231" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104389:104603" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="104844:105057" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105258:105355" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105785:105839" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="105929:106044" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="108047:108076" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="108663:108753" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="109476:109589" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="110533:110731" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="110950:111124" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="111360:111415" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111456:111508" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111549:111601" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111801:111857" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111899:111956" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112013:112065" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="112591:112648" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112732:112784" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="113616:113715" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="113858:113914" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="114009:114112" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="114215:114297" placeholder="select total..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="114516:114617" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="114982:115047" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="115240:115307" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115345:115413" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115909:115983" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="116120:116227" placeholder="select depar..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="116764:116889" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="117675:117780" placeholder="select quest..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118466:118531" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118716:118783" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118819:118887" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118930:118995" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="119142:119196" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="119270:119331" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120333:120398" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="120583:120650" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120686:120754" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120797:120862" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="121009:121070" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121131:121211" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121433:121494" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121555:121635" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121914:121975" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="122500:122557" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="122865:122944" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123293:123383" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123908:123970" placeholder="select autho..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="124435:124521" placeholder="select disti..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="124874:124949" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="125276:125305" placeholder="select * fro..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="125576:125739" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="125993:126065" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="126300:126420" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="126374:126418" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="127049:127121" placeholder="select * fro..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="127212:127269" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="127381:127465" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="127681:127781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128110:128188" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="128283:128332" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128664:128722" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="128775:128848" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="128981:129047" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129103:129167" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129223:129288" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129344:129410" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129466:129538" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129594:129669" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129807:129879" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129935:130007" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130063:130129" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130284:130317" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="130474:130580" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="131212:131398" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="131927:131984" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="132115:132165" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="132300:132382" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="132446:132545" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="133099:133158" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="133254:133315" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="133607:133665" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133718:133776" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133941:134002" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="134287:134341" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134387:134449" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134594:134648" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="134785:134856" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="135074:135102" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135290:135363" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="135791:135869" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135950:136010" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="137198:137294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137553:137649" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137901:138000" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138169:138233" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="138484:138583" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138753:138841" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139080:139179" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="139349:139437" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139706:139794" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140043:140107" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140355:140454" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="140624:140688" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140915:141004" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="141310:141418" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="141629:141729" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="142138:142233" placeholder="select produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="142371:142463" placeholder="select slowt..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="142792:142915" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="142964:143140" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="146701:146758" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="147188:147251" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="147887:148345" placeholder="select disti..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="148972:149059" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149779:149833" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149923:149975" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="150159:150253" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="150490:150675" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="151494:151928" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="152574:152661" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="153675:154173" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="154866:154953" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="156070:156513" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="157225:157312" placeholder="select quest..sklcc_return_check..." />
+          </folding>
+>>>>>>> dev
         </state>
       </provider>
     </entry>
@@ -812,7 +1490,291 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="29350" max-vertical-offset="84810">
           <caret line="1589" column="0" selection-start-line="1589" selection-start-column="0" selection-end-line="1589" selection-end-column="0" />
+<<<<<<< HEAD
           <folding />
+=======
+          <folding>
+            <element signature="e#57#124#0" expanded="true" />
+            <marker date="1425793902843" expanded="true" signature="5285:5360" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="5759:5810" placeholder="select Top 1..." />
+            <marker date="1425793902843" expanded="true" signature="5993:6186" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6108:6184" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6453:7108" placeholder="select reche..recheckor..." />
+            <marker date="1425793902843" expanded="true" signature="6521:6680" placeholder="select reche..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="7270:7421" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="7836:7988" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="8224:8375" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="11463:11562" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="11737:11868" placeholder="select sum( ..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="12354:12435" placeholder="select quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="12969:13114" placeholder="select disti..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="13381:13440" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="13577:13644" placeholder="select emplo..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="13848:13917" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="14081:14159" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="14300:14379" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="14674:14947" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="15027:15299" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="16152:16438" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="16518:16801" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="17378:17468" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="18310:18545" placeholder="select TOP 3..." />
+            <marker date="1425793902843" expanded="true" signature="20259:20326" placeholder="select usern..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="20490:20569" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="23691:23734" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="24223:24398" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="24696:24994" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="25972:26043" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="26428:26471" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="27279:27542" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="28253:28319" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="28456:28617" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="32002:32100" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="32845:33176" placeholder="select a.wor..producestyle..." />
+            <marker date="1425793902843" expanded="true" signature="34119:34409" placeholder="select a.ser..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="34678:34738" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35180:35274" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="35502:35607" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35700:35798" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="35922:35993" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="36216:36262" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="36297:36377" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="36482:36525" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="37277:37358" placeholder="select Depar..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="38367:38498" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="38802:38933" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="39303:39389" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="39886:40011" placeholder="select WorkN..ProducePackProc..." />
+            <marker date="1425793902843" expanded="true" signature="40490:40591" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="41445:41557" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="42204:42287" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="42737:42851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="43216:43264" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="43754:43989" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44301:44381" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="44537:44591" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="44670:44781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44918:45041" placeholder="select sum( ..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="45527:45618" placeholder="select commo..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="45803:45885" placeholder="select symme..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="46074:46159" placeholder="select measu..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="47931:48136" placeholder="select seria..sklcc_measure_record..." />
+            <marker date="1425793902843" expanded="true" signature="48358:48615" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="49061:49223" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="49589:49998" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="50489:50633" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51082:51365" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51652:51758" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51810:52021" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="51920:51981" placeholder="SELECT sum( ..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="52970:53114" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="54496:54541" placeholder="select EQ_re..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="55381:55442" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="55605:55679" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="56125:56190" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="56654:56724" placeholder="SELECT size,..." />
+            <marker date="1425793902843" expanded="true" signature="57105:57212" placeholder="select disti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="57475:57674" placeholder="select commo..." />
+            <marker date="1425793902843" expanded="true" signature="58667:58900" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="59433:59487" placeholder="select * fro..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="59642:59694" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="61022:61070" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="61186:61242" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61297:61344" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="61457:61512" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61567:61619" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="61730:61784" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61845:61909" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="62027:62074" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="62644:62673" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="64274:64870" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="64958:65684" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="66658:66720" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="66825:66893" placeholder="select quest..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="67264:67336" placeholder="select isStr..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="69848:69900" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="69942:69996" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70045:70089" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70132:70177" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70220:70266" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70309:70361" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="71265:71461" placeholder="select depar..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="73809:73890" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74053:74118" placeholder="select state..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74203:74286" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="74505:74608" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="74715:74807" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="74981:75027" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="76752:76851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="76978:77086" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="77576:77645" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="78055:78208" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="78774:78843" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="79255:79408" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="79884:79962" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="81002:81067" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="81251:81325" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="81639:81729" placeholder="SELECT size_..." />
+            <marker date="1425793902843" expanded="true" signature="82214:82273" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="82307:82358" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82463:82549" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82698:82757" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="83008:83062" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="83235:83360" placeholder="INSERT INTO ..." />
+            <marker date="1425793902843" expanded="true" signature="84008:84064" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84368:84448" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84818:84906" placeholder="select Batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="85571:85660" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="86192:86294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="87402:87493" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="87720:87796" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="88120:88237" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88522:88640" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88905:89064" placeholder="select total..sklcc_recheck_bald..." />
+            <marker date="1425793902843" expanded="true" signature="90032:90098" placeholder="select DISTI..." />
+            <marker date="1425793902843" expanded="true" signature="90189:90340" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="91081:91179" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="91800:91874" placeholder="select Produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="91961:92069" placeholder="select WorkL..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="92838:92965" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="93240:93397" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="93882:94037" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="95093:95183" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="96686:96898" placeholder="select batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="97305:97403" placeholder="select disti..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="98038:98103" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="99163:99228" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="99331:99503" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="99709:99765" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104141:104231" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104389:104603" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="104844:105057" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105258:105355" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105785:105839" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="105929:106044" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="108047:108076" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="108663:108753" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="109476:109589" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="110533:110731" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="110950:111124" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="111360:111415" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111456:111508" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111549:111601" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111801:111857" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111899:111956" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112013:112065" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="112591:112648" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112732:112784" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="113616:113715" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="113858:113914" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="114009:114112" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="114215:114297" placeholder="select total..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="114516:114617" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="114982:115047" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="115240:115307" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115345:115413" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115909:115983" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="116120:116227" placeholder="select depar..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="116764:116889" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="117675:117780" placeholder="select quest..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118466:118531" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118716:118783" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118819:118887" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118930:118995" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="119142:119196" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="119270:119331" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120333:120398" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="120583:120650" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120686:120754" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120797:120862" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="121009:121070" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121131:121211" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121433:121494" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121555:121635" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121914:121975" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="122500:122557" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="122865:122944" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123293:123383" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123908:123970" placeholder="select autho..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="124435:124521" placeholder="select disti..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="124874:124949" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="125276:125305" placeholder="select * fro..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="125576:125739" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="125993:126065" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="126300:126420" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="126374:126418" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="127049:127121" placeholder="select * fro..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="127212:127269" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="127381:127465" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="127681:127781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128110:128188" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="128283:128332" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128664:128722" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="128775:128848" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="128981:129047" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129103:129167" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129223:129288" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129344:129410" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129466:129538" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129594:129669" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129807:129879" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129935:130007" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130063:130129" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130284:130317" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="130474:130580" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="131212:131398" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="131927:131984" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="132115:132165" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="132300:132382" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="132446:132545" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="133099:133158" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="133254:133315" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="133607:133665" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133718:133776" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133941:134002" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="134287:134341" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134387:134449" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134594:134648" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="134785:134856" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="135074:135102" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135290:135363" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="135791:135869" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135950:136010" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="137198:137294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137553:137649" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137901:138000" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138169:138233" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="138484:138583" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138753:138841" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139080:139179" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="139349:139437" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139706:139794" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140043:140107" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140355:140454" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="140624:140688" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140915:141004" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="141310:141418" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="141629:141729" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="142138:142233" placeholder="select produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="142371:142463" placeholder="select slowt..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="142792:142915" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="142964:143140" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="146701:146758" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="147188:147251" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="147887:148345" placeholder="select disti..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="148972:149059" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149779:149833" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149923:149975" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="150159:150253" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="150490:150675" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="151494:151928" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="152574:152661" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="153675:154173" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="154866:154953" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="156070:156513" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="157225:157312" placeholder="select quest..sklcc_return_check..." />
+          </folding>
+>>>>>>> dev
         </state>
       </provider>
     </entry>
@@ -1009,7 +1971,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="6533" max-vertical-offset="9438">
           <caret line="303" column="35" selection-start-line="303" selection-start-column="35" selection-end-line="303" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1017,38 +1978,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="176" max-vertical-offset="8382">
           <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sklcc/pad.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="17932" max-vertical-offset="19756">
-          <caret line="838" column="37" selection-start-line="838" selection-start-column="37" selection-end-line="838" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="31152" max-vertical-offset="31746">
-          <caret line="1416" column="0" selection-start-line="1416" selection-start-column="0" selection-end-line="1416" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sklcc/utilitys.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2530" max-vertical-offset="4708">
-          <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3102" max-vertical-offset="3454">
-          <caret line="141" column="51" selection-start-line="141" selection-start-column="51" selection-end-line="141" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1060,40 +1989,425 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/recheck.js">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="17932" max-vertical-offset="19756">
+          <caret line="838" column="37" selection-start-line="838" selection-start-column="37" selection-end-line="838" selection-end-column="37" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="29722" max-vertical-offset="35090">
+          <caret line="1351" column="0" selection-start-line="1351" selection-start-column="0" selection-end-line="1351" selection-end-column="0" />
+          <folding />
+>>>>>>> dev
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/measure_size_set.html">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="31152" max-vertical-offset="31746">
+          <caret line="1416" column="0" selection-start-line="1416" selection-start-column="0" selection-end-line="1416" selection-end-column="0" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="7106" max-vertical-offset="11022">
+          <caret line="333" column="16" selection-start-line="333" selection-start-column="16" selection-end-line="333" selection-end-column="16" />
+>>>>>>> dev
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/measure_in.html">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state vertical-scroll-proportion="0.0" vertical-offset="2530" max-vertical-offset="4708">
+          <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="7281" max-vertical-offset="9262">
+          <caret line="339" column="11" selection-start-line="339" selection-start-column="11" selection-end-line="339" selection-end-column="11" />
+>>>>>>> dev
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sklcc/pad.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="16729" max-vertical-offset="20262">
+          <caret line="773" column="34" selection-start-line="773" selection-start-column="34" selection-end-line="773" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sklcc/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="29577" max-vertical-offset="31768">
+          <caret line="1350" column="42" selection-start-line="1350" selection-start-column="40" selection-end-line="1350" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sklcc/utilitys.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="4180" max-vertical-offset="7722">
           <caret line="190" column="16" selection-start-line="190" selection-start-column="16" selection-end-line="190" selection-end-column="16" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="3014" max-vertical-offset="4730">
+          <caret line="137" column="26" selection-start-line="137" selection-start-column="26" selection-end-line="137" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3432">
+          <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
+>>>>>>> dev
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/measure.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="7394" max-vertical-offset="7854">
           <caret line="340" column="25" selection-start-line="340" selection-start-column="25" selection-end-line="340" selection-end-column="25" />
           <folding />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="3740" max-vertical-offset="7854">
+          <caret line="170" column="52" selection-start-line="170" selection-start-column="50" selection-end-line="170" selection-end-column="52" />
+          <folding>
+            <marker date="1425618825181" expanded="true" signature="1031:1209" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425618825181" expanded="true" signature="1620:1749" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425618825181" expanded="true" signature="2584:2901" placeholder="SELECT parti..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="3450:3788" placeholder="SELECT inspe..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="5077:5190" placeholder="select disti..." />
+            <marker date="1425618825181" expanded="true" signature="5523:5646" placeholder="select disti..." />
+            <marker date="1425618825181" expanded="true" signature="7262:7462" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="7682:7870" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="8180:8439" placeholder="insert into ..." />
+            <marker date="1425618825181" expanded="true" signature="9282:9345" placeholder="SELECT TOP 1..." />
+            <marker date="1425618825181" expanded="true" signature="9618:9670" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9713:9767" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9819:9872" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="9916:9976" placeholder="select top 1..." />
+            <marker date="1425618825181" expanded="true" signature="10036:10090" placeholder="delete from ..." />
+            <marker date="1425618825181" expanded="true" signature="12088:12230" placeholder="SELECT disti..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="12663:12761" placeholder="select state..sklcc_measure_record..." />
+            <marker date="1425618825181" expanded="true" signature="13291:13392" placeholder="update sklcc..." />
+          </folding>
+>>>>>>> dev
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/views.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="24838" max-vertical-offset="96844">
           <caret line="1129" column="9" selection-start-line="1129" selection-start-column="9" selection-end-line="1129" selection-end-column="9" />
           <folding />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="22716" max-vertical-offset="97064">
+          <caret line="1045" column="67" selection-start-line="1045" selection-start-column="67" selection-end-line="1045" selection-end-column="67" />
+          <folding>
+            <element signature="e#57#124#0" expanded="true" />
+            <marker date="1425793902843" expanded="true" signature="5285:5360" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="5759:5810" placeholder="select Top 1..." />
+            <marker date="1425793902843" expanded="true" signature="5993:6186" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6108:6184" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="6453:7108" placeholder="select reche..recheckor..." />
+            <marker date="1425793902843" expanded="true" signature="6521:6680" placeholder="select reche..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="7270:7421" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="7836:7988" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="8224:8375" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="11463:11562" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="11737:11868" placeholder="select sum( ..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="12354:12435" placeholder="select quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="12969:13114" placeholder="select disti..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="13381:13440" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="13577:13644" placeholder="select emplo..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="13848:13917" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="14081:14159" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="14300:14379" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="14674:14947" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="15027:15299" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="16152:16438" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="16518:16801" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="17378:17468" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="18310:18545" placeholder="select TOP 3..." />
+            <marker date="1425793902843" expanded="true" signature="20259:20326" placeholder="select usern..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="20490:20569" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="23691:23734" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="24223:24398" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="24696:24994" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="25972:26043" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="26428:26471" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="27279:27542" placeholder="select parti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="28253:28319" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="28456:28617" placeholder="select parti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="32002:32100" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="32845:33176" placeholder="select a.wor..producestyle..." />
+            <marker date="1425793902843" expanded="true" signature="34119:34409" placeholder="select a.ser..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="34678:34738" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35180:35274" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="35502:35607" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="35700:35798" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="35922:35993" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="36216:36262" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="36297:36377" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="36482:36525" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="37277:37358" placeholder="select Depar..Employee..." />
+            <marker date="1425793902843" expanded="true" signature="38367:38498" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="38802:38933" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="39303:39389" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="39886:40011" placeholder="select WorkN..ProducePackProc..." />
+            <marker date="1425793902843" expanded="true" signature="40490:40591" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="41445:41557" placeholder="select retur..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="42204:42287" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="42737:42851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="43216:43264" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="43754:43989" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44301:44381" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="44537:44591" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="44670:44781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="44918:45041" placeholder="select sum( ..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="45527:45618" placeholder="select commo..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="45803:45885" placeholder="select symme..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="46074:46159" placeholder="select measu..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="47931:48136" placeholder="select seria..sklcc_measure_record..." />
+            <marker date="1425793902843" expanded="true" signature="48358:48615" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="49061:49223" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="49589:49998" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="50489:50633" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51082:51365" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51652:51758" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="51810:52021" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="51920:51981" placeholder="SELECT sum( ..sklcc_info..." />
+            <marker date="1425793902843" expanded="true" signature="52970:53114" placeholder="select seria..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="54496:54541" placeholder="select EQ_re..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="55381:55442" placeholder="select check..sklcc_check_type..." />
+            <marker date="1425793902843" expanded="true" signature="55605:55679" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="56125:56190" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="56654:56724" placeholder="SELECT size,..." />
+            <marker date="1425793902843" expanded="true" signature="57105:57212" placeholder="select disti..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="57475:57674" placeholder="select commo..." />
+            <marker date="1425793902843" expanded="true" signature="58667:58900" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="59433:59487" placeholder="select * fro..sklcc_style_measure..." />
+            <marker date="1425793902843" expanded="true" signature="59642:59694" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="61022:61070" placeholder="select * fro..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="61186:61242" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61297:61344" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="61457:61512" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61567:61619" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="61730:61784" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="61845:61909" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="62027:62074" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="62644:62673" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="64274:64870" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="64958:65684" placeholder="SELECT check..." />
+            <marker date="1425793902843" expanded="true" signature="66658:66720" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="66825:66893" placeholder="select quest..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="67264:67336" placeholder="select isStr..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="69848:69900" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="69942:69996" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70045:70089" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70132:70177" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70220:70266" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="70309:70361" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="71265:71461" placeholder="select depar..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="73809:73890" placeholder="select * fro..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74053:74118" placeholder="select state..sklcc_table..." />
+            <marker date="1425793902843" expanded="true" signature="74203:74286" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="74505:74608" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="74715:74807" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="74981:75027" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="76752:76851" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="76978:77086" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="77576:77645" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="78055:78208" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="78774:78843" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="79255:79408" placeholder="select creat..." />
+            <marker date="1425793902843" expanded="true" signature="79884:79962" placeholder="select disti..sklcc_measure_info..." />
+            <marker date="1425793902843" expanded="true" signature="81002:81067" placeholder="select measu..sklcc_measure_type..." />
+            <marker date="1425793902843" expanded="true" signature="81251:81325" placeholder="select parti..sklcc_measure_partition..." />
+            <marker date="1425793902843" expanded="true" signature="81639:81729" placeholder="SELECT size_..." />
+            <marker date="1425793902843" expanded="true" signature="82214:82273" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="82307:82358" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82463:82549" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="82698:82757" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="83008:83062" placeholder="DELETE FROM ..." />
+            <marker date="1425793902843" expanded="true" signature="83235:83360" placeholder="INSERT INTO ..." />
+            <marker date="1425793902843" expanded="true" signature="84008:84064" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84368:84448" placeholder="select disti..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="84818:84906" placeholder="select Batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="85571:85660" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="86192:86294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="87402:87493" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="87720:87796" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="88120:88237" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88522:88640" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="88905:89064" placeholder="select total..sklcc_recheck_bald..." />
+            <marker date="1425793902843" expanded="true" signature="90032:90098" placeholder="select DISTI..." />
+            <marker date="1425793902843" expanded="true" signature="90189:90340" placeholder="select disti..." />
+            <marker date="1425793902843" expanded="true" signature="91081:91179" placeholder="select Quest..QCQuestion..." />
+            <marker date="1425793902843" expanded="true" signature="91800:91874" placeholder="select Produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="91961:92069" placeholder="select WorkL..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="92838:92965" placeholder="select workn..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="93240:93397" placeholder="select TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="93882:94037" placeholder="SELECT TOP 1..." />
+            <marker date="1425793902843" expanded="true" signature="95093:95183" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="96686:96898" placeholder="select batch..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="97305:97403" placeholder="select disti..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="98038:98103" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="99163:99228" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="99331:99503" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="99709:99765" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104141:104231" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="104389:104603" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="104844:105057" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105258:105355" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="105785:105839" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="105929:106044" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="108047:108076" placeholder="select days ..sklcc_config..." />
+            <marker date="1425793902843" expanded="true" signature="108663:108753" placeholder="select sampl..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="109476:109589" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="110533:110731" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="110950:111124" placeholder="select state..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="111360:111415" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111456:111508" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111549:111601" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111801:111857" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="111899:111956" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112013:112065" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="112591:112648" placeholder="select * fro..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="112732:112784" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="113616:113715" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="113858:113914" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="114009:114112" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="114215:114297" placeholder="select total..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="114516:114617" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="114982:115047" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="115240:115307" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115345:115413" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="115909:115983" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="116120:116227" placeholder="select depar..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="116764:116889" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="117675:117780" placeholder="select quest..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118466:118531" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="118716:118783" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118819:118887" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="118930:118995" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="119142:119196" placeholder="select * fro..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="119270:119331" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120333:120398" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="120583:120650" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120686:120754" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="120797:120862" placeholder="select seria..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="121009:121070" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121131:121211" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121433:121494" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121555:121635" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="121914:121975" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="122500:122557" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="122865:122944" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123293:123383" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="123908:123970" placeholder="select autho..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="124435:124521" placeholder="select disti..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="124874:124949" placeholder="select depar..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="125276:125305" placeholder="select * fro..sklcc_authority..." />
+            <marker date="1425793902843" expanded="true" signature="125576:125739" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="125993:126065" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="126300:126420" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="126374:126418" placeholder="select emplo..sklcc_employeeno_type..." />
+            <marker date="1425793902843" expanded="true" signature="127049:127121" placeholder="select * fro..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="127212:127269" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="127381:127465" placeholder="select depar..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="127681:127781" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128110:128188" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="128283:128332" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="128664:128722" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="128775:128848" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="128981:129047" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129103:129167" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129223:129288" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129344:129410" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129466:129538" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129594:129669" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129807:129879" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="129935:130007" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130063:130129" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="130284:130317" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="130474:130580" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="131212:131398" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="131927:131984" placeholder="select emplo..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="132115:132165" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="132300:132382" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="132446:132545" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="133099:133158" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="133254:133315" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="133607:133665" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133718:133776" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="133941:134002" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="134287:134341" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134387:134449" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="134594:134648" placeholder="select * fro..sklcc_department..." />
+            <marker date="1425793902843" expanded="true" signature="134785:134856" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="135074:135102" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135290:135363" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="135791:135869" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="135950:136010" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="137198:137294" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137553:137649" placeholder="select total..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="137901:138000" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138169:138233" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="138484:138583" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="138753:138841" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139080:139179" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="139349:139437" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="139706:139794" placeholder="select disti..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140043:140107" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140355:140454" placeholder="select seria..sklcc_recheck_info..." />
+            <marker date="1425793902843" expanded="true" signature="140624:140688" placeholder="select retur..sklcc_recheck_content..." />
+            <marker date="1425793902843" expanded="true" signature="140915:141004" placeholder="select usern..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="141310:141418" placeholder="select top 1..." />
+            <marker date="1425793902843" expanded="true" signature="141629:141729" placeholder="select disti..sklcc_employee_authority..." />
+            <marker date="1425793902843" expanded="true" signature="142138:142233" placeholder="select produ..ProduceMaster..." />
+            <marker date="1425793902843" expanded="true" signature="142371:142463" placeholder="select slowt..ProduceStyle..." />
+            <marker date="1425793902843" expanded="true" signature="142792:142915" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="142964:143140" placeholder="select sum(t..sklcc_record..." />
+            <marker date="1425793902843" expanded="true" signature="146701:146758" placeholder="select passw..sklcc_employee..." />
+            <marker date="1425793902843" expanded="true" signature="147188:147251" placeholder="update sklcc..." />
+            <marker date="1425793902843" expanded="true" signature="147887:148345" placeholder="select disti..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="148972:149059" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149779:149833" placeholder="select * fro..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="149923:149975" placeholder="delete from ..." />
+            <marker date="1425793902843" expanded="true" signature="150159:150253" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="150490:150675" placeholder="insert into ..." />
+            <marker date="1425793902843" expanded="true" signature="151494:151928" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="152574:152661" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="153675:154173" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="154866:154953" placeholder="select quest..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="156070:156513" placeholder="select sklcc..sklcc_return_check..." />
+            <marker date="1425793902843" expanded="true" signature="157225:157312" placeholder="select quest..sklcc_return_check..." />
+          </folding>
+>>>>>>> dev
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/recheck.js">
+    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0" vertical-offset="29481" max-vertical-offset="33110">
           <caret line="1351" column="23" selection-start-line="1351" selection-start-column="23" selection-end-line="1351" selection-end-column="23" />
+=======
+        <state vertical-scroll-proportion="0.0" vertical-offset="176" max-vertical-offset="4158">
+          <caret line="33" column="10" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
+>>>>>>> dev
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/measure_size_set.html">
+    <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/settings.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="-7.096774" vertical-offset="7106" max-vertical-offset="11022">
           <caret line="333" column="86" selection-start-line="333" selection-start-column="86" selection-end-line="333" selection-end-column="86" />
           <folding />
@@ -1112,6 +2426,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45257142" vertical-offset="176" max-vertical-offset="4158">
           <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+=======
+        <state vertical-scroll-proportion="0.656" vertical-offset="196" max-vertical-offset="4246">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+>>>>>>> dev
           <folding />
         </state>
       </provider>

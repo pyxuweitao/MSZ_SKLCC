@@ -231,7 +231,7 @@ def pad_form_3( request ):
 	# string          = request.GET['employeeno']
 	# employeeno_list = string.split( '>' )
 
-	employee_list   = get_all_employee( )
+	employee_list   = get_all_inspector( )
 	employeeno_list = []
 	for t in employee_list:
 		employeeno_list.append( t.employeeno )
@@ -312,8 +312,8 @@ def pad_form_4( request ):
 def pad_form_5( request ):
 	form5_list = []
 
-	start = '2014-07-01'
-	end   = '2014-08-31'
+	start = request.GET['start']
+	end   = request.GET['end']
 	Raw   = Raw_sql( )
 
 	distance_list = get_time_distance_list( start, end )
@@ -347,8 +347,8 @@ def pad_form_6( request ):
 	target   = Raw.query_one()
 	standard = target[0]
 
-	start = '2014-07-01'
-	end   = '2014-08-31'
+	start = request.GET['start']
+	end   = request.GET['end']
 	time_list = get_time_distance_list( start, end )
 	Raw.sql = '''
     select inspector_no,inspector, questionname,questionno,sum(returnno) from sklcc_info join sklcc_record on sklcc_info.serialno = sklcc_record.serialno
@@ -777,6 +777,7 @@ def pad_form_12( request ):
 		start      = request.GET['start']
 		end        = request.GET['end']
 		batch_list = request.GET.getlist('batch')
+		print batch_list
 		Raw        = Raw_sql()
 
 		res_list = []
@@ -784,11 +785,13 @@ def pad_form_12( request ):
 		date_have_year_list = change_distance_date_to_str_have_year( distance )
 		date_not_have_year  = change_distance_date_to_str_not_have_year( distance )
 		for batch in batch_list:
+			print batch
 			data = [ { 'time': one, 'number':0, 'per':"0", 'batch':batch } for one in date_have_year_list ]
 
 			Raw.sql = "select left( createtime, 10 ), sum( totalreturn ), sum( totalnumber ) from sklcc_record" \
 			          " where batch = '%s' and left( createtime, 10 ) >= '%s' and left( createtime, 10 ) <= '%s'" \
 			          " group by left( createtime, 10 )"%( batch, start, end )
+			print Raw.sql
 			target_list = Raw.query_all()
 
 			if target_list != False:
@@ -808,12 +811,9 @@ def pad_choose( request ):
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
 	username = '0000'
-	record_not_commit_list = find_record_state_is( 2, username, 2, 1 )
 	record_have_committed_list = find_record_state_is( 1, username, 2, 0 )
 	record_have_committed_list = find_record_state_is( 0, username, 2, 0 ) + record_have_committed_list
-
 	json = []
-	json.append( record_not_commit_list )
 	json.append( record_have_committed_list )
 
 	response = HttpResponse( simplejson.dumps( json, ensure_ascii=False ).encode('utf-8') )
@@ -826,7 +826,8 @@ def pad_choose_check( request ):
 	username = '0000'
 	not_check_list = find_record_state_is( 0, username, 4, 1 )
 	have_check_list = find_record_state_is( 1, username, 4, 0 )
-
+	print not_check_list
+	print have_check_list
 
 	json    = []
 	json.append( not_check_list )
@@ -836,15 +837,30 @@ def pad_choose_check( request ):
 	return response
 
 def pad_update_table( request ):
+	Raw   = Raw_sql()
 	state = int(request.GET['state'])
+	serialno = request.GET['code']
 	username = '0000'
 	#username = request.session['username']
-	record_list = find_record_state_is( state, username, 2, 0 )
+	Raw.sql = "select departmentno, totalnumber, createtime, batch, inspector," \
+	          " inspector_no, check_type, totalreturn, serialno from sklcc_record where serialno = '%s'" \
+	          " and state = %d" % ( serialno, state )
+
+	target = Raw.query_one( )
 	xml = """"""
-	for record in record_list:
-		if request.GET['code'] == record['serialno']:
-			xml = tables_xml( record )
-	response = HttpResponse( xml )
+	if target != False:
+		record = dict( )
+		record['departmentno'] = target[0]
+		record['totalreturn'] = target[7]
+		record['totalnumber'] = target[1]
+		record['createtime'] = target[2]
+		record['batch'] = target[3]
+		record['inspector'] = target[4]
+		record['inspector_no'] = target[5]
+		record['check_type'] = target[6]
+		record['serialno'] = target[8]
+		xml = tables_xml( record )
+	response = HttpResponse(xml)
 	response['Access-Control-Allow-Origin'] = '*'
 	return response
 

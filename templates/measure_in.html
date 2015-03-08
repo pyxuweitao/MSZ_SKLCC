@@ -16,7 +16,7 @@
 <style>
     .number_input {
         border: none;
-        width: 50px;
+        width: 32px;
     }
 </style>
 <script type="text/javascript">
@@ -30,6 +30,7 @@
              }
         });
     }
+
     window.onload = function () {
         document.getElementsByTagName('body')[0].style.overflow = 'auto';
         //document.getElementsByTagName('body')[0].style.overflow = 'auto';
@@ -87,13 +88,61 @@
             var rows = this.getElementsByTagName('tr');
             for (var i=4;i<rows.length - 1;i++){
                 var td = rows[i].getElementsByTagName('td');
-                console.log('---------------------'+i+'-----------------------');
+                //console.log('---------------------'+i+'-----------------------');
                 for (var j=0;j<td.length;j++){
                     td[j].setAttribute('colspan',bitmap[j].getAttribute('colspan'));
                 }
             }
         });
+        $("div.panel-body").each(function(){
+            var table = document.createElement("table");
+            $(table).addClass("");
+            var tr = document.createElement("tr");
+            var to_cpy = this.getElementsByTagName("table")[0].getElementsByTagName("tr")[0].getElementsByTagName("td");
+            //console.log(to_cpy[0]);
+            $(this).find("table:first").each(function(){
+                $(this).find("tbody:first").each(function(){
+                    $(this).find("tr:first").each(function(){
+                        $(this).find("td").each(function(i){
+                            var td = document.createElement("td");
+                            if (i == 0){
+                                td.style.minWidth = '50px';
+                            }else{
+                                td.style.minWidth = '100px';
+                            }
+                            //td.style.minHeight = '100px';
+                            $(td).css({
+                                "text-align":"center",
+                                "border":"1px solid #777",
+                                "background": "rgba(170,170,170,0.5)"
+                             
+                            });
+                            td.innerHTML = to_cpy[i].innerHTML;
+                            tr.appendChild(td);
+                        });
+                        table.appendChild(tr);
+                    });
+                });
+            });
+            $(table).css({
+                "margin-top":"15px",
+                "margin-left":"0px",
+                "position":"absolute"
+                //"z-index":-100
+            });
+            table.id = "hinter";
+            this.insertBefore(table,this.getElementsByTagName("table")[0]);
+        });
+        $("div.panel-body").on("scroll",function(){
+            $(this).find("table:first").css({
+                "margin-left":'-'+parseInt(this.scrollLeft).toString() + 'px'
+            });
+        });
     };
+     window.onscroll = function(){
+         console.log(document.body.scrollTop);
+         document.getElementById("hinter").style.marginTop = parseInt(document.body.scrollTop).toString() +'px';
+     }
     target = '';
     function onclickpano(n) {
         target.focus();
@@ -142,9 +191,20 @@
         // }).on('hide.bs.popover',function(e){
         //     $(e.target).removeClass('popover_is_shown');
         // });
-        $(".number_input").number_keyboard({
-            placement:'auto',
-            type:"type_with_number_and_point"            
+        var temp = $(".number_input");
+        temp.each(function(i){
+            if (i >= (temp.length)/2){
+                $(this).number_keyboard({
+                    placement:'left',
+                    type:'type_with_number_and_point',
+                });
+            }else{
+                $(this).number_keyboard({
+                    placement:'right',
+                    type:'type_with_number_and_point',
+                });
+            }
+            
         });
     }
     function flush_index() {
@@ -179,10 +239,19 @@
                         tb.appendChild(node);
                         var tr_last = tb.getElementsByTagName("tr")[tb.getElementsByTagName("tr").length-1];
                         $(tb).parents("table:first").addClass("to_sub");
-                        //console.log($(tr_last).children());
-                        $(tr_last).find(".number_input").number_keyboard({
-                                placement:'auto',
-                                type:"type_with_number_and_point"            
+                        var temp = $(tr_last).find(".number_input");
+                        temp.each(function(i){
+                            if (i >= (temp.length)/2){
+                                $(this).number_keyboard({
+                                    placement:'left',
+                                    type:'type_with_number_and_point',
+                                });
+                            }else{
+                                $(this).number_keyboard({
+                                    placement:'right',
+                                    type:'type_with_number_and_point',
+                                });
+                            } 
                         }).focus(function(){
                             $(this).parents("table:first").addClass("to_sub");
                         });
@@ -259,10 +328,10 @@
     <data model='{{temp.model}}' size='{{temp.size}}' serialno='{{temp.serialno}}'></data>
     {% endfor %}
 </datalist>
-<div class="container" style="">
-    <div class="row clearfix">
+<div class="container" style="width:100%;padding:0 0 0 0">
+    <div class="row clearfix" style="width:100%;margin-right:0px;margin-left:0px">
         <button class='btn btn-success' onclick='submit()'>提交</button>
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top:10px">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top:10px;margin-left:0;padding:0 0 0 0">
             {% for temp in ok %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -275,23 +344,23 @@
                 </div>
                 <div id="collscape{{forloop.counter}}" class="panel-collapse collapse" role="tabpanel">
                     <div class="panel-body" style="min-height:300px;overflow:auto">
-                        <!-- <button onclick="document.getElementById('xx').innerHTML = ''">gg</button> -->
-                        <table id='table{{forloop.counter}}' class='table table-bordered' style='width:80px'>
+                        <!-- <div style="display:inline;z-index:10000;min-width:100px"></div> -->
+                        <table id='table{{forloop.counter}}' class='table table-bordered' style='width:80px;display:inline'>
                             {% for g in temp %}
                             {% ifequal forloop.counter 1 %}
-                            <thead >
-                            <tr>
-                                <td style='min-width:50px'>部位</td>
-                                {% for j in g %}
-                                <td colspan='2' style='max-width:50px;min-width:50px'>{{j}}</td>
-                                {% endfor %}
-                            </tr>
+                            <thead class="fixed" style="visibility:hidden">
+                                <tr>
+                                    <td style='min-width:50px'>部位</td>
+                                    {% for j in g %}
+                                    <td colspan='2' style='max-width:100px;min-width:100px'>{{j}}</td>
+                                    {% endfor %}
+                                </tr>
                             </thead>
                             <tbody>
                             {% else %}
                                 {% ifequal forloop.counter 2 %}
                                 <tr>
-                                    <td>公差</td>
+                                    <td style='min-width:50px'>公差</td>
                                     {% for j in g %}
                                     <td colspan='2'>±{{j}}</td>
                                     {% endfor %}
@@ -333,6 +402,7 @@
 
                             </tfoot>
                         </table>
+                        <div style="display:inline"></div>
                     </div>
                 </div>
             </div>

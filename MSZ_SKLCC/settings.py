@@ -34,11 +34,11 @@ DATABASES = {
         }
         },
 
-}
 #DATABASE_OPTIONS = {
      #'driver': 'SQL Server Native Client 10.0',
      #'MARS_Connection': True,
-#}
+}
+
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False

@@ -328,6 +328,7 @@ function flush_measure_list(xmlDoc) {
     div.id = 'partion_input';
     div.style.overflow = 'auto';
     div.style.marginTop = '10px';
+    div.style.minWidth = "10000px";
     document.getElementById('measure_size').appendChild(div);
     selectx.onchange = function() {
         return get_partition();
@@ -456,7 +457,7 @@ function flush_style_measuree (xmlDoc) {
                 temp.push(recc[k].getAttribute("sym2"));
             }
             console.log(temp);
-            $("#partion_input table tbody tr").each(function(){
+            $("#measure_res_table tbody tr").each(function(){
                 if (this.getElementsByTagName("td")[0].innerHTML == recc[k].getAttribute("partition")){
                     for (var j = 0;j<temp.length;j++){
                         $(this).find("input").each(function(){
@@ -505,11 +506,15 @@ function get_partition() {
 
 function flush_style_measure(xmlDoc) {
     if (document.getElementById("measure_size").getElementsByTagName("table").length == 0) {
+        var div = document.createElement("div");
+        $(div).css({"float":"left","display":"inline","min-width":"1000px"});
         var table = document.createElement('table');
+        table.id = "measure_res_table";
+        $(table).css({"display":"inline"});
         table.setAttribute('class', 'table table-bordered');
         table.style.border = 'none';
         table.style.width = '100px';
-        table.innerHTML = '<thead><tr><th style="min-width: 120px;;border:#ddd 1px solid">工序</th><th style="min-width: 60px;max-width:120px;border:#ddd 1px solid">标准</th><th style="min-width: 60px;max-width:120px;border:#ddd 1px solid">公差</th><th style="max-width:120px;border:#ddd 1px solid;min-width: 60px;">对称</th><th style="border:none"><a style="cursor:pointer" id="measure_partition_add_col_button"> <span class="glyphicon glyphicon-plus-sign"> </span></a></th></tr></thead>';
+        table.innerHTML = '<thead><tr><th style="min-width: 120px;;border:#ddd 1px solid">部位</th><th style="min-width: 60px;max-width:120px;border:#ddd 1px solid">标准</th><th style="min-width: 60px;max-width:120px;border:#ddd 1px solid">公差</th><th style="max-width:120px;border:#ddd 1px solid;min-width: 60px;">对称</th><th style="border:none"><a style="cursor:pointer" id="measure_partition_add_col_button"> <span class="glyphicon glyphicon-plus-sign"> </span></a></th></tr></thead>';
         var str = xmlDoc.getElementsByTagName('measure');
         var tbody = document.createElement('tbody');
         for (var i = 0; i < str.length; i++) {
@@ -519,6 +524,9 @@ function flush_style_measure(xmlDoc) {
             //td0.style.marginTop = '0px';
             td0.style.width = '120px';
             td0.style.height = '30px';
+            td0.style.maxHeight = '30px';
+            td0.style.maxWidth = '120px';
+            //td0.setAttribute("");
             td0.innerHTML = str[i].getAttribute('partition');
             td0.style.backgroundColor = 'rgba(238, 238, 238, 0.8)';
             var td1 = document.createElement('td');
@@ -546,7 +554,8 @@ function flush_style_measure(xmlDoc) {
             };
         }
         //document.getElementById('measure_size').appendChild(btn);
-        document.getElementById('partion_input').appendChild(table);
+        div.appendChild(table);
+        document.getElementById('partion_input').appendChild(div);
         $('#measure_partition_add_col_button').tooltip({
             animation: true,
             html: true,
@@ -623,8 +632,89 @@ function flush_style_measure(xmlDoc) {
             ts[i].style.minHeight = '45px';
         }
         document.getElementById('measure_partition_add_col_button').click();
+        setTimeout(function(){
+            document.getElementById("measure_trigger").click();
+            var hint_table = document.createElement("table");
+            hint_table.id = "measure_hint_table";
+            var cell_width;
+            $("#measure_size").find("table:first").each(function(){
+                $(this).find("tr").each(function(i){
+                    var tar_node;
+                    if (i == 0){
+                        tar_node = this.getElementsByTagName("th")[0];
+                        cell_width = tar_node.offsetWidth;
+                        console.log(this.getElementsByTagName("th")[0].offsetWidth);
+                    }else{
+                        tar_node = this.getElementsByTagName("td")[0];;
+                        console.log(this.getElementsByTagName("td")[0].offsetWidth);
+                    }
+                    var tr = document.createElement("tr");
+                    var td = document.createElement("td");
+                    td.innerHTML = tar_node.innerHTML;
+                    $(td).css({
+                        "max-width":tar_node.offsetWidth,
+                        "height":parseInt(tar_node.offsetHeight)+1,
+                        "background":"rgba(238, 238, 238, 1)",
+                        "border-top":"0px solid #fff"
+                    }).addClass("table table-bordered");
+                    //td.style.width = tar_node.offsetWidth;
+                    //td.style.minWidth = tar_node.offsetWidth;
+                    //td.style.maxWidth = tar_node.offsetWidth;
+                    //td.style.height = tar_node.offsetHeight;
+                    //td.style.minHeight = tar_node.offsetHeight;
+                    //td.style.maxHeight = tar_node.offsetHeight;
+                    tr.appendChild(td);
+                    hint_table.appendChild(tr);
+
+                });
+
+            });
+            
+            $(hint_table).css({
+                "display":"inline"
+            });
+            var temp_div = document.createElement("div");
+            $(temp_div).css({
+                //"display":"inline"
+                
+            });
+            temp_div.appendChild(hint_table);
+            document.getElementById("partion_input").insertBefore(temp_div,document.getElementById("measure_res_table").parentNode);
+            $("#measure_res_table tr").each(function(i){
+
+                $(this).find("td:first").css({
+                    "visibility":"hidden"
+                });
+                $(this).find("th:first").css({
+                    "visibility":"hidden"
+                });
+            }); 
+            var temp_res_table;
+            console.log("-----");
+            $("#measure_hint_table").parent().each(function(){
+                console.log(this.offsetHeight);
+                temp_res_table = this.offsetHeight;
+            })
+            console.log("-----");
+            $("#measure_res_table").parent().css({
+                "margin-top":'-'+temp_res_table.toString()+'px',
+                "display":"inline"
+            });
+            $("#measure_size").on("scroll",function(){
+                var value = this.scrollLeft;
+                console.log(this.scrollLeft);
+                $("#measure_hint_table").parent().css({
+                    "margin-left":''+value+'px'
+                });
+            });
+            document.getElementById("measure_partition_add_col_button").click();
+            $("#measure_res_table a.del_col_a:last").each(function(){
+                this.click();
+            });
+        },100);
+
     }else{
-        $("#measure_size").find("table").each(function(){
+        $("#measure_res_table").each(function(){
             var table = this;
             var str = xmlDoc.getElementsByTagName('measure');
             var tbody_trs = this.getElementsByTagName("tbody")[0].getElementsByTagName("tr");

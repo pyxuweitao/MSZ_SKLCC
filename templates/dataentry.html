@@ -375,6 +375,9 @@
             function OnScan(evt) {
                 if (evt.keyCode == 13) {
                     var ele = document.getElementById("scan_input"); //禁用输入框，防止二次输入
+                    if (ele.value.length != 5 && ele.value.length != 10){
+                        return;
+                    }
                     if (ele.value.length != code_length) {
                         {% ifequal login_switch 1 %}
                             change_user(ele.value.slice(-5));//需要一套工号的格式
