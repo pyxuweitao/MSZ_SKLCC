@@ -1,5 +1,4 @@
 ﻿# 2014-09-02 written by XuWeitao
-
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template.response import TemplateResponse
@@ -177,14 +176,16 @@ class Myinfo:
 				format( float( self.check_totalreturn ) / float( self.check_totalnumber ), '.2%' ) )
 
 		self.check_miss = get_check_miss( employeeno, date )
+		self.check_miss_totalnumber = get_check_miss_totalnumber( employeeno, date )
 		self.recheck_totalnumber = get_recheck_totalnumber( employeeno, date )  #sampletotalnumber
 		self.recheck_totalreturn = get_recheck_totalreturn( employeeno, date )
 
-		if self.recheck_totalnumber == 0:
+
+		if self.check_miss_totalnumber == 0:
 			self.recheck_percentage = '0%'
 		else:
 			self.recheck_percentage = str(
-				format( float( self.recheck_totalreturn ) / float( self.recheck_totalnumber ), '.2%' ) )
+				format( float( self.check_miss ) / float( self.check_miss_totalnumber ), '.2%' ) )
 		self.bald_totalnumber = get_today_bald( employeeno, date )
 
 
@@ -399,7 +400,7 @@ class timer( threading.Thread ):
 				except Exception, e:
 					make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) + 'RTX' )
 			time.sleep( 60 )
-
+#TODO:MEASURE_CHECK 16:00
 	def stop( self ):
 		self.thread_stop = True
 
@@ -687,69 +688,77 @@ def submit_id( request ):
 	else:
 		Raw.sql = "select password, employeeno, employee from sklcc_employee where username = '%s'" % username
 		target = Raw.query_one( )
-		if em_password == True and username not in superuser and target:
-			request.session['username'] = username
-			request.session['em_password'] = em_password
-			request.session['employee'] = target[2]
-			request.session['employeeno'] = target[1]
-			status = find_status_list( username )
-			request.session['status'] = status
-			return HttpResponse( )
-		if target and target[0] == em_password:
-			request.session['username'] = username
-			request.session['em_password'] = em_password
-			request.session['employee'] = target[2]
-			request.session['employeeno'] = target[1]
-			status = find_status_list( username )
-			request.session['status'] = status
-			if 7 in status:
-				return HttpResponseRedirect( '/admini/' )
-			elif 4 in status:
-				return HttpResponseRedirect( '/choose_check/' )
-			elif 5 in status:
-				return HttpResponseRedirect( '/choose_check_recheck/' )
-			elif 0 in status:
-				return HttpResponseRedirect( '/url_dataentry/' )
-			elif 1 in status:
-				return HttpResponseRedirect( '/recheck/' )
-			elif 2 in status:
-				return HttpResponseRedirect( '/choose/' )
-			elif 3 in status:
-				return HttpResponseRedirect( '/choose_recheck/' )
-			elif 6 in status:
-				return HttpResponseRedirect( '/line_chart/' )
-			elif 8 in status:
-				return HttpResponseRedirect( '/form4/' )
-			elif 9 in status:
-				return HttpResponseRedirect( '/form5/' )
-			elif 10 in status:
-				return HttpResponseRedirect( '/form1/' )
-			elif 11 in status:
-				return HttpResponseRedirect( '/form2/' )
-			elif 12 in status:
-				return HttpResponseRedirect( '/form3/' )
-			elif 13 in status:
-				return HttpResponseRedirect( '/form6/' )
-			elif 14 in status:
-				return HttpResponseRedirect( '/form7/' )
-			elif 15 in status:
-				return HttpResponseRedirect( '/form0/' )
-			elif 16 in status:
-				return HttpResponseRedirect( '/form8/' )
-			elif 17 in status:
-				return HttpResponseRedirect( '/form9/' )
-			elif 18 in status:
-				return HttpResponseRedirect( '/bar_question_chart/' )
-			elif 19 in status:
-				return HttpResponseRedirect( '/pie_chart/' )
-			elif 21 in status:
-				return HttpResponseRedirect( '/bar_measure_chart/' )
-			elif 22 in status:
-				return HttpResponseRedirect( '/style_measure/' )
+		#扫码登录
+		if em_password == True:
+			if target != False:
+				if username not in superuser:
+					request.session['username']    = username
+					request.session['em_password'] = em_password
+					request.session['employee']    = target[2]
+					request.session['employeeno']  = target[1]
+					status = find_status_list( username )
+					request.session['status']      = status
+					return HttpResponse()
+				else:
+					return HttpResponse("superuser")
 			else:
-				return HttpResponseRedirect( '/login/#3' )
+				return HttpResponse("notfound")
 		else:
-			return HttpResponseRedirect( '/login/#2' )
+			if target and target[0] == em_password:
+				request.session['username'] = username
+				request.session['em_password'] = em_password
+				request.session['employee'] = target[2]
+				request.session['employeeno'] = target[1]
+				status = find_status_list( username )
+				request.session['status'] = status
+				if 7 in status:
+					return HttpResponseRedirect( '/admini/' )
+				elif 4 in status:
+					return HttpResponseRedirect( '/choose_check/' )
+				elif 5 in status:
+					return HttpResponseRedirect( '/choose_check_recheck/' )
+				elif 0 in status:
+					return HttpResponseRedirect( '/url_dataentry/' )
+				elif 1 in status:
+					return HttpResponseRedirect( '/recheck/' )
+				elif 2 in status:
+					return HttpResponseRedirect( '/choose/' )
+				elif 3 in status:
+					return HttpResponseRedirect( '/choose_recheck/' )
+				elif 6 in status:
+					return HttpResponseRedirect( '/line_chart/' )
+				elif 8 in status:
+					return HttpResponseRedirect( '/form4/' )
+				elif 9 in status:
+					return HttpResponseRedirect( '/form5/' )
+				elif 10 in status:
+					return HttpResponseRedirect( '/form1/' )
+				elif 11 in status:
+					return HttpResponseRedirect( '/form2/' )
+				elif 12 in status:
+					return HttpResponseRedirect( '/form3/' )
+				elif 13 in status:
+					return HttpResponseRedirect( '/form6/' )
+				elif 14 in status:
+					return HttpResponseRedirect( '/form7/' )
+				elif 15 in status:
+					return HttpResponseRedirect( '/form0/' )
+				elif 16 in status:
+					return HttpResponseRedirect( '/form8/' )
+				elif 17 in status:
+					return HttpResponseRedirect( '/form9/' )
+				elif 18 in status:
+					return HttpResponseRedirect( '/bar_question_chart/' )
+				elif 19 in status:
+					return HttpResponseRedirect( '/pie_chart/' )
+				elif 21 in status:
+					return HttpResponseRedirect( '/bar_measure_chart/' )
+				elif 22 in status:
+					return HttpResponseRedirect( '/style_measure/' )
+				else:
+					return HttpResponseRedirect( '/login/#3' )
+			else:
+				return HttpResponseRedirect( '/login/#2' )
 
 
 def logout( request ):
@@ -1033,6 +1042,8 @@ def update_info( request ):
 		xml += """<ProducePackProc WorkLineNo = "100" WorkName = "裁剪" Employee = "裁剪组" Employeeno = "0"/>""".decode(
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "101" WorkName = "整烫" Employee = "整烫组" Employeeno = "0" />""".decode(
+			'utf-8' )
+		xml += """<ProducePackProc WorkLineNo = "102" WorkName = "裁剪" Employee = "裁剪组" Employeeno = "0"/>""".decode(
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "0" WorkName = "未知" Employee = "未知" Employeeno = "0"/>""".decode(
 			'utf-8' )
@@ -3843,7 +3854,6 @@ def get_check_miss( employeeno, date ):
 	Raw = Raw_sql( )
 	Raw.sql = "select serialno from sklcc_recheck_info where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
 	employeeno, date )
-
 	totalreturn = 0
 	target_list = Raw.query_all( )
 
@@ -4029,9 +4039,9 @@ def get_worktime_by_inspector_date( inspector_no, date, month_or_day ):
 
 
 def myinfo( request ):
-	username = request.session['username']
-	em_number = request.session['employeeno']
-	html = get_template( 'personal.html' )
+	username     = request.session['username']
+	em_number    = request.session['employeeno']
+	html         = get_template( 'personal.html' )
 	employeeno = request.session['employeeno']
 	employeename = request.session['employee']
 	employee = get_myinfo( username )

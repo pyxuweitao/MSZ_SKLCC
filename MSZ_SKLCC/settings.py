@@ -10,37 +10,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'MSZ': {
-        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
-        'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': '626107',                  # Not used with sqlite3.
-        'HOST': '192.168.2.189',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '1433',
-        'OPTIONS':{
-	        'host_is_server':True
-        }},
-    'default': {
-        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
-        'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': '626107',                  # Not used with sqlite3.
-        'HOST': '192.168.2.189',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '1433',
-        'OPTIONS':{
-	        'host_is_server':True
-        }
-    },
-}
 # DATABASES = {
 #     'MSZ': {
 #         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 #         'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
 #         'USER': 'sa',                      # Not used with sqlite3.
-#         'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
-#         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT': '',
+#         'PASSWORD': '626107',                  # Not used with sqlite3.
+#         'HOST': '192.168.2.189',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '1433',
 #         'OPTIONS':{
 # 	        'host_is_server':True
 #         }},
@@ -48,25 +25,48 @@ DATABASES = {
 #         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 #         'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
 #         'USER': 'sa',                      # Not used with sqlite3.
-#         'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
-#         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT': '',
-#         'OPTIONS':{
-# 	        'host_is_server':True
-#         }
-#         },
-#     'ok': {
-#         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#         'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
-#         'USER': 'sa',                      # Not used with sqlite3.
 #         'PASSWORD': '626107',                  # Not used with sqlite3.
-#         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT': '',
+#         'HOST': '192.168.2.189',                      # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '1433',
 #         'OPTIONS':{
 # 	        'host_is_server':True
 #         }
 #     },
 # }
+DATABASES = {
+    'MSZ': {
+        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
+        'USER': 'sa',                      # Not used with sqlite3.
+        'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',
+        'OPTIONS':{
+	        'host_is_server':True
+        }},
+    'default': {
+        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
+        'USER': 'sa',                      # Not used with sqlite3.
+        'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',
+        'OPTIONS':{
+	        'host_is_server':True
+        }
+        },
+    'ok': {
+        'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
+        'USER': 'sa',                      # Not used with sqlite3.
+        'PASSWORD': '626107',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',
+        'OPTIONS':{
+	        'host_is_server':True
+        }
+    },
+}
 #DATABASE_OPTIONS = {
      #'driver': 'SQL Server Native Client 10.0',
      #'MARS_Connection': True,

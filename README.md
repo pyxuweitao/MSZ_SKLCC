@@ -1,28 +1,30 @@
-MSZ_SKLCC 系统版本更新记录：
+`MSZ_SKLCC` 成品质检系统版本更新记录：
 =================
-<hr/>
+@(项目工作笔记)[MSZ_SJKCC|版本迭代记录]
 
+------------
+>[@xuweitao](https://github.com/pyxuweitao/MSZ_SKLCC "code in github:MSZ_SKLCC")
+>
+<strong>在2014年6月4日凌晨发行了β版本,并正式进入测试阶段:</strong>
 <br>
-<strong><h2>在2014年6月4日凌晨发行了β版本,并正式进入测试阶段:</strong>
-<br>
-<strong>9月2日正式结束测试阶段，并更新项目名称为MSZ_SKLCC
+<strong>9月2日正式结束测试阶段，并更新项目名称为`MSZ_SKLCC`
 </br>
-*以下是更新记录：*
+*以下是更新记录：* 
 </br>
-</h2>
+
 <table>
-	
 <tr>
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
 </tr>
 
-
-<td>2015-03-05</br><strong><h3>`v2.0`</strong></h3></td>
+<tr>
+<td>2012-03-05</br><h2>v2.0</h2>
+</td>
 <td> 
 <ul>
 <li>抽验员平均效率汇总报表的平均效率计算方法修正</li>
 <li>返修活检验记录汇总报表无数据的BUG修复</li>
-<li>阶段返修记录表剔除非线上检验人员名单</li> 
+<li>阶段返修记录表剔除非线上检验人员名单</li>
 <li><strong>二检尺寸测量正式测试版本发布</strong></li>
 <li>二检尺寸测量页面布局设计优化</li>
 <li>二检尺寸测量用户输入交互设计优化</li>
@@ -53,7 +55,7 @@ MSZ_SKLCC 系统版本更新记录：
 </td>
 </tr>
 
-
+<tr>
 <td>2015-02-10</td>
 <td> 
 <ul>
@@ -77,6 +79,7 @@ MSZ_SKLCC 系统版本更新记录：
 </td>
 </tr>
 
+<tr>
 <td>2015-02-05</td>
 <td> 
 <ul>
@@ -93,6 +96,7 @@ MSZ_SKLCC 系统版本更新记录：
 </td>
 </tr>
 
+<tr>
 <td>2015-02-03</td>
 <td> 
 <ul>
@@ -114,7 +118,7 @@ MSZ_SKLCC 系统版本更新记录：
 
 
 <tr>
-<td>2014-09-02</br><strong><h3>`v1.0`</strong></h3></td>
+<td>2014-09-02</br><h2>v1.0</h2></td>
 <td><ul>
 <li>修复一检录入BUG
 <li>腾讯通发送定时通知功能实现，并添加配置文件。
@@ -558,7 +562,8 @@ MSZ_SKLCC 系统版本更新记录：
 </td>
 </tr>
 
-<td>2014-06-06</td>
+<tr>
+<td>2014-06-06</br><h2>v0.1</h2></td>
 <td> 
 <ul>
 <li>登录界面：员工号->账号</li>
@@ -596,3 +601,4 @@ MSZ_SKLCC 系统版本更新记录：
 </td>
 </tr>
 
+</table>

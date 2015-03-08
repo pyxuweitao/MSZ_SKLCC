@@ -4,6 +4,7 @@
 (function() {
     jQuery.fn.number_keyboard = function(opt_in) {
         var opts = jQuery.extend({}, jQuery.fn.number_keyboard.defaults, opt_in);
+        //console.log(opts);
         return this.each(function() {
             switch (opts.type) {
                 case 'type_only_number':
@@ -23,6 +24,7 @@
                     return type_name();
                 },
                 html: true,
+                viewport:opts.viewport,
                 template: '<div class="popover number_keyboard_element"><div class="arrow number_keyboard_element"><h3 class="popover-title number_keyboard_element"></h3></div><div class="popover-content number_keyboard_element"></div></div>'
             }).addClass("number_keyboard").on("show.bs.popover", function(e) {
                 return jQuery.fn.number_keyboard.handle.on_show(e);
@@ -42,7 +44,8 @@
         container: document.body,
         content: "",
         trigger: "manual",
-        placement: "auto"
+        placement: "auto",
+        viewport:"body"
     };
     jQuery.fn.number_keyboard.handle = {
         on_show: function(e) {
@@ -80,7 +83,7 @@
     jQuery.fn.number_keyboard.types = {};
     jQuery.fn.number_keyboard.types.type_only_number = function() {
         var div = document.createElement("div");
-        $("div").addClass("number_keyboard_button");
+        $("div").addClass("number_keyboard_button").css({"z-index":999});
         for (var i = 1; i < 10; i++) {
             $("<button tabindex='-1'>" + i + "</button>").appendTo(div).addClass("btn btn-default number_keyboard_element").on("click", function(e) {
                 return jQuery.fn.number_keyboard.handle.on_number_click(e);
@@ -118,7 +121,7 @@
     }
     jQuery.fn.number_keyboard.types.type_with_number_and_point = function() {
         var div = document.createElement("div");
-        $("div").addClass("number_keyboard_button");
+        $("div").addClass("number_keyboard_button").css({"z-index":999});
         for (var i = 1; i < 10; i++) {
             $("<button tabindex='-1'>" + i + "</button>").appendTo(div).addClass("btn btn-default number_keyboard_element").on("click", function(e) {
                 return jQuery.fn.number_keyboard.handle.on_number_click(e);

@@ -146,7 +146,8 @@ def get_all_employee():
 
 def get_all_inspector():
 	Raw = Raw_sql()
-	Raw.sql = "select distinct username from sklcc_employee_authority where authorityid = 0"
+	Raw.sql = "select distinct username from sklcc_employee_authority where authorityid = 0" \
+	          " except select distinct username from sklcc_employee_authority where authorityid = 22"
 	target_list = Raw.query_all()
 	inspector_list = []
 

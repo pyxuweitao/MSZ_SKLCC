@@ -709,3 +709,45 @@ commit_res_recheck>>>local variable 'id' referenced before assignment
 2015-03-06 03:16:01.827000
 commit_res_recheck>>>junk after document element: line 1, column 264
 ====================
+2015-03-07 10:00:58.565000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-07 12:00:02.449000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-07 12:00:23.569000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-07 12:00:44.575000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-07 15:00:39.142000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-07 15:56:24.695000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 15:58:53.206000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 15:59:39.466000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 16:02:37.089000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 16:04:07.617000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 16:11:42.430000
+get_personal_miss_history>>>'bool' object is not iterable
+====================
+2015-03-07 17:01:01.205000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-07 17:01:22.205000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-07 18:00:22.242000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================

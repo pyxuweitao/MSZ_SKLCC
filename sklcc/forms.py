@@ -37,7 +37,7 @@ class Total_strong:
 		self.questionno   = []
 		self.count        = 0
 		Raw               = Raw_sql( )
-		Raw.sql           = "SELECT QuestionNO, QuestionCode FROM QCQuestion WHERE isStrong = 'True' ORDER BY QuestionNO"
+		Raw.sql           = "SELECT distinct QuestionNO, QuestionCode FROM QCQuestion WHERE isStrong = 'True' ORDER BY QuestionNO, QuestionCode"
 		target_list       = Raw.query_all( 'MSZ' )
 
 		if target_list != False:
@@ -1367,6 +1367,7 @@ def return_percentage_by_batch( request ):
 			Raw.sql = "select left( createtime, 10 ), sum( totalreturn ), sum( totalnumber ) from sklcc_record" \
 			          " where batch = '%s' and left( createtime, 10 ) >= '%s' and left( createtime, 10 ) <= '%s'" \
 			          " group by left( createtime, 10 )"%( batch, start, end )
+			print Raw.sql
 			target_list = Raw.query_all()
 
 			if target_list != False:
