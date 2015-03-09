@@ -1043,7 +1043,7 @@ def update_info( request ):
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "101" WorkName = "整烫" Employee = "整烫组" Employeeno = "0" />""".decode(
 			'utf-8' )
-		xml += """<ProducePackProc WorkLineNo = "102" WorkName = "裁剪" Employee = "裁剪组" Employeeno = "0"/>""".decode(
+		xml += """<ProducePackProc WorkLineNo = "102" WorkName = "粘合" Employee = "粘合组" Employeeno = "0"/>""".decode(
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "0" WorkName = "未知" Employee = "未知" Employeeno = "0"/>""".decode(
 			'utf-8' )
@@ -1204,6 +1204,11 @@ def written_info_in_database( serialno = "", barcode = "", check_id = 1, batch =
 		workno = 101
 		employee = "整烫组"
 		employeeno = "整烫组"
+	elif workno == 102:
+		workname = "粘合".encode( 'gbk' )
+		workno = 102
+		employee = "粘合"
+		employeeno = "粘合组"
 	else:
 		info_ini = get_info( barcode, inspector_no )
 		Raw.sql = "select WorkName from ProducePackProc WITH (NOLOCK) where ( PackID = '" + str(
@@ -2625,6 +2630,7 @@ def flush_buttons_recheck( request ):
 
 			xml += """<ProduceStyle WorkLineNo = "100" WorkName = "裁剪" Employee = "裁剪组" />""".decode( 'utf-8' )
 			xml += """<ProduceStyle WorkLineNo = "101" WorkName = "整烫" Employee = "整烫组" />""".decode( 'utf-8' )
+			xml += """<ProduceStyle WorkLineNo = "102" WorkName = "粘合" Employee = "粘合组" />""".decode( 'utf-8' )
 			xml += """<ProduceStyle WorkLineNo = "0" WorkName = "未知" Employee = "未知" />""".decode( 'utf-8' )
 		xml += "</PR>"
 		size_list_temp = []
