@@ -139,10 +139,11 @@
         });
         http.onreadystatechange = function () {
             if (http.readyState == 4 && http.status == 200) {
+                alert("提交成功");
                 window.location.reload(1);
             }
         };
-        console.log(JSON.stringify(resjson));
+        //console.log(JSON.stringify(resjson));
         http.send('res=' + JSON.stringify(resjson));
     }
 

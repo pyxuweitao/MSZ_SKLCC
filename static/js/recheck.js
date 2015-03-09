@@ -347,10 +347,13 @@ function bind_to_size() {
 
 function style_measure_illeagl() {
     try {
-        if (!document.getElementById('partion_input').getElementsByTagName('table')[0]) {
+        if (!document.getElementById('partion_input').getElementsByTagName('table')[1]) {
             return true;
         }
     } catch (e) {
+        return true;
+    }
+    if (document.getElementById("is_recheck").checked){
         return true;
     }
     var records = 0;
@@ -1349,7 +1352,10 @@ function OnCommit() {
 }
 
 function submit() {
-
+    if (!style_measure_illeagl()){
+        alert('尺寸测量数据不足或数据有空缺');
+        return ;
+    }
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.open("POST", '/commit_res_recheck/', false);

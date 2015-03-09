@@ -113,11 +113,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.875226" vertical-offset="0" max-vertical-offset="3432">
-              <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3432">
+              <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataentry_js.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/js/dataentry_js.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.41897234" vertical-offset="5596" max-vertical-offset="30910">
+              <caret line="264" column="40" selection-start-line="264" selection-start-column="40" selection-end-line="264" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -432,16 +442,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="measure_size_set.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/measure_size_set.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="7106" max-vertical-offset="11022">
-              <caret line="333" column="16" selection-start-line="333" selection-start-column="16" selection-end-line="333" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -487,7 +487,6 @@
         <option value="E:/../../大三/网络与信息安全/交流题装逼版.py" />
         <option value="E:/../../大三/网络与信息安全/交流题.py" />
         <option value="E:/../../大三/网络与信息安全/交流题short.py" />
-        <option value="$PROJECT_DIR$/static/js/dataentry_js.js" />
         <option value="D:/3 - study/python 32/Lib/site-packages/funkload-demo/simple/test_Simple.py" />
         <option value="$PROJECT_DIR$/echo_wsh.py" />
         <option value="E:/../../program/python2.7/test/untitled-2.py" />
@@ -506,6 +505,7 @@
         <option value="$PROJECT_DIR$/MSZ_SKLCC/settings - develop.py" />
         <option value="$PROJECT_DIR$/MSZ_SKLCC/settings.py" />
         <option value="$PROJECT_DIR$/sklcc/views.py" />
+        <option value="$PROJECT_DIR$/static/js/dataentry_js.js" />
       </list>
     </option>
   </component>
@@ -1824,13 +1824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/dataentry_js.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="11814" max-vertical-offset="31526">
-          <caret line="544" column="31" selection-start-line="544" selection-start-column="31" selection-end-line="544" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/123.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09116022" vertical-offset="0" max-vertical-offset="724">
@@ -2281,8 +2274,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.875226" vertical-offset="0" max-vertical-offset="3432">
-          <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3432">
+          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/dataentry_js.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41897234" vertical-offset="5596" max-vertical-offset="30910">
+          <caret line="264" column="40" selection-start-line="264" selection-start-column="40" selection-end-line="264" selection-end-column="40" />
           <folding />
         </state>
       </provider>

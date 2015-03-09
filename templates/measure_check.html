@@ -42,7 +42,7 @@
             tr.appendChild(document.createElement('td'));
             for (var i = 1; i < targets.length; i++) {
                 console.log(parseInt(targets[i].innerHTML));
-                if (parseInt(targets[i].innerHTML) == 0) {
+                if (parseFloat(targets[i].innerHTML) <= 1e-6) {
                     var td = document.createElement('td');
                     td.setAttribute('class', 'changeable');
                     td.setAttribute('colspan', 2);
@@ -190,7 +190,7 @@
             for (var i = 1; i < trs[0].getElementsByTagName('td').length; i++) {
                 partition_map.push({
                     name: trs[0].getElementsByTagName('td')[i].innerHTML,
-                    has_compact: parseInt(trs[2].getElementsByTagName('td')[i].innerHTML) != 0
+                    has_compact: parseFloat(trs[2].getElementsByTagName('td')[i].innerHTML) >= 1e-6
                 });
             }
             var part_res = [];

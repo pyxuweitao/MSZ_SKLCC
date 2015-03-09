@@ -235,6 +235,12 @@ function flush_info() {
         success: function (e) {
             xmlfile = e.toString().replace(new RegExp('unknown', 'gm'), '未知');
             build_page(xmlfile);
+            $("a[href='#mistake_2'").parent().hide();
+            $("#program_1 button").each(function(){
+                if ($.trim(this.innerHTML) == '半检' ){
+                    $(this).attr("class"," button button-rounded button-flat-caution button-tiny");
+                }
+            });
         },
         timeout: 15000,
         error: function (err,info) {
@@ -261,11 +267,17 @@ function change_user(account) {
     var xml = new XMLHttpRequest();
     xml.open('GET', '/logout/?username=' + account + '&no_redirect=True', false);
     xml.onreadystatechange = function () {
-        if (xml.readyState == 4 && xml.status == 200 && xml.responseText == 'ok') {
+        if (xml.readyState == 4 && xml.status == 200) {
             xml2 = new XMLHttpRequest();
             xml2.onreadystatechange = function () {
-                if (xml2.readyState == 4 && xml2.status == 200) {
+                if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "") {
                     window.location.reload(0);
+                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "notfound"){
+                    alert("工号不存在,请重新登录");
+                    window.location.href = '/login/';
+                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "superuser"){
+                    alert("管理员无法扫码登录,请重新登录");
+                    window.location.href = '/login/';
                 }
             };
             xml2.open('GET', '/submit_id/?username=' + account, false);
@@ -717,6 +729,14 @@ function flush_state_info(xmlDoc) {
     var id1 = document.getElementById("scan_id");
     id1.innerHTML = ele[0].firstChild.nodeValue;
     id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
+    if(document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked){
+        if (!confirm("此条码不属于"+document.getElementById("barcode_index").innerHTML+'，还要确定扫描吗？')){
+            initiallize();
+            return false;
+        }
+    }    
+    document.getElementById("barcode_index").innerHTML = ele[0].firstChild.nodeValue;
+
     //id1.style.fontSize = '10px';
     var msg = id1.innerHTML + '|';
     ele = xmlDoc.getElementsByTagName('scan_count');
@@ -1253,7 +1273,7 @@ function submit() {
 
         },
         timeout: 15000,
-        async: false
+        async: true
     });
     /*
      xmlhttp.onload = function(e) {

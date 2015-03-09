@@ -58,6 +58,7 @@
              });
         }
         on_change_quick_add(document.getElementById("quick_add_selection"));
+        bind_inputs();
     };
     function div_update(){
         document.getElementById('scroll_div').scrollTo(100000000,10000000);
@@ -107,6 +108,209 @@
             var th = this.getElementsByTagName('td')[thead.getElementsByTagName('th').length - 2];
             this.insertBefore(td, th);
             calc_value(td,parseFloat(th.getElementsByTagName("input")[0].value));
+            
+        });
+        bind_inputs();
+    }
+    function bind_inputs(){
+        $("td").find("input:first").keydown(function(e){
+            var tar = this;
+            if (e.keyCode == 38){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").prev("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno - 3;
+                    temp = $(this).parents("table:first").find("tr:first").find("input").each(function(i){
+                        
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 40){
+                
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").next("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+
+                    temp = $(this).parents("table:first").find("tbody:first").find("tr:first").find("input").each(function(i){
+                        lineno = lineno + 3;
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 39){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    if (lineno+1 == i){
+                        $(this).focus();
+                    }
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+
+                    }
+                });
+
+            }else if (e.keyCode == 37){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                console.log(lineno);
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (lineno-1 == i){
+                        $(this).focus();
+                    }
+                });
+            }
+        });
+        $("th").find("input:first").keydown(function(e){
+            var tar = this;
+            if (e.keyCode == 38){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").prev("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno - 3;
+                    temp = $(this).parents("table:first").find("tr:first").find("input").each(function(i){
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 40){
+                
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").next("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno + 3;
+                    temp = $(this).parents("table:first").find("tbody:first").find("tr:first").find("input").each(function(i){
+                        
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 39){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    if (lineno+1 == i){
+                        $(this).focus();
+                    }
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+
+                    }
+                });
+
+            }else if (e.keyCode == 37){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                console.log(lineno);
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (lineno-1 == i){
+                        $(this).focus();
+                    }
+                });
+            }
         });
     }
     function add_row(name) {
@@ -157,7 +361,7 @@
             title: '点击删除此行'
         });
         check.checked = true;
-        console.log(check.checked);
+        //console.log(check.checked);
     }
     var temp_id = 1;
     function get_id() {
