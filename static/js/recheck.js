@@ -1,12 +1,16 @@
-window.onload = function() {
 
+window.onload = function() {
+    Messenger.options = {
+        extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+        theme: 'flat'
+    };
     if (window.location.search.length > 1) {
         var search = window.location.search;
         content_id = search.split('&')[0].split('=')[1];
         dept = decodeURI(search.split('&')[1].split('=')[1]);
         inspectorno = search.split('&')[2].split('=')[1];
         inspectorname = decodeURI(search.split('&')[3].split('=')[1]);
-        batch = search.split('&')[4].split('=')[1];
+        batch = decodeURI(search.split('&')[4].split('=')[1]);
         console.log(batch);
         con_total_num = search.split('&')[5].split('=')[1];
         con_sample_num = search.split('&')[6].split('=')[1];
@@ -361,16 +365,20 @@ function style_measure_illeagl() {
         records += 1;
         //console.log(1);
     });
-    if (records <= Math.round(parseFloat(document.getElementById("check_num").value) * 0.1)) {
+    if (records < Math.round(parseFloat(document.getElementById("check_num").value) * 0.1)) {
+        //alert(Math.round(parseFloat(document.getElementById("check_num").value) * 0.1));
+        //alert(records);
         return false;
     }
-    var tds = document.getElementById('partion_input').getElementsByTagName('table')[0].getElementsByTagName('tbody')[0].getElementsByTagName('td');
-    for (var i = 0; i < tds.length; i++) {
-        if ($.trim(tds[i].innerHTML) == '') {
+    var ill = true;
+    var re = /^\d+(\.\d+)?$/;
+    $("#measure_res_table input").each(function(){
+        if (!re.test(this.value)){
+            ill = false;
             return false;
         }
-    }
-    return true;
+    });
+    return ill;
 }
 var change_input = document.createElement("input");
 change_input.id = 'change_input';
@@ -478,7 +486,7 @@ function flush_style_measuree (xmlDoc) {
 }
 function get_partition() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/get_partition_table/?batch=' + document.getElementById('batch').value + '&size=' + document.getElementById('size_flush_select').value+'&contentid='+window.location.search.split('&')[0].split('=')[1], false);
+    xhr.open('GET', '/get_partition_table/?batch=' + document.getElementById('batch').value + '&size=' + document.getElementById('size_flush_select').value+'&contentid='+window.location.search.split('&')[0].split('=')[1]+'&href='+Math.random(), false);
     var x = document.getElementById('size_flush_select').value;
     xhr.onload = function() {
             var domParser = new DOMParser();
@@ -527,7 +535,7 @@ function flush_style_measure(xmlDoc) {
             //td0.style.marginTop = '0px';
             td0.style.width = '120px';
             td0.style.height = '30px';
-            td0.style.maxHeight = '30px';
+            // td0.style.maxHeight = '30px';
             td0.style.maxWidth = '120px';
             //td0.setAttribute("");
             td0.innerHTML = str[i].getAttribute('partition');
@@ -658,7 +666,8 @@ function flush_style_measure(xmlDoc) {
                         "max-width":tar_node.offsetWidth,
                         "height":parseInt(tar_node.offsetHeight)+1,
                         "background":"rgba(238, 238, 238, 1)",
-                        "border-top":"0px solid #fff"
+                        "border-top":"0px solid #fff",
+                        "min-width":tar_node.offsetWidth
                     }).addClass("table table-bordered");
                     //td.style.width = tar_node.offsetWidth;
                     //td.style.minWidth = tar_node.offsetWidth;
@@ -693,15 +702,18 @@ function flush_style_measure(xmlDoc) {
                 });
             }); 
             var temp_res_table;
+            var temp_res_table_width;
             console.log("-----");
             $("#measure_hint_table").parent().each(function(){
                 console.log(this.offsetHeight);
                 temp_res_table = this.offsetHeight;
-            })
+                temp_res_table_width = this.offsetWidth;
+            });
             console.log("-----");
             $("#measure_res_table").parent().css({
                 "margin-top":'-'+temp_res_table.toString()+'px',
                 "display":"inline"
+                //"margin-left":'-30px'
             });
             $("#measure_size").on("scroll",function(){
                 var value = this.scrollLeft;
@@ -1334,8 +1346,10 @@ function OnCommit() {
             // } else {
             //     alert('有数据不明确或检验次数达不到最低要求');
             // }
-            submit();
-            initiallize();
+            if (submit()){
+                initiallize();
+            }
+            
         } else {
             return;
         }
@@ -1346,15 +1360,16 @@ function OnCommit() {
         // } else {
         //     alert('有数据不明确或检验次数达不到最低要求');
         // }
-        submit();
-        initiallize();
+        if (submit()){
+                initiallize();
+            }
     }
 }
 
 function submit() {
     if (!style_measure_illeagl()){
         alert('尺寸测量数据不足或数据有空缺');
-        return ;
+        return false;
     }
     var xmlhttp = new XMLHttpRequest();
 
@@ -1364,6 +1379,7 @@ function submit() {
     var time = new Date();
     if (window.location.search.length == 0) {
         var content_id = time.getFullYear().toString() + (time.getMonth() + 1).toString() + time.getDate().toString() + (time.getHours() + 1).toString() + (time.getMinutes() + 1).toString() + time.getSeconds().toString() + time.getMilliseconds().toString() + Math.floor(Math.random() * 10000).toString();
+        console.log(content_id);
         resultxml += '<id>' + content_id + '</id>';
     } else {
         var search = window.location.search;
@@ -1433,7 +1449,7 @@ function submit() {
     }
     xmlhttp.send(resultxml);
     if (document.getElementById("size_flush_select") == null){
-        return ;
+        return true;
     }
     var total_measure_in = {
         model:$("#batch").find("option:selected").text(),
@@ -1444,15 +1460,18 @@ function submit() {
     //resultxml += JSON.stringify(json);
     //console.log(resultxml);
 
-    if (window.location.search.length > 1) {
-        window.close();
-    }
+    
     var xml = new XMLHttpRequest();
     xml.open('POST', '/measure_commit/', false);
-    
+    xml.onload = function(){
 
+    }
+    console.log(content_id);
     xml.send('JSON=[' + JSON.stringify(total_measure_in)+']&contentid='+content_id);
-    // alert('sss');
+    if (window.location.search.length > 1) {
+        //window.close();
+    }
+    return true;
 }
 
 function OnClickClear() {

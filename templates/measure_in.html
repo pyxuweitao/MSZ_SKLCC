@@ -191,27 +191,49 @@
         // }).on('hide.bs.popover',function(e){
         //     $(e.target).removeClass('popover_is_shown');
         // });
-        var temp = $(".number_input");
-        temp.each(function(i){
-            if (i >= (temp.length)/2){
-                $(this).number_keyboard({
-                    placement:'left',
-                    type:'type_with_number_and_point',
-                });
-            }else{
-                $(this).number_keyboard({
-                    placement:'top',
-                    type:'type_with_number_and_point',
-                });
-            }
-            
-        }).on('finished.number_keyboard',function(){
-            $(this.parentNode).next().find("input:first").focus();
-        }).keydown(function(e){
-            if (e.keyCode == 13){
-                var x = $(this.parentNode).next().find("input:first").focus();
-            }
+        $("tr").each(function(){
+            var temp = $(this).find("input.number_input");
+            temp.each(function(i){
+                if (i >= (temp.length)/2){
+                    $(this).number_keyboard({
+                        placement:'left',
+                        type:'type_with_number_and_point',
+                    });
+                }else{
+                    $(this).number_keyboard({
+                        placement:'top',
+                        type:'type_with_number_and_point',
+                    });
+                }
+            }).on('finished.number_keyboard',function(){
+                $(this.parentNode).next().find("input:first").focus();
+            }).keydown(function(e){
+                if (e.keyCode == 13){
+                    var x = $(this.parentNode).next().find("input:first").focus();
+                }
+            });
         });
+
+        // temp.each(function(i){
+        //     if (i >= (temp.length)/2){
+        //         $(this).number_keyboard({
+        //             placement:'left',
+        //             type:'type_with_number_and_point',
+        //         });
+        //     }else{
+        //         $(this).number_keyboard({
+        //             placement:'top',
+        //             type:'type_with_number_and_point',
+        //         });
+        //     }
+            
+        // }).on('finished.number_keyboard',function(){
+        //     $(this.parentNode).next().find("input:first").focus();
+        // }).keydown(function(e){
+        //     if (e.keyCode == 13){
+        //         var x = $(this.parentNode).next().find("input:first").focus();
+        //     }
+        // });
     }
     function flush_index() {
         $('table').each(function () {
@@ -284,7 +306,9 @@
         //bind_changeable();
     }
     function submit() {
+        var re = /^\d+(\.\d+)?$/;
         var res = [];
+        var ill  = true;
         $('table.to_sub').each(function () {
             var partition_map = [];
             var trs = this.getElementsByTagName('tr');
@@ -297,16 +321,26 @@
             var part_res = [];
             for (var i = 4; i < trs.length - 1; i++) {
                 var r_res = trs[i].getElementsByTagName('td');
-                console.log(r_res);
+                //console.log(r_res);
                 var pointer = 1;
                 for (var j = 1; j < trs[0].getElementsByTagName('td').length; j++) {
                     if (partition_map[j - 1].has_compact) {
+                        if (!re.test(r_res[pointer].getElementsByTagName('input')[0].value) || !re.test(r_res[pointer + 1].getElementsByTagName('input')[0].value)){
+                            alert("数据格式有误");
+                            ill = false;
+                            return false;
+                        }
                         part_res.push({
                             name: partition_map[j - 1].name,
                             data: [ r_res[pointer].getElementsByTagName('input')[0].value , r_res[pointer + 1].getElementsByTagName('input')[0].value ]
                         });
                         pointer += 2;
                     } else {
+                        if (!re.test(r_res[pointer].getElementsByTagName('input')[0].value)){
+                            alert("数据格式有误");
+                            ill = false;
+                            return false;
+                        }
                         part_res.push({
                             name: partition_map[j - 1].name,
                             data: [ r_res[pointer].getElementsByTagName('input')[0].value]
@@ -322,6 +356,9 @@
                 res: part_res
             });
         });
+        if (!ill){
+            return ;
+        }
         console.log(JSON.stringify(res));
         var xml = new XMLHttpRequest();
         xml.open('POST', '/measure_commit/', false);

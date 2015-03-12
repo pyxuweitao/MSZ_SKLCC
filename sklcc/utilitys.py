@@ -88,6 +88,37 @@ class Employee:
 	username     = ""
 	em_password  = ""
 
+def time_form( string ):
+	year = int( string.split( '-' )[0] )
+	month = int( string.split( '-' )[1] )
+	day = int( string.split( '-' )[2] )
+	time = datetime.datetime( year, month, day )
+	return time
+
+def get_time_distance_list( start, end ):
+	distance = list( )
+	start = time_form( start )
+	end = time_form( end )
+	distance.append( start.date( ) )
+	for i in range( (end - start).days ):
+		start = start + datetime.timedelta( days = 1 )
+		distance.append( start.date( ) )
+	#distance.append( end.date() )
+	return distance
+
+def change_distance_date_to_str_have_year( distance ):
+	distance_new = []
+	for one in distance:
+		distance_new.append( str( one )[0:10] )
+	return distance_new
+
+
+def change_distance_date_to_str_not_have_year( distance ):
+	distance_new = []
+	for one in distance:
+		distance_new.append( str( one )[5:10] )
+	return distance_new
+
 def find_employeeno( username ):
 	Raw     = Raw_sql()
 	Raw.sql = "select employeeno from sklcc_employee where username = '%s'"%username
@@ -123,7 +154,7 @@ def find_inspector_by_department_authority( departmentno, authorityid ):
 
 def find_department_name( departmentno ):
 	Raw = Raw_sql()
-	Raw.sql = "select department from sklcc_department where departmentno = '%s'"%departmentno
+	Raw.sql = "select distinct department from sklcc_department where departmentno = '%s'"%departmentno
 	target  = Raw.query_one()
 	return target[0]
 

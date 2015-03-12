@@ -1210,7 +1210,7 @@ function OnCommit() {
     //$('.alert').alert()
     submit();
 }
-
+var last_code ;
 function submit() {
     if (!style_measure_illeagl()) {
         alert('尺寸测量有数据不明确');
@@ -1226,6 +1226,7 @@ function submit() {
         return;
     }
     resultxml += 'batch=' + document.getElementById('scan_id').innerHTML + '&';
+    resultxml += 'size=' + document.getElementById('scan_model').innerHTML + '&';
     resultxml += 'count=' + document.getElementById('scan_count').innerHTML + '&';
     resultxml += 'group=' + document.getElementById('scan_group').innerHTML + '&';
     resultxml += 'inspectorno=' + document.getElementById('session_inspector').getElementsByTagName('data')[0].getAttribute('value') + '&';
@@ -1244,14 +1245,15 @@ function submit() {
     //resultxml += JSON.stringify(json);
     resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
+    last_code = $.trim(document.getElementById('scan_input').value);
     $.ajax({
         url: '/commit_res/',
         type: 'POST',
         data: resultxml,
         success: function () {
-            initiallize();
+            
             Messenger().post({
-                message: "提交成功",
+                message: last_code+"提交成功",
                 hideAfter: 1,
                 hideOnNavigate: true
             });
@@ -1259,13 +1261,13 @@ function submit() {
         error: function (err,info) {
             if (info == "timeout"){
                 Messenger().post({
-                    message: "网络状况不良，请重试",
+                    message: last_code+"网络状况不良，请重试",
                     hideAfter: 3,
                     hideOnNavigate: true
                 });
             }else{
                 Messenger().post({
-                    message: "服务器出错",
+                    message: last_code+"服务器出错",
                     hideAfter: 3,
                     hideOnNavigate: true
                 });
@@ -1275,6 +1277,7 @@ function submit() {
         timeout: 15000,
         async: true
     });
+    initiallize();
     /*
      xmlhttp.onload = function(e) {
      //console.log(JSON.stringify(esrcElement));

@@ -83,7 +83,7 @@
     jQuery.fn.number_keyboard.types = {};
     jQuery.fn.number_keyboard.types.type_only_number = function() {
         var div = document.createElement("div");
-        $("div").addClass("number_keyboard_button").css({"z-index":999});
+        $(div).addClass("number_keyboard_button").css({"z-index":99});
         for (var i = 1; i < 10; i++) {
             $("<button tabindex='-1'>" + i + "</button>").appendTo(div).addClass("btn btn-default number_keyboard_element").on("click", function(e) {
                 return jQuery.fn.number_keyboard.handle.on_number_click(e);
@@ -121,7 +121,7 @@
     }
     jQuery.fn.number_keyboard.types.type_with_number_and_point = function() {
         var div = document.createElement("div");
-        $("div").addClass("number_keyboard_button").css({"z-index":999});
+        $(div).addClass("number_keyboard_button").css({"z-index":99});
         for (var i = 1; i < 10; i++) {
             $("<button tabindex='-1'>" + i + "</button>").appendTo(div).addClass("btn btn-default number_keyboard_element").on("click", function(e) {
                 return jQuery.fn.number_keyboard.handle.on_number_click(e);

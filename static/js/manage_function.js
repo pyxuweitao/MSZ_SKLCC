@@ -199,10 +199,11 @@ function change_mass_auth_sub() {
         }
     }
     $('#authority_table tbody tr.selected').each(function () {
-        var ajax_request = '/change_authority/?username=' + this.getElementsByTagName('td')[0].innerHTML + res;
+        var ajax_request = '/change_authority/';
+        res += '&username='+this.getElementsByTagName('td')[0].innerHTML;
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('GET', ajax_request, false);
-        xmlHttp.send();
+        xmlHttp.open('POST', ajax_request, false);
+        xmlHttp.send(res);
     });
     window.location.reload(1);
 

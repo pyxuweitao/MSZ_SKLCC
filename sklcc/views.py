@@ -590,18 +590,7 @@ def find_sec_table( employeeno, authorityid, start, end ):
 	return sec_tables
 
 
-def change_distance_date_to_str_have_year( distance ):
-	distance_new = []
-	for one in distance:
-		distance_new.append( str( one )[0:10] )
-	return distance_new
 
-
-def change_distance_date_to_str_not_have_year( distance ):
-	distance_new = []
-	for one in distance:
-		distance_new.append( str( one )[5:10] )
-	return distance_new
 
 
 def get_three_workno_to_EQ( date, departmentno ):
@@ -638,26 +627,6 @@ def get_three_workno_to_EQ( date, departmentno ):
 	T = Current_time( )
 	res += "@当前统计数据截止到%s#1" % T.get_time( )[0:8]
 	return res.decode( 'utf-8' )
-
-
-def time_form( string ):
-	year = int( string.split( '-' )[0] )
-	month = int( string.split( '-' )[1] )
-	day = int( string.split( '-' )[2] )
-	time = datetime.datetime( year, month, day )
-	return time
-
-
-def get_time_distance_list( start, end ):
-	distance = list( )
-	start = time_form( start )
-	end = time_form( end )
-	distance.append( start.date( ) )
-	for i in range( (end - start).days ):
-		start = start + datetime.timedelta( days = 1 )
-		distance.append( start.date( ) )
-	#distance.append( end.date() )
-	return distance
 
 
 def fail( request, url ):
@@ -909,13 +878,13 @@ def get_partition_table( request ):
 	size  = request.GET['size']
 	contentid = request.GET['contentid'] if 'contentid' in request.GET else False
 	styleno = batch.split('-')[0]
-	Raw.sql = "select distinct size from sklcc_style_measure where styleno = '%s'" % styleno
+	Raw.sql = "select distinct size from sklcc_style_measure where styleno = '%s' and state = 1" % styleno
 
 	target_list = Raw.query_all( )
 	if target_list != False:
 		if size in [target[0] for target in target_list]:
 			Raw.sql = "select partition, common_difference, symmetry, measure_res from sklcc_style_measure where measure_or_not" \
-			          " = 1 and size = '%s' and styleno = '%s'" % ( size, styleno )
+			          " = 1 and size = '%s' and styleno = '%s' and state = 1" % ( size, styleno )
 			partition_list = Raw.query_all( )
 
 			if partition_list != False:
@@ -1358,7 +1327,7 @@ def get_return_percentage( departmentno, date ):
 
 def get_common_difference( styleno, partition ):
 	Raw = Raw_sql( )
-	Raw.sql = "select common_difference from sklcc_style_measure where styleno = '%s' and partition = '%s'" % (
+	Raw.sql = "select common_difference from sklcc_style_measure where styleno = '%s' and partition = '%s' and state = 1" % (
 	styleno, partition )
 	target = Raw.query_one( )
 
@@ -1369,7 +1338,7 @@ def get_common_difference( styleno, partition ):
 
 def get_symmetry( styleno, partition ):
 	Raw = Raw_sql( )
-	Raw.sql = "select symmetry from sklcc_style_measure where styleno = '%s' and partition = '%s'" % (
+	Raw.sql = "select symmetry from sklcc_style_measure where styleno = '%s' and partition = '%s' and state = 1" % (
 	styleno, partition )
 	target = Raw.query_one( )
 
@@ -1381,7 +1350,7 @@ def get_symmetry( styleno, partition ):
 
 def get_measure_res( styleno, partition ):
 	Raw = Raw_sql( )
-	Raw.sql = "select measure_res from sklcc_style_measure where styleno = '%s' and partition = '%s'" % (
+	Raw.sql = "select measure_res from sklcc_style_measure where styleno = '%s' and partition = '%s' and state = 1" % (
 	styleno, partition )
 	target = Raw.query_one( )
 
@@ -1433,35 +1402,35 @@ def commit_res( request ):
 
 		insert_info['barcode'] = request.POST.get( 'codenumber' )
 		insert_info['batch'] = request.POST.get( 'batch' )
-		insert_info['batch'] = request.POST.get( 'batch' )
 		insert_info['number_pack'] = int( request.POST.get( 'count' ) )
 		insert_info['departmentno'] = request.POST.get( 'group' )
 		insert_info['inspector'] = request.POST.get( 'inspectorname' )
 		insert_info['inspector_no'] = request.POST.get( 'inspectorno' )
 		insert_info['check_id'] = request.POST.get( 'type' )
+		insert_info['size']     = request.POST.get('size')
 		insert_info['res'] = list( )
 		totalreturn = 0
 
 		json = simplejson.loads( request.POST.get( 'res_json' ) )
 		T = Current_time( )
 		today = T.get_date( )
-	##TODO:fix this problem measure
-		Raw.sql = "select serialno, measure_count from sklcc_measure_record where inspector_no = '%s' " \
-		          "and left( createtime, 10 ) = '%s' and batch = '%s' and size = [BDDMS_MSZ].DBO.get_size_by_barcode( '%s' )"\
-		          % ( insert_info['inspector_no'], today, insert_info['batch'], insert_info['barcode'] )
-		target = Raw.query_one( )
-		if target == False:
-			serialno = uuid.uuid1( )
-			createtime = T.time_str
-			Raw.sql = u"SELECT TOP 1 a.styleno, b.size FROM ProduceMaster a JOIN producepack b WITH (NOLOCK) " \
-			          u"ON a.producemasterid = b.producemasterid WHERE Barcode = SUBSTRING('%s',1,5)" \
-			          u" AND FormState = '审核' AND packno = SUBSTRING( '%s', 6, 5 )"%( insert_info['barcode'], insert_info['barcode'] )
-			style = Raw.query_one('MSZ')
-			if style != False:
+
+
+		Raw.sql = "SELECT TOP 1 * FROM sklcc_style_measure " \
+		          "WHERE styleno = '%s' AND SIZE = '%s' "%( insert_info['batch'].split('-')[0], insert_info['size'] )
+		target  = Raw.query_one()
+		if target != False:
+			Raw.sql = "select serialno, measure_count from sklcc_measure_record where inspector_no = '%s' " \
+			          "and left( createtime, 10 ) = '%s' and batch = '%s' and size = '%s' "\
+			          % ( insert_info['inspector_no'], today, insert_info['batch'], insert_info['size'] )
+			target = Raw.query_one( )
+			if target == False:
+				serialno = uuid.uuid1( )
+				createtime = T.time_str
 				written_into_measure_record(
-				dict( serialno = serialno, createtime = createtime, inspector_no = insert_info['inspector_no'],
-				    inspector = insert_info['inspector'], batch = insert_info['batch'], styleno = style[0], size = style[1],
-			         measure_count = 0, departmentno = insert_info['departmentno'] ) )
+					dict( serialno = serialno, createtime = createtime, inspector_no = insert_info['inspector_no'],
+					    inspector = insert_info['inspector'], batch = insert_info['batch'], styleno = insert_info['batch'].split('-')[0], size = insert_info['size'],
+				         measure_count = 0, departmentno = insert_info['departmentno'] ) )
 
 		Raw.sql = u"select serialno from sklcc_record where state = 2 and batch = '%s' and inspector_no = '%s' and" \
 		          u" check_id = '%s' and left( createtime, 10 ) = '%s'" % (
@@ -1601,142 +1570,7 @@ def get_check_type( check_id ):
 	return target[0] if target else False
 
 
-def get_all_partition( measure_type_id ):
-	res = []
-	Raw = Raw_sql( )
-	Raw.sql = "select partition from sklcc_measure_partition where measure_type_id = '%s'" % measure_type_id
-	target_list = Raw.query_all( )
-	if target_list != False:
-		for target in target_list:
-			res.append( target[0] )
-	return res
 
-
-def style_measure( request ):
-	try:
-		if 22 not in request.session['status']:
-			return HttpResponseRedirect( '/warning/' )
-		#reload(sys)
-		#sys.setdefaultencoding('utf-8')
-		em_number    = request.session['employeeno']
-		employeename = request.session['employee']
-		Raw = Raw_sql( )
-		Raw.sql = "select measure_type_id, measure_type_name from sklcc_measure_type"
-		target_list = Raw.query_all( )
-		measure_list = []
-		state = 0
-		if target_list != False:
-			for target in target_list:
-				temp = { 'id': target[0], 'name': target[1] }
-				partiton_list = get_all_partition( target[0] )
-				temp['partition_list'] = partiton_list
-				measure_list.append( temp )
-		html = get_template( 'measure_size_set.html' )
-		measure_list_json = simplejson.dumps( measure_list, ensure_ascii = False )
-
-		common_size_list = []
-		Raw.sql = "SELECT size, size_name FROM sklcc_measure_size WHERE employeeno = '%s'"%em_number
-		target_list = Raw.query_all()
-
-		if target_list != False:
-			for target in target_list:
-				common_size_list.append( {'name':target[1], 'value':target[0].replace( '@', ',' )[:-1] } )
-
-		if 'style' in request.GET:
-			style = request.GET['style']
-			if style == '':
-				is_mine = 1
-				state   = 0
-				return TemplateResponse( request, html, locals( ) )
-
-			Raw.sql = "select distinct partition, serial, employeeno from sklcc_style_measure where styleno = '%s' ORDER BY serial" % style
-			target_list = Raw.query_all( )
-			if target_list == False:
-				state = 1
-				is_mine = 1
-				return TemplateResponse( request, html, locals( ) )
-			else:
-				res = []
-				for target in target_list:
-					temp = { }
-					size_list = []
-					Raw.sql = "select common_difference, createtime, symmetry, size, partition, measure_res, measure_or_not, note" \
-					          " from sklcc_style_measure where styleno = '%s' and partition = '%s' order by size" % (
-					          style.decode( 'utf-8' ), target[0] )
-					info_list = Raw.query_all( )
-					if info_list != False:
-						temp['common'] = str( info_list[0][0] ) if info_list[0][0] != 0 else ''
-						temp['symmetry'] = str( info_list[0][2] ) if info_list[0][0] != 0 else ''
-						temp['partition'] = target[0]
-						temp['hint'] = info_list[0][7].decode( "gbk" ) if info_list[0][7] != None else ''
-						temp['measure_or_not'] = 1 if info_list[0][6] else 0
-						temp['data'] = []
-						for info in info_list:
-							one = { }
-							one['size'] = info[3]
-							size_list.append( info[3] )
-							one['no'] = str( info[5] ) if info[5] != 0 else ''
-							temp['data'].append( one )
-					res.append( temp )
-				state = 2
-				is_mine = 1 if em_number == target_list[0][2] else 0
-		return TemplateResponse( request, html, locals( ) )
-	except Exception, e:
-		logging.debug( e )
-
-
-def written_into_style_measure( record ):
-	Raw = Raw_sql( )
-	T = Current_time( )
-	now = T.time_str
-	Raw.sql = u"insert into sklcc_style_measure( employeeno,serial,styleno, common_difference, createtime, symmetry, size, partition, " \
-	          u"measure_res, note, measure_or_not  ) values( '%s', '%d', '%s', %f, '%s', %f, '%s', '%s', %f, '%s', " % (
-	          record['employeeno'], record['index'], record['styleno'], record['common_difference'], now, record['symmetry'], record['size'],
-	          record['partition'], record['number'], record['note'] )
-	Raw.sql += '1 )' if record['measure_or_not'] == True else '0 )'
-	Raw.update( )
-
-
-def submit_style_measure( request ):
-	try:
-		reload( sys )
-		sys.setdefaultencoding( 'utf-8' )
-		Raw = Raw_sql( )
-		json = request.POST.get('json')
-		res = simplejson.loads( json )
-		if res['new_style'] != res['old_style']:
-			Raw.sql = "select * from sklcc_style_measure where styleno = '%s'" % res['new_style']
-			target = Raw.query_one( )
-			if target != False:
-				#this new styleno has been found
-				return HttpResponse( '0' )
-
-		Raw.sql = "delete from sklcc_style_measure where styleno = '%s'" % res['old_style']
-		Raw.update( )
-		record = { }
-		record['styleno']    = res['new_style']
-		record['employeeno'] = request.session['employeeno']
-		data = res['data']
-		for one in data:
-
-			record['partition']         = one['name']
-			record['index']             = int( one['index'] )
-			record['measure_or_not']    = one['is_need']
-			record['note']              = one['hint']
-			record['symmetry']          = float( one['balance_error'] ) if one['balance_error'] != None else 0
-			record['common_difference'] = float( one['common_difference'] ) if one['common_difference'] != None else 0
-			for temp in one['res']:
-				if temp.has_key( 'size' ):
-					record['size'] = temp['size']
-					record['number'] = float( temp['data'] ) if temp['data'] != None else 0
-					written_into_style_measure( record )
-				else:
-					break
-
-		return HttpResponse( '1' )
-	except Exception, e:
-		logging.debug(e)
-		make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) )
 
 
 ##################################### *@*       end of dataentry        *@* ############################################
@@ -2568,11 +2402,11 @@ def recheck( request ):
 
 def get_size_by_batch( employeeno, batch ):
 	Raw = Raw_sql( )
-	Raw.sql = """select DISTINCT size from sklcc_style_measure where styleno = '%s'""" % ( batch.split( '-' )[0])
+	Raw.sql = """select DISTINCT size from sklcc_style_measure where styleno = '%s' and state = 1""" % ( batch.split( '-' )[0])
 	target_list = Raw.query_all( )
 	size_list = []
 	Raw.sql = "select distinct size, serialno from sklcc_measure_record where inspector_no = '%s' and" \
-	          " left( createtime, 10 ) = '%s' and styleno = '%s'"%( employeeno, Current_time.get_now_date(), batch.split( '-' )[0] )
+	          " left( createtime, 10 ) = '%s' and batch = '%s'"%( employeeno, Current_time.get_now_date(), batch )
 	size_list_scaned = []
 	res_list = Raw.query_all()
 	if res_list != False:
@@ -3727,8 +3561,8 @@ def add_authority( request ):
 
 def change_authority( request ):
 	Raw = Raw_sql( )
-	username = request.GET['username']
-	item_list = request.GET.getlist( 'item' )
+	username = request.POST['username']
+	item_list = request.POST.getlist( 'item' )
 
 	if len( item_list ) == 0:
 		Raw.sql = "delete from sklcc_employee_authority where username = '%s'" % ( username )
