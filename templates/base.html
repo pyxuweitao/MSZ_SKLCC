@@ -17,7 +17,7 @@
 </datalist>
 <div class="container" style="width:100%;">
     <div class="row clearfix">
-        <div class="col-md-12 column">
+        <div class="col-md-12 column" style="">
             <nav class="navbar navbar-static-top navbar-default" role="navigation">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -76,7 +76,7 @@
                                     <a href="/choose_check_recheck/">报表审批</a>
                                 </li>
                                 <li>
-                                    <a href="/measure_check/">部位测量审批</a>
+                                    <a href="/measure_check_recheck/">部位测量审批</a>
                                 </li>
                             </ul>
                         </li>
@@ -162,6 +162,9 @@
                                 <li>
                                     <a href="/partition_set/">常用部位编辑</a>
                                 </li>
+                                <li>
+                                    <a href="/style_measure_check/">部位测量审批</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -237,7 +240,31 @@
                     }
                 }
             }
+            setTimeout(function(){
+                if (window.location.search == ''){
+                    var date = new Date();
+                    var year = date.getFullYear().toString();
+                    var month = date.getMonth()+1;
+                    if (month<=9){
+                        month = '0'+ month.toString();
+                    }
+                    month = month.toString();
+                    var day = date.getDate();
+                    if (day<=9){
+                        day = '0'+ day.toString();
+                    }
+                    day = day.toString();
+                    $("input").each(function(){
+                    //console.log('-----------------');
+                        if (this.getAttribute("type") == "date"){
+                            //console.log((new DateFormat("yy-mm-dd")).toLocaleDateString());
+                            this.value = year+'-'+month+'-'+day;
+                        }
+                    });
+                }
+            },800);
         }());
+        
     </script>
     {% block other %}
     {% endblock %}

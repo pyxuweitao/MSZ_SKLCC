@@ -235,6 +235,12 @@ function flush_info() {
         success: function (e) {
             xmlfile = e.toString().replace(new RegExp('unknown', 'gm'), '未知');
             build_page(xmlfile);
+            $("a[href='#mistake_2'").parent().hide();
+            $("#program_1 button").each(function(){
+                if ($.trim(this.innerHTML) == '半检' ){
+                    $(this).attr("class"," button button-rounded button-flat-caution button-tiny");
+                }
+            });
         },
         timeout: 15000,
         error: function (err,info) {
@@ -261,11 +267,17 @@ function change_user(account) {
     var xml = new XMLHttpRequest();
     xml.open('GET', '/logout/?username=' + account + '&no_redirect=True', false);
     xml.onreadystatechange = function () {
-        if (xml.readyState == 4 && xml.status == 200 && xml.responseText == 'ok') {
+        if (xml.readyState == 4 && xml.status == 200) {
             xml2 = new XMLHttpRequest();
             xml2.onreadystatechange = function () {
-                if (xml2.readyState == 4 && xml2.status == 200) {
+                if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "") {
                     window.location.reload(0);
+                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "notfound"){
+                    alert("工号不存在,请重新登录");
+                    window.location.href = '/login/';
+                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "superuser"){
+                    alert("管理员无法扫码登录,请重新登录");
+                    window.location.href = '/login/';
                 }
             };
             xml2.open('GET', '/submit_id/?username=' + account, false);
@@ -493,7 +505,7 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue;
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
@@ -519,7 +531,7 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue;
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
@@ -717,6 +729,15 @@ function flush_state_info(xmlDoc) {
     var id1 = document.getElementById("scan_id");
     id1.innerHTML = ele[0].firstChild.nodeValue;
     id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
+    if(document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked && $.trim(document.getElementById("barcode_index").innerHTML) != ''){
+        if (!confirm("此条码不属于"+document.getElementById("barcode_index").innerHTML+'，还要确定扫描吗？')){
+            initiallize();
+            return false;
+        }
+
+    }    
+    document.getElementById("barcode_index").innerHTML = ele[0].firstChild.nodeValue;
+
     //id1.style.fontSize = '10px';
     var msg = id1.innerHTML + '|';
     ele = xmlDoc.getElementsByTagName('scan_count');
@@ -1190,7 +1211,7 @@ function OnCommit() {
     //$('.alert').alert()
     submit();
 }
-
+var last_code ;
 function submit() {
     if (!style_measure_illeagl()) {
         alert('尺寸测量有数据不明确');
@@ -1206,6 +1227,7 @@ function submit() {
         return;
     }
     resultxml += 'batch=' + document.getElementById('scan_id').innerHTML + '&';
+    resultxml += 'size=' + document.getElementById('scan_model').innerHTML + '&';
     resultxml += 'count=' + document.getElementById('scan_count').innerHTML + '&';
     resultxml += 'group=' + document.getElementById('scan_group').innerHTML + '&';
     resultxml += 'inspectorno=' + document.getElementById('session_inspector').getElementsByTagName('data')[0].getAttribute('value') + '&';
@@ -1213,25 +1235,36 @@ function submit() {
     resultxml += 'type=1&';
     resultxml += 'res_json=';
     var temp_res_json = [];
+    var res_table = document.getElementById("status").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
     for (var i = 0; i < res_mistake_no.length; i++) {
+        var mistake_name = $.trim(res_table[i].getElementsByTagName("td")[3].innerHTML);
+        var work_name = $.trim(res_table[i].getElementsByTagName("td")[1].innerHTML);
         temp_res_json.push(
-            {work_no:res_program_no[i],mistake_no:res_mistake_no[i],count:res_count[i],employee_name:res_employee[i],employee_no:res_employeeno[i]}
+            {work_no:res_program_no[i],
+                mistake_no:res_mistake_no[i],
+                count:res_count[i],
+                employee_name:res_employee[i],
+                employee_no:res_employeeno[i],
+                mistake_name:mistake_name,
+                work_name:work_name
+            }
         );
         //resultxml = resultxml + "<" + 're mist' + '="' + res_mistake_no[i] + '\" prog = \"' + res_program_no[i] + '\" count = \"' + res_count[i] + '\" employeeno=\"' + res_employeeno[i] + '\" employee=\"' + res_employee[i] + '\"/>';
     }
     resultxml += JSON.stringify(temp_res_json) + "&";
     resultxml += 'measure_json=';
     //resultxml += JSON.stringify(json);
-    resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
+    //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
+    last_code = $.trim(document.getElementById('scan_input').value);
     $.ajax({
         url: '/commit_res/',
         type: 'POST',
         data: resultxml,
         success: function () {
-            initiallize();
+            
             Messenger().post({
-                message: "提交成功",
+                message: last_code+"提交成功",
                 hideAfter: 1,
                 hideOnNavigate: true
             });
@@ -1239,13 +1272,13 @@ function submit() {
         error: function (err,info) {
             if (info == "timeout"){
                 Messenger().post({
-                    message: "网络状况不良，请重试",
+                    message: last_code+"网络状况不良，请重试",
                     hideAfter: 3,
                     hideOnNavigate: true
                 });
             }else{
                 Messenger().post({
-                    message: "服务器出错",
+                    message: last_code+"服务器出错",
                     hideAfter: 3,
                     hideOnNavigate: true
                 });
@@ -1253,8 +1286,9 @@ function submit() {
 
         },
         timeout: 15000,
-        async: false
+        async: true
     });
+    initiallize();
     /*
      xmlhttp.onload = function(e) {
      //console.log(JSON.stringify(esrcElement));

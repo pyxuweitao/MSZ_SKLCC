@@ -14,8 +14,7 @@ urlpatterns = patterns('',
     url( r'^submit_id', views.submit_id ),
     url( r'^url_dataentry/$', views.url_dataentry ),
     url( r'^number_off/', views.number_off ),
-    url( r'^style_measure/$', views.style_measure ),
-    url( r'^submit_style_measure/$', views.submit_style_measure ),
+
     url( r'^update_info/', views.update_info ),
     url( r'^commit_res/$', views.commit_res ),
 
@@ -142,7 +141,17 @@ urlpatterns = patterns('',
     url( r'^measure_force_recheck/$', measure.measure_force_recheck ),
     url( r'^measure_commit/$', measure.measure_commit  ),
     url( r'^measure_check/$', measure.measure_check ),
+    url( r'^measure_check_recheck/$', measure.measure_check_recheck ),
+    url( r'^measure_check_info/$', measure.measure_check_info ),
+    url( r'^get_batch_by_departmentno_and_date', measure.get_batch_by_departmentno_and_date ),
     url( r'^measure_check_pass', measure.measure_check_pass ),
+	url( r'^style_measure/$', views.style_measure ),
+    url( r'^submit_style_measure/$', views.submit_style_measure ),
+    url( r'^style_measure_check/$', measure.style_measure_check ),
+    url( r'^commit_style_measure/$', measure.commit_style_measure ),
+    url( r'^pass_style_measure/$' , measure.pass_style_measure ),
+
+
 
     url( r'^(500)/$', views.fail ),
     url( r'^(404)/$', views.fail ),

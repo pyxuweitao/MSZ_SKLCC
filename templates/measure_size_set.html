@@ -46,10 +46,21 @@
             var v = this.parentNode.getAttribute("value");
             $(se).val(v);
         });
+        on_change_quick_add(document.getElementById("quick_add_selection"));
+        bind_inputs();
+        if (window.location.hash == '#copyfrom'){
+            document.getElementById("add_on_area").innerHTML = '';
+            document.getElementById("style_input").value = "";
+            document.getElementById("style_input").setAttribute("placeholder","输入新款号");
+            document.getElementById("make_query_btn").setAttribute("disabled","disabled");
+            return ;
+        }
         var is_mine = parseInt(document.getElementById("changeable").getAttribute("value"));
         if (!is_mine){
+            //$("button[innerHTML != '查询']").hide();
              document.getElementById("btn-sub").disabled = true;
-             document.getElementById("btn-sub").innerHTML = "您无权修改此单据";
+            document.getElementById("btn-sub").innerHTML = "锁定";
+            document.getElementById("submit_to_check_btn").style.display = 'none';
              $("#scroll_div input").attr("readonly", "readonly");
              $("#scroll_div a").remove();
              $("#scroll_div select").attr("disabled","disabled");
@@ -57,7 +68,56 @@
                 this.disabled = true;
              });
         }
-        on_change_quick_add(document.getElementById("quick_add_selection"));
+        if(window.location.hash == '#check'){
+            //$("button[innerHTML != '查询']").hide();
+            document.getElementById("btn-sub").disabled = true;
+            document.getElementById("btn-sub").innerHTML = "锁定";
+            $("#scroll_div input").attr("readonly", "readonly");
+            $("#scroll_div a").remove();
+            $("#scroll_div select").attr("disabled","disabled");
+            $(":checkbox").each(function(){
+               this.disabled = true;
+            });
+            $("#submit_to_check_btn").hide();
+            $("#btn-sub").hide();
+            $("<button>通过</button>").addClass("btn btn-success").click(function(){
+                $.ajax({
+                    url:"/pass_style_measure",
+                    data:{
+                        state:1,
+                        styleno:document.getElementById("style_input").value
+                    },
+                    success:function(){
+                        alert("该单通过成功");
+                    }
+                });
+            }).appendTo($("#submit_to_check_btn").parent());
+            $("<button>不通过</button>").addClass("btn btn-danger").click(function(){
+                $.ajax({
+                    url:"/pass_style_measure",
+                    data:{
+                        state:2,
+                        styleno:document.getElementById("style_input").value
+                    },
+                    success:function(){
+                        alert("该单退回成功");
+                    }
+                });
+            }).appendTo($("#btn-sub").parent());
+            return ;
+        }
+        if (document.getElementById("state_infoo").getAttribute("value") == '1' || document.getElementById("state_infoo").getAttribute("value") == '0'){
+            document.getElementById("btn-sub").disabled = true;
+            document.getElementById("btn-sub").innerHTML = "锁定";
+            document.getElementById("submit_to_check_btn").style.display = 'none';
+            $("#controller button:gt(0)").attr("disabled","disabled");
+            $("#scroll_div input").attr("readonly", "readonly");
+            $("#scroll_div a").remove();
+            $("#scroll_div select").attr("disabled","disabled");
+            $(":checkbox").each(function(){
+               this.disabled = true;
+            });
+        }
     };
     function div_update(){
         document.getElementById('scroll_div').scrollTo(100000000,10000000);
@@ -107,6 +167,212 @@
             var th = this.getElementsByTagName('td')[thead.getElementsByTagName('th').length - 2];
             this.insertBefore(td, th);
             calc_value(td,parseFloat(th.getElementsByTagName("input")[0].value));
+            
+        });
+        bind_inputs();
+        console.log(document.getElementById("scroll_div").scrollLeft);
+        document.getElementById("scroll_div").scrollLeft = '1000';
+        //$('#scroll_div').scroll(-100000);
+    }
+    function bind_inputs(){
+        $("td").find("input:first").keydown(function(e){
+            var tar = this;
+            if (e.keyCode == 38){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").prev("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno - 3;
+                    temp = $(this).parents("table:first").find("tr:first").find("input").each(function(i){
+                        
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 40){
+                
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").next("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+
+                    temp = $(this).parents("table:first").find("tbody:first").find("tr:first").find("input").each(function(i){
+                        lineno = lineno + 3;
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 39){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    if (lineno+1 == i){
+                        $(this).focus();
+                    }
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+
+                    }
+                });
+
+            }else if (e.keyCode == 37){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                console.log(lineno);
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (lineno-1 == i){
+                        $(this).focus();
+                    }
+                });
+            }
+        });
+        $("th").find("input:first").keydown(function(e){
+            var tar = this;
+            if (e.keyCode == 38){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").prev("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno - 3;
+                    temp = $(this).parents("table:first").find("tr:first").find("input").each(function(i){
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 40){
+                
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                var temp = $(this).parents("tr:first").next("tr");
+                if (temp.length != 0){
+                    temp.find("input").each(function(i){
+                        if (i == lineno){
+                            $(this).focus();
+                        }
+                    });
+                }else{
+                    lineno = lineno + 3;
+                    temp = $(this).parents("table:first").find("tbody:first").find("tr:first").find("input").each(function(i){
+                        
+                        if (lineno<0){
+                            if (i == 0){
+                                $(this).focus();
+                                return false;
+                            }
+                        }else{
+                            if (i == lineno){
+                                $(this).focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
+            }else if (e.keyCode == 39){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    if (lineno+1 == i){
+                        $(this).focus();
+                    }
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+
+                    }
+                });
+
+            }else if (e.keyCode == 37){
+                var lineno = 0;
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (this == tar){
+                        //console.log(i);
+                        lineno = i;
+                    }
+                });
+                console.log(lineno);
+                $(this).parents("tr:first").find("input").each(function(i){
+                    //console.log(this);
+                    if (lineno-1 == i){
+                        $(this).focus();
+                    }
+                });
+            }
         });
     }
     function add_row(name) {
@@ -157,13 +423,14 @@
             title: '点击删除此行'
         });
         check.checked = true;
-        console.log(check.checked);
+        bind_inputs();
+        //console.log(check.checked);
     }
     var temp_id = 1;
     function get_id() {
         return temp_id += 1;
     }
-    function submit() {
+    function submit(n) {
         var size_map = [];
         var size_row = document.getElementById('tar').getElementsByTagName('th');
         if (size_row.length <= 5) {
@@ -230,17 +497,29 @@
             'type_id': null,
             'data': partions
         };
+        if (window.location.hash == '#copyfrom'){
+            data.old_style = null;
+        }
         if (data.new_style == '') {
             alert('请填写款号');
             return;
         }
         $.ajax({
             success: function (e) {
+                
+                if (!n){
+                    return ;
+                }
                 if (e == '0'){
                     alert('已存在此款号');
+                    return ;
                 }else if (e == '1'){
-                    alert('提交成功');
+                    alert('保存成功');
                 }
+                if(window.location.hash == '#copyfrom'){
+                    window.close();
+                }
+
             },
             error: function (e) {
                 console.log(e);
@@ -249,7 +528,8 @@
             url: '/submit_style_measure/',
             type: 'POST',
             data: 'json=' + JSON.stringify(data),
-            timeout: 5000
+            timeout: 5000,
+            async:n
         });
     }
 </script>
@@ -257,7 +537,7 @@
 {% endblock %}
 
 {% block other %}
-<div class="row clearfix area">
+<div class="row clearfix area" id="controller">
     <datalist id="json">
         {{measure_list_json}}
     </datalist>
@@ -271,11 +551,11 @@
         </form>
     </div>
     <div class="col-md-1">
-        <button class="btn btn-info" onclick="query_style()">查询</button>
+        <button class="btn btn-info" onclick="query_style()" id="make_query_btn">查询</button>
     </div>
     <script>
         function query_style() {
-            document.getElementsByTagName('form')[0].submit();
+            document.getElementsByTagName('form')[0].submit(true);
         }
         function on_change_quick_add(n){
             document.getElementById("partition_list_data").innerHTML = document.getElementById(n.value).innerHTML;
@@ -291,9 +571,9 @@
     </div>
     <div class="col-md-1">
         {% ifequal state 0 %}
-            <button disabled="disabled" onclick="quick_append_partition()" class="btn btn-primary">快速添加部位</button>
+            <button disabled="disabled" onclick="quick_append_partition()" class="btn btn-primary">+部位</button>
         {% else %}
-            <button  class="btn btn-primary" onclick="quick_append_partition()">快速添加部位</button>
+            <button  class="btn btn-primary" onclick="quick_append_partition()">+部位</button>
         {% endifequal %}
     </div>
     <script>
@@ -314,14 +594,14 @@
 
     <div class="col-md-1">
         <select name="" id="quick_size_choose" class="form-control">
-            <option value="">选择尺码</option>
+            <option value="">尺码</option>
             {% for temp in common_size_list %}
                 <option value="{{temp.value}}">{{temp.name}}</option>
             {% endfor %}
         </select>
     </div>
     <div class="col-md-1">
-        <button class="btn btn-primary" onclick="quick_add_size()">快速添加尺码</button>
+        <button class="btn btn-primary" onclick="quick_add_size()">+尺码</button>
     </div>
     <script>
         function quick_fill_data(){
@@ -359,12 +639,30 @@
                 }
             }
         }
+        function submit_to_check(){
+            submit(false);
+            $.ajax({
+                url:"/commit_style_measure/",
+                data:{"styleno":document.getElementById("style_input").value},
+                success:function(){
+                    alert("提交成功，请等待审核");
+                    if(window.location.hash == '#copyfrom'){
+                        window.close();
+                    }
+                    window.location.reload(1);
+                }
+            });
+        }
     </script>
-    <div class="col-md-3">
+    
+    <div class="col-md-2">
         
     </div>
+     <div class="col-md-1">
+        <button class="btn btn-success" onclick="return submit_to_check()" id="submit_to_check_btn">提交</button>
+    </div>
     <div class="col-md-1">
-        <button class="btn btn-success" id="btn-sub" onclick="return submit()">提交修改</button>
+        <button class="btn btn-success" id="btn-sub" onclick="return submit(true)">保存</button>
     </div>
 </div>
 <div class="area" id="scroll_div" style="margin-top: 20px;overflow-x: auto">
@@ -479,6 +777,30 @@
             </table>
         </div>
     </div>
+</div>
+<div id="add_on_area">
+    
+
+{% ifequal state 2 %}
+    此单据由{{measure_employee}}录入
+{% endifequal %}
+<span id="state_infoo" value="{{measure_state}}">
+{% ifequal measure_state 2 %}
+    未提交
+{% endifequal %}
+{% ifequal measure_state 0 %}
+    审核中
+{% endifequal %}
+{% ifequal measure_state 1 %}
+    已通过 
+{% endifequal %}
+</span>
+{% ifequal measure_state 0 %}
+    <a href="#copyfrom" target="_blank" id="copyfrom">从此款复制</a> 
+{% endifequal %}
+{% ifequal measure_state 1 %}
+    <a href="#copyfrom" target="_blank" id="copyfrom">从此款复制</a> 
+{% endifequal %}
 </div>
 </div>
 <datalist id="partition_list_data">

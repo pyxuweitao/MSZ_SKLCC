@@ -1434,5 +1434,5 @@ def table_measure_size_in( request ):
 					temp['employee']   = target[4]
 					temp['size']       = [target[1]]
 					res.append( deepcopy( temp ) )
-		print res
+
 		return TemplateResponse( request, html, locals() )
