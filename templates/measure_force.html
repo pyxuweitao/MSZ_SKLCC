@@ -135,10 +135,60 @@
         // }).on('hide.bs.popover',function(e){
         //     $(e.target).removeClass('popover_is_shown');
         // });
-        $(".number_input").number_keyboard({
-            placement:'auto',
-            type:"type_with_number_and_point"            
+        $("tr").each(function(){
+            var temp = $(this).find("input.number_input");
+            temp.each(function(i){
+                if (i >= (temp.length)/2){
+                    $(this).number_keyboard({
+                        placement:'left',
+                        type:'type_with_number_and_point',
+                    });
+                }else{
+                    $(this).number_keyboard({
+                        placement:'top',
+                        type:'type_with_number_and_point',
+                    });
+                }
+            }).on('finished.number_keyboard',function(){
+                $(this.parentNode).next().find("input:first").focus();
+            }).keydown(function(e){
+                if (e.keyCode == 13){
+                    var x = $(this.parentNode).next().find("input:first").focus();
+                }
+            }).on('blur',function(){
+                console.log(patterm_float.test(this.value));
+                if (!patterm_float.test(this.value)){
+                    $(this).css({
+                        "border":"1px solid red"
+                    });
+                }else{
+                    $(this).css({
+                        "border":"none"
+                    });
+                }
+            });
         });
+
+        // temp.each(function(i){
+        //     if (i >= (temp.length)/2){
+        //         $(this).number_keyboard({
+        //             placement:'left',
+        //             type:'type_with_number_and_point',
+        //         });
+        //     }else{
+        //         $(this).number_keyboard({
+        //             placement:'top',
+        //             type:'type_with_number_and_point',
+        //         });
+        //     }
+            
+        // }).on('finished.number_keyboard',function(){
+        //     $(this.parentNode).next().find("input:first").focus();
+        // }).keydown(function(e){
+        //     if (e.keyCode == 13){
+        //         var x = $(this.parentNode).next().find("input:first").focus();
+        //     }
+        // });
     }
     function flush_index() {
         $('table').each(function () {
@@ -172,17 +222,46 @@
                         tb.appendChild(node);
                         var tr_last = tb.getElementsByTagName("tr")[tb.getElementsByTagName("tr").length-1];
                         $(tb).parents("table:first").addClass("to_sub");
-                        //console.log($(tr_last).children());
-                        $(tr_last).find(".number_input").number_keyboard({
-                                placement:'auto',
-                                type:"type_with_number_and_point"            
+                        var temp = $(tr_last).find(".number_input");
+                        temp.each(function(i){
+                            if (i >= (temp.length)/2){
+                                $(this).number_keyboard({
+                                    placement:'left',
+                                    type:'type_with_number_and_point',
+                                });
+                            }else{
+                                $(this).number_keyboard({
+                                    placement:'top',
+                                    type:'type_with_number_and_point',
+                                });
+                            } 
                         }).focus(function(){
                             $(this).parents("table:first").addClass("to_sub");
+                        }).on('finished.number_keyboard',function(){
+                            $(this.parentNode).next().find("input:first").focus();
+                        }).keydown(function(e){
+                            if (e.keyCode == 13){
+                                var x = $(this.parentNode).next().find("input:first").focus();
+                            }
+                        }).on('blur',function(){
+                            console.log(patterm_float.test(this.value));
+                            if (!patterm_float.test(this.value)){
+                                $(this).css({
+                                    "border":"1px solid red"
+                                });
+                            }else{
+                                $(this).css({
+                                    "border":"none"
+                                });
+                            }
                         });
                         // $(node).children(".number_input").number_keyboard({
                         //     placement:'auto',
                         //     type:"type_with_number_and_point"            
                         // });
+                        $(this).parents("tfoot:first").find("input").css({
+                            "border":"none"
+                        });
                         flush_index();
                         
                     };
@@ -195,6 +274,7 @@
         });
         //bind_changeable();
     }
+    var patterm_float = /^\d+(\.\d+)?$/;
     function submit() {
         var res = [];
         $('table.to_sub').each(function () {

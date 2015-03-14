@@ -535,7 +535,7 @@ def style_measure( request ):
 				is_mine = 1
 				state   = 0
 				return TemplateResponse( request, html, locals( ) )
-
+			#serial是数据库中为了确保录入的部位有序
 			Raw.sql = "select distinct partition, serial, a.employeeno, b.employee, state from sklcc_style_measure" \
 			          " a JOIN sklcc_employee b ON a.employeeno = b.employeeno where styleno = '%s' ORDER BY serial" % style
 			target_list = Raw.query_all( )
@@ -549,22 +549,22 @@ def style_measure( request ):
 				for target in target_list:
 					temp = { }
 					size_list = []
-					Raw.sql = "select common_difference, createtime, symmetry, size, partition, measure_res, measure_or_not, note" \
+					Raw.sql = "select distinct common_difference, symmetry, size, partition, measure_res, measure_or_not, note" \
 					          " from sklcc_style_measure where styleno = '%s' and partition = '%s' order by size" % (
 					          style.decode( 'utf-8' ), target[0] )
 					info_list = Raw.query_all( )
 					if info_list != False:
 						temp['common']    = str( info_list[0][0] ) if info_list[0][0] != 0 else ''
-						temp['symmetry']  = str( info_list[0][2] ) if info_list[0][0] != 0 else ''
+						temp['symmetry']  = str( info_list[0][1] ) if info_list[0][0] != 0 else ''
 						temp['partition'] = target[0]
-						temp['hint'] = info_list[0][7].decode( "gbk" ) if info_list[0][7] != None else ''
-						temp['measure_or_not'] = 1 if info_list[0][6] else 0
+						temp['hint'] = info_list[0][6] if info_list[0][6] != None else ''
+						temp['measure_or_not'] = 1 if info_list[0][5] else 0
 						temp['data'] = []
 						for info in info_list:
 							one = { }
-							one['size'] = info[3]
-							size_list.append( info[3] )
-							one['no'] = str( info[5] ) if info[5] != 0 else ''
+							one['size'] = info[2]
+							size_list.append( info[2] )
+							one['no'] = str( info[4] ) if info[4] != 0 else ''
 							temp['data'].append( one )
 					res.append( temp )
 				state = 2
@@ -623,7 +623,7 @@ def submit_style_measure( request ):
 					record['number'] = float( temp['data'] ) if temp['data'] != None else 0
 					written_into_style_measure( record )
 				else:
-					break
+					continue
 
 		return HttpResponse( '1' )
 	except Exception, e:

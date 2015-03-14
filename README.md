@@ -16,9 +16,36 @@
 <tr>
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
 </tr>
+<tr>
+<td>2015-03-19</br><h2>v2.1.1</h2>
+</td>
+<td> 
+<ul>
+<li>工艺部位维护提交结果提示与实际提交结果不一致的BUG修复</li>
+<li>工艺录入的出现错位或者数据丢失的问题修复</li>
+<li>一检条码检验是否属于当前录入款的提示修正</li>
+<li>工艺录入无法使用方向键移动的BUG修复</li>
+<li>报数录入提交错误的BUG修复</li>
+<li>增加检验员部位测量录入数据有误的高亮提示</li>
+<li>二检部位测量审批页面查询出现一检的数据的BUG修复</li>
+<li>优化一检疵点录入提交速度</li>
+<li>所有的日期选择都增添默认值</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>views.py</li>
+<li>utilitys.py</li>
+<li>measure.py</li>
+<li>部分html</li>
+<li>sql脚本</li>
+<li>js文件</li>
+</ul>
+</td>
+</tr>
 
 <tr>
-<td>2012-03-12</br><h2>v2.1</h2>
+<td>2015-03-12</br><h2>v2.1</h2>
 </td>
 <td> 
 <ul>
@@ -65,7 +92,7 @@
 </tr>
 
 <tr>
-<td>2012-03-05</br><h2>v2.0</h2>
+<td>2015-03-05</br><h2>v2.0</h2>
 </td>
 <td> 
 <ul>

@@ -437,7 +437,7 @@ def get_personal_miss_history( employeeno, date ):
 
 def get_all_question( ):
 	Raw = Raw_sql( )
-	Raw.sql = 'select questioncode, questionno from QCQuestion WITH (NOLOCK) order by questionno'
+	Raw.sql = 'select DISTINCT questioncode, questionno from QCQuestion WITH (NOLOCK) order by questionno'
 	target_list = Raw.query_all( 'MSZ' )
 
 	question_list = []
@@ -1399,22 +1399,19 @@ def commit_res( request ):
 		Raw = Raw_sql( )
 		insert_info = dict( )
 		SQL = ""
-
-		insert_info['barcode'] = request.POST.get( 'codenumber' )
-		insert_info['batch'] = request.POST.get( 'batch' )
-		insert_info['number_pack'] = int( request.POST.get( 'count' ) )
+		insert_info['barcode']      = request.POST.get( 'codenumber' )
+		insert_info['batch']        = request.POST.get( 'batch' )
+		insert_info['number_pack']  = int( request.POST.get( 'count' ) )
 		insert_info['departmentno'] = request.POST.get( 'group' )
-		insert_info['inspector'] = request.POST.get( 'inspectorname' )
+		insert_info['inspector']    = request.POST.get( 'inspectorname' )
 		insert_info['inspector_no'] = request.POST.get( 'inspectorno' )
-		insert_info['check_id'] = request.POST.get( 'type' )
-		insert_info['size']     = request.POST.get('size')
-		insert_info['res'] = list( )
-		totalreturn = 0
-
-		json = simplejson.loads( request.POST.get( 'res_json' ) )
-		T = Current_time( )
+		insert_info['check_id']     = request.POST.get( 'type' )
+		insert_info['size']         = request.POST.get('size')
+		insert_info['res']          = list( )
+		totalreturn                 = 0
+		json  = simplejson.loads( request.POST.get( 'res_json' ) )
+		T     = Current_time( )
 		today = T.get_date( )
-
 
 		Raw.sql = "SELECT TOP 1 * FROM sklcc_style_measure " \
 		          "WHERE styleno = '%s' AND SIZE = '%s' "%( insert_info['batch'].split('-')[0], insert_info['size'] )
@@ -1445,21 +1442,36 @@ def commit_res( request ):
 
 		if len( json ) != 0:
 			for item in json:
-				SQL += u"""insert into sklcc_info( state, questionname, questionno, type, workname, workno, employee,
+				#疵点录入
+				if insert_info['barcode'] != 'null':
+					SQL += u"""insert into sklcc_info( state, questionname, questionno, type, workname, workno, employee,
  	    					employeeno, returnno, barcode, boxno, number_pack, serialno, batch )
- 	    					values( 2, [BDDMS_MSZ].DBO.get_questioncode_by_no( %d ),%d, [BDDMS_MSZ].DBO.get_questiontype_by_no( %d ),
- 	    		[BDDMS_MSZ].DBO.get_workname_by_worklineno_and_barcode( %d, '%s' ), %d, '%s', '%s', %d, '%s', %d, %d, '%s', '%s'); """ % (
-				int( item['mistake_no'] ), int( item['mistake_no'] ), int( item['mistake_no'] ), int( item['work_no'] ),
-				insert_info['barcode'], int( item['work_no'] ), item['employee_name'], item['employee_no'],
-				int( item['count'] ), insert_info['barcode'], int( insert_info['barcode'][5:] ),
-				insert_info['number_pack'], insert_info['serialno'], insert_info['batch'] )
+ 	    					values( 2, '%s',%d, [BDDMS_MSZ].DBO.get_questiontype_by_no( %d ),
+ 	    		     '%s', %d, '%s', '%s', %d, '%s', %d, %d, '%s', '%s'); """ % (
+					item['mistake_name'],int( item['mistake_no'] ), int( item['mistake_no'] ), item['work_name'],
+					int( item['work_no'] ), item['employee_name'], item['employee_no'],
+					int( item['count'] ), insert_info['barcode'], int( insert_info['barcode'][5:] ),
+					insert_info['number_pack'], insert_info['serialno'], insert_info['batch'] )
+				#报数录入
+				else:
+					SQL += u"""insert into sklcc_info( state, questionname, questionno, type, workno, workname, employee,
+ 	    					employeeno, returnno, number_pack, serialno, batch, barcode, boxno )
+ 	    					values( 2, '%s',%d, [BDDMS_MSZ].DBO.get_questiontype_by_no( %d ),
+ 	    			%d, '%s','%s', '%s', %d, %d, '%s', '%s', 'baoshu', 0); """ % (
+					 item['mistake_name'],int( item['mistake_no'] ), int( item['mistake_no'] ), int( item['work_no'] ), 'unknown',
+					 item['employee_name'], item['employee_no'], int( item['count'] ), insert_info['number_pack'],
+					 insert_info['serialno'], insert_info['batch'] )
 				totalreturn += int( item['count'] )
 			#SQL = SQL[:-10] + ';' #去除最后一个UNION ALL 并且加上执行分号
 		else:
-			SQL = u"insert into sklcc_info ( state, returnno, barcode, boxno, batch, number_pack, serialno )" \
+			if insert_info['barcode'] != 'null':
+				SQL = u"insert into sklcc_info ( state, returnno, barcode, boxno, batch, number_pack, serialno )" \
 			      u" values( 2, 0, '%s', %d, '%s', %d, '%s' );" % (
 			      insert_info['barcode'], int( insert_info['barcode'][5:] ), insert_info['batch'],
 			      insert_info['number_pack'], insert_info['serialno'] )
+			else:
+				SQL = u"insert into sklcc_info ( state, returnno, barcode, boxno, batch, number_pack, serialno)" \
+			      u" values( 2, 0, 'baoshu', 0, '%s', %d, '%s' );" % ( insert_info['batch'], insert_info['number_pack'], insert_info['serialno'] )
 		####    ###################################        sklcc info table     ####################################################
 
 		####    ###################################        sklcc record table   ####################################################
@@ -1477,7 +1489,6 @@ def commit_res( request ):
 			       u" totalreturn = (SELECT sum( returnno ) FROM sklcc_info WHERE serialno =  '%s' ) " \
 			       u"where serialno = '%s';" % (
 			       insert_info['serialno'], insert_info['serialno'], insert_info['serialno'] )
-
 		Raw.sql = SQL
 		Raw.update( )
 		return HttpResponse( )

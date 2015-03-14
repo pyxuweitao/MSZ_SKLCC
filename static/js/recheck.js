@@ -417,7 +417,7 @@ function onclickfin() {
         change_is_shown = false;
     }
 }
-
+var patterm_float = /^\d+(\.\d+)?$/;
 function bind_size_cells() {
     $('#partion_input td.record').each(function(e) {
         if (this.getElementsByTagName("input").length == 0) {
@@ -430,6 +430,17 @@ function bind_size_cells() {
             }).appendTo(tempN).number_keyboard({
                 placement: 'auto',
                 type: "type_with_number_and_point"
+            }).on('blur',function(){
+                console.log(patterm_float.test(this.value));
+                if (!patterm_float.test(this.value)){
+                    $(this).css({
+                        "border":"1px solid red"
+                    });
+                }else{
+                    $(this).css({
+                        "border":"none"
+                    });
+                }
             });
         }
     });

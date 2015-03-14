@@ -55158,3 +55158,241 @@
 	第1块电子屏打开电子屏失败
 The current date/time is: Thu Mar 12 18:04:03 2015
 	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 10:00:22 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:00:22 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 10:00:43 2015
+	第2块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:00:43 2015
+	第2块电子屏发送失败
+The current date/time is: Sat Mar 14 10:01:03 2015
+	第3块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:01:03 2015
+	第3块电子屏发送失败
+The current date/time is: Sat Mar 14 10:01:24 2015
+	第4块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:01:24 2015
+	第4块电子屏发送失败
+The current date/time is: Sat Mar 14 10:01:45 2015
+	第5块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:01:45 2015
+	第5块电子屏发送失败
+The current date/time is: Sat Mar 14 10:02:05 2015
+	第6块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:02:05 2015
+	第6块电子屏发送失败
+The current date/time is: Sat Mar 14 10:02:26 2015
+	第7块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:02:26 2015
+	第7块电子屏发送失败
+The current date/time is: Sat Mar 14 10:02:46 2015
+	第8块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:02:46 2015
+	第8块电子屏发送失败
+The current date/time is: Sat Mar 14 10:03:07 2015
+	第9块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:03:07 2015
+	第9块电子屏发送失败
+The current date/time is: Sat Mar 14 10:03:28 2015
+	第10块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:03:28 2015
+	第10块电子屏发送失败
+The current date/time is: Sat Mar 14 10:03:48 2015
+	第11块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:03:48 2015
+	第11块电子屏发送失败
+The current date/time is: Sat Mar 14 10:04:09 2015
+	第12块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:04:09 2015
+	第12块电子屏发送失败
+The current date/time is: Sat Mar 14 10:04:30 2015
+	第31块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:04:30 2015
+	第31块电子屏发送失败
+The current date/time is: Sat Mar 14 10:04:51 2015
+	第13块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:04:51 2015
+	第13块电子屏发送失败
+The current date/time is: Sat Mar 14 10:05:11 2015
+	第15块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:05:11 2015
+	第15块电子屏发送失败
+The current date/time is: Sat Mar 14 10:05:32 2015
+	第16块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:05:32 2015
+	第16块电子屏发送失败
+The current date/time is: Sat Mar 14 10:05:52 2015
+	第17块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:05:52 2015
+	第17块电子屏发送失败
+The current date/time is: Sat Mar 14 10:06:13 2015
+	第18块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:06:13 2015
+	第18块电子屏发送失败
+The current date/time is: Sat Mar 14 10:06:34 2015
+	第19块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:06:34 2015
+	第19块电子屏发送失败
+The current date/time is: Sat Mar 14 10:06:54 2015
+	第20块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:06:54 2015
+	第20块电子屏发送失败
+The current date/time is: Sat Mar 14 10:07:15 2015
+	第22块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:07:15 2015
+	第22块电子屏发送失败
+The current date/time is: Sat Mar 14 10:07:36 2015
+	第21块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:07:36 2015
+	第21块电子屏发送失败
+The current date/time is: Sat Mar 14 10:07:56 2015
+	第23块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:07:56 2015
+	第23块电子屏发送失败
+The current date/time is: Sat Mar 14 10:08:17 2015
+	第24块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:08:17 2015
+	第24块电子屏发送失败
+The current date/time is: Sat Mar 14 10:08:37 2015
+	第25块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:08:37 2015
+	第25块电子屏发送失败
+The current date/time is: Sat Mar 14 10:08:58 2015
+	第26块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:08:58 2015
+	第26块电子屏发送失败
+The current date/time is: Sat Mar 14 10:09:19 2015
+	第27块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:09:19 2015
+	第27块电子屏发送失败
+The current date/time is: Sat Mar 14 10:09:39 2015
+	第28块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:09:39 2015
+	第28块电子屏发送失败
+The current date/time is: Sat Mar 14 10:10:00 2015
+	第29块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:10:00 2015
+	第29块电子屏发送失败
+The current date/time is: Sat Mar 14 10:10:21 2015
+	第30块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:10:21 2015
+	第30块电子屏发送失败
+The current date/time is: Sat Mar 14 10:10:41 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:10:41 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 10:11:02 2015
+	第2块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:11:02 2015
+	第2块电子屏发送失败
+The current date/time is: Sat Mar 14 10:11:22 2015
+	第3块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:11:22 2015
+	第3块电子屏发送失败
+The current date/time is: Sat Mar 14 10:11:43 2015
+	第4块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:11:43 2015
+	第4块电子屏发送失败
+The current date/time is: Sat Mar 14 10:12:04 2015
+	第5块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:12:04 2015
+	第5块电子屏发送失败
+The current date/time is: Sat Mar 14 10:12:24 2015
+	第6块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:12:24 2015
+	第6块电子屏发送失败
+The current date/time is: Sat Mar 14 10:12:45 2015
+	第7块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:12:45 2015
+	第7块电子屏发送失败
+The current date/time is: Sat Mar 14 10:13:06 2015
+	第8块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:13:06 2015
+	第8块电子屏发送失败
+The current date/time is: Sat Mar 14 10:13:26 2015
+	第9块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:13:26 2015
+	第9块电子屏发送失败
+The current date/time is: Sat Mar 14 10:13:47 2015
+	第10块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:13:47 2015
+	第10块电子屏发送失败
+The current date/time is: Sat Mar 14 10:14:07 2015
+	第11块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:14:07 2015
+	第11块电子屏发送失败
+The current date/time is: Sat Mar 14 10:14:28 2015
+	第12块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:14:28 2015
+	第12块电子屏发送失败
+The current date/time is: Sat Mar 14 10:14:49 2015
+	第31块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:14:49 2015
+	第31块电子屏发送失败
+The current date/time is: Sat Mar 14 10:15:10 2015
+	第13块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:15:10 2015
+	第13块电子屏发送失败
+The current date/time is: Sat Mar 14 10:15:30 2015
+	第15块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:15:30 2015
+	第15块电子屏发送失败
+The current date/time is: Sat Mar 14 10:15:51 2015
+	第16块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:15:51 2015
+	第16块电子屏发送失败
+The current date/time is: Sat Mar 14 10:16:12 2015
+	第17块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:16:12 2015
+	第17块电子屏发送失败
+The current date/time is: Sat Mar 14 10:16:32 2015
+	第18块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:16:32 2015
+	第18块电子屏发送失败
+The current date/time is: Sat Mar 14 10:16:53 2015
+	第19块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:16:53 2015
+	第19块电子屏发送失败
+The current date/time is: Sat Mar 14 10:17:14 2015
+	第20块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:17:14 2015
+	第20块电子屏发送失败
+The current date/time is: Sat Mar 14 10:17:34 2015
+	第22块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:17:34 2015
+	第22块电子屏发送失败
+The current date/time is: Sat Mar 14 10:17:55 2015
+	第21块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:17:55 2015
+	第21块电子屏发送失败
+The current date/time is: Sat Mar 14 10:18:15 2015
+	第23块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:18:15 2015
+	第23块电子屏发送失败
+The current date/time is: Sat Mar 14 10:18:36 2015
+	第24块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 10:18:36 2015
+	第24块电子屏发送失败
+The current date/time is: Sat Mar 14 10:18:57 2015
+	第25块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:00:43 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:00:43 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 12:01:43 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:01:43 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 12:02:43 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:02:43 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 12:03:43 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:03:43 2015
+	第1块电子屏发送失败
+The current date/time is: Sat Mar 14 12:04:43 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Sat Mar 14 12:04:43 2015
+	第1块电子屏发送失败

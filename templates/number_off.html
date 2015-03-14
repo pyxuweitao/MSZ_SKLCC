@@ -206,8 +206,10 @@
                 {% endfor %}
             </div>
         </div>
+
         <div class="tab-pane" id="search_res">
             <div class="well" style="height: 450px;margin-top:10px">
+
                 {% for temp in question_list %}
                 <div style="width:70px;float:left;margin-left: 10px;margin-top: 10px">
                     {% ifequal temp.questiontype 0 %}
@@ -646,15 +648,24 @@
         resultxml += 'group=' + document.getElementById('department').value + '&';
         resultxml += 'inspectorno=' + document.getElementById('inspector').getAttribute('no') + '&';
         resultxml += 'inspectorname=' + document.getElementById('inspector').getElementsByTagName('a')[0].innerHTML + '&';
-        resultxml += 'type=' + document.getElementById('type').value + '&';
-        resultxml += 'xml=<xml><res>';
+        resultxml += 'type=' + document.getElementById('type').value + '&res_json=';
+        var temp_res_json = [];
+        //resultxml += 'xml=<xml><res>';
         $('#status tbody tr').each(function () {
-            resultxml += '<re mist="' + this.getElementsByTagName('td')[1].getAttribute('no') + '" ';
-            resultxml += 'prog="0" count="' + this.getElementsByTagName('td')[2].innerHTML + '" ';
-            resultxml += 'employeeno="' + this.getElementsByTagName('td')[0].getAttribute('no') + '" ';
-            resultxml += 'employee="' + this.getElementsByTagName('td')[0].innerHTML + '"/>';
+            temp_res_json.push({
+                work_no:'0',
+                mistake_no:this.getElementsByTagName('td')[1].getAttribute('no'),
+                count:this.getElementsByTagName('td')[2].innerHTML,
+                employee_name:this.getElementsByTagName('td')[0].innerHTML,
+                employee_no:this.getElementsByTagName('td')[0].getAttribute('no'),
+                mistake_name:$.trim(this.getElementsByTagName("td")[1].innerHTML)
+            });
+            // resultxml += '<re mist="' + this.getElementsByTagName('td')[1].getAttribute('no') + '" ';
+            // resultxml += 'prog="0" count="' + this.getElementsByTagName('td')[2].innerHTML + '" ';
+            // resultxml += 'employeeno="' + this.getElementsByTagName('td')[0].getAttribute('no') + '" ';
+            // resultxml += 'employee="' + this.getElementsByTagName('td')[0].innerHTML + '"/>';
         });
-        resultxml = resultxml + "</res></xml>";
+        resultxml = resultxml + JSON.stringify(temp_res_json);
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
                 alert('提交成功');

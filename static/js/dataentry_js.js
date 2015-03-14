@@ -505,7 +505,7 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue;
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
@@ -531,7 +531,7 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue;
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
@@ -729,11 +729,12 @@ function flush_state_info(xmlDoc) {
     var id1 = document.getElementById("scan_id");
     id1.innerHTML = ele[0].firstChild.nodeValue;
     id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
-    if(document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked){
+    if(document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked && $.trim(document.getElementById("barcode_index").innerHTML) != ''){
         if (!confirm("此条码不属于"+document.getElementById("barcode_index").innerHTML+'，还要确定扫描吗？')){
             initiallize();
             return false;
         }
+
     }    
     document.getElementById("barcode_index").innerHTML = ele[0].firstChild.nodeValue;
 
@@ -1234,16 +1235,26 @@ function submit() {
     resultxml += 'type=1&';
     resultxml += 'res_json=';
     var temp_res_json = [];
+    var res_table = document.getElementById("status").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
     for (var i = 0; i < res_mistake_no.length; i++) {
+        var mistake_name = $.trim(res_table[i].getElementsByTagName("td")[3].innerHTML);
+        var work_name = $.trim(res_table[i].getElementsByTagName("td")[1].innerHTML);
         temp_res_json.push(
-            {work_no:res_program_no[i],mistake_no:res_mistake_no[i],count:res_count[i],employee_name:res_employee[i],employee_no:res_employeeno[i]}
+            {work_no:res_program_no[i],
+                mistake_no:res_mistake_no[i],
+                count:res_count[i],
+                employee_name:res_employee[i],
+                employee_no:res_employeeno[i],
+                mistake_name:mistake_name,
+                work_name:work_name
+            }
         );
         //resultxml = resultxml + "<" + 're mist' + '="' + res_mistake_no[i] + '\" prog = \"' + res_program_no[i] + '\" count = \"' + res_count[i] + '\" employeeno=\"' + res_employeeno[i] + '\" employee=\"' + res_employee[i] + '\"/>';
     }
     resultxml += JSON.stringify(temp_res_json) + "&";
     resultxml += 'measure_json=';
     //resultxml += JSON.stringify(json);
-    resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
+    //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
     last_code = $.trim(document.getElementById('scan_input').value);
     $.ajax({

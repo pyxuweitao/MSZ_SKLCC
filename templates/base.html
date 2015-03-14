@@ -240,7 +240,31 @@
                     }
                 }
             }
+            setTimeout(function(){
+                if (window.location.search == ''){
+                    var date = new Date();
+                    var year = date.getFullYear().toString();
+                    var month = date.getMonth()+1;
+                    if (month<=9){
+                        month = '0'+ month.toString();
+                    }
+                    month = month.toString();
+                    var day = date.getDate();
+                    if (day<=9){
+                        day = '0'+ day.toString();
+                    }
+                    day = day.toString();
+                    $("input").each(function(){
+                    //console.log('-----------------');
+                        if (this.getAttribute("type") == "date"){
+                            //console.log((new DateFormat("yy-mm-dd")).toLocaleDateString());
+                            this.value = year+'-'+month+'-'+day;
+                        }
+                    });
+                }
+            },800);
         }());
+        
     </script>
     {% block other %}
     {% endblock %}
