@@ -1008,14 +1008,20 @@ def update_info( request ):
 				xml += """<ProducePackProc WorkLineNo = "%d" WorkName = "%s" Employee = "%s" Employeeno = "%s" />""" % (
 				one[0], one[1].decode( 'gbk' ), one[2], one[3] )
 
+
 		xml += """<ProducePackProc WorkLineNo = "100" WorkName = "裁剪" Employee = "裁剪组" Employeeno = "0"/>""".decode(
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "101" WorkName = "整烫" Employee = "整烫组" Employeeno = "0" />""".decode(
 			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "102" WorkName = "粘合" Employee = "粘合组" Employeeno = "0"/>""".decode(
 			'utf-8' )
+		xml += """<ProducePackProc WorkLineNo = "103" WorkName = "花边" Employee = "花边组" Employeeno = "0"/>""".decode(
+			'utf-8' )
+		xml += """<ProducePackProc WorkLineNo = "104" WorkName = "肩带" Employee = "肩带组" Employeeno = "0"/>""".decode(
+			'utf-8' )
 		xml += """<ProducePackProc WorkLineNo = "0" WorkName = "未知" Employee = "未知" Employeeno = "0"/>""".decode(
 			'utf-8' )
+
 		xml += "</PR>"
 		#if find in info table, add info in xml
 
@@ -1178,6 +1184,16 @@ def written_info_in_database( serialno = "", barcode = "", check_id = 1, batch =
 		workno = 102
 		employee = "粘合"
 		employeeno = "粘合组"
+	elif workno == 103:
+		workname = "花边".encode( 'gbk' )
+		workno = 103
+		employee = "花边"
+		employeeno = "花边组"
+	elif workno == 104:
+		workname = "肩带".encode( 'gbk' )
+		workno = 104
+		employee = "肩带"
+		employeeno = "肩带组"
 	else:
 		info_ini = get_info( barcode, inspector_no )
 		Raw.sql = "select WorkName from ProducePackProc WITH (NOLOCK) where ( PackID = '" + str(
@@ -2476,6 +2492,8 @@ def flush_buttons_recheck( request ):
 			xml += """<ProduceStyle WorkLineNo = "100" WorkName = "裁剪" Employee = "裁剪组" />""".decode( 'utf-8' )
 			xml += """<ProduceStyle WorkLineNo = "101" WorkName = "整烫" Employee = "整烫组" />""".decode( 'utf-8' )
 			xml += """<ProduceStyle WorkLineNo = "102" WorkName = "粘合" Employee = "粘合组" />""".decode( 'utf-8' )
+			xml += """<ProduceStyle WorkLineNo = "103" WorkName = "花边" Employee = "花边组" />""".decode( 'utf-8' )
+			xml += """<ProduceStyle WorkLineNo = "104" WorkName = "肩带" Employee = "肩带组" />""".decode( 'utf-8' )
 			xml += """<ProduceStyle WorkLineNo = "0" WorkName = "未知" Employee = "未知" />""".decode( 'utf-8' )
 		xml += "</PR>"
 		size_list_temp = []

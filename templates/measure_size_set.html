@@ -453,6 +453,7 @@
         var data;
         var partions = [];
         var is_legal = true;
+        var is_legal_2 = true;
         $('#tar tbody tr').each(function (e,i) {
             for (var i = 0; i < partions.length; i++) {
                 if (this.getElementsByTagName('input')[0].value == partions[i].name) {
@@ -480,7 +481,16 @@
                 'res': res
 
             });
+            if ($.trim(common_difference) == ""){
+
+                is_legal_2 = false;
+                return false;
+            }
         });
+        if (!is_legal_2){
+            alert("公差不能为空");
+            return ;
+        }
         for (var i = 0; i < partions.length; i++) {
             if (partions[i].name == '') {
                 alert('有部位名为空');
@@ -721,7 +731,7 @@
                     <td value = "{{temp.common}}">
                         <!-- <input class="table-input" value="{{temp.common}}"/> -->
                         <select name="" id="">
-                            <option value=""></option>
+                            <!-- <option value=""></optionn> -->
                             <option >0.1</option>
                             <option >0.2</option>
                             <option >0.3</option>
@@ -786,14 +796,20 @@
 {% endifequal %}
 <span id="state_infoo" value="{{measure_state}}">
 {% ifequal measure_state 2 %}
-    未提交
+    {% ifequal measure_assessor "" %}
+        未提交
+    {% else %}
+        由<span style="color:blue">{{measure_assessor}}</span>于 <span style="color:red">{{assessor_time}}</span> 退回
+    {% endifequal %}
 {% endifequal %}
 {% ifequal measure_state 0 %}
     审核中
 {% endifequal %}
 {% ifequal measure_state 1 %}
-    已通过 
+    由<span style="color:blue">{{measure_assessor}}</span>于 <span style="color:red">{{assessor_time}}</span> 通过 
 {% endifequal %}
+
+
 </span>
 {% ifequal measure_state 0 %}
     <a href="#copyfrom" target="_blank" id="copyfrom">从此款复制</a> 

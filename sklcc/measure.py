@@ -481,7 +481,9 @@ def pass_style_measure( request ):
 	Raw     = Raw_sql()
 	state   = int( request.GET['state'] )
 	styleno = request.GET['styleno']
-	Raw.sql = "UPDATE sklcc_style_measure SET state = %d WHERE styleno = '%s'"%( state, styleno )
+	time    = Current_time.get_accurate_time()
+	Raw.sql = "UPDATE sklcc_style_measure SET state = %d, assessor_no = '%s', assesstime = '%s' WHERE styleno = '%s'"%(
+	state, request.session['employeeno'], time, styleno )
 	Raw.update()
 	return HttpResponse()
 
@@ -536,13 +538,13 @@ def style_measure( request ):
 				state   = 0
 				return TemplateResponse( request, html, locals( ) )
 			#serial是数据库中为了确保录入的部位有序
-			Raw.sql = "select distinct partition, serial, a.employeeno, b.employee, state from sklcc_style_measure" \
+			Raw.sql = "select distinct partition, serial, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
+			          " from sklcc_style_measure" \
 			          " a JOIN sklcc_employee b ON a.employeeno = b.employeeno where styleno = '%s' ORDER BY serial" % style
 			target_list = Raw.query_all( )
 			if target_list == False:
 				state   = 1
 				is_mine = 1
-
 				return TemplateResponse( request, html, locals( ) )
 			else:
 				res = []
@@ -572,6 +574,13 @@ def style_measure( request ):
 				measure_state = target_list[0][4]
 				is_mine = 1 if em_number == target_list[0][2] else 0
 				measure_employee = target_list[0][3]
+				if target_list[0][5] != None:
+					assessor = find_em_name( target_list[0][5] )
+					measure_assessor = assessor if assessor else target_list[0][5]
+					assessor_time    = target_list[0][6]
+				else:
+					measure_assessor = ""
+					assessor_time    = ""
 		return TemplateResponse( request, html, locals( ) )
 	except Exception, e:
 		pass
