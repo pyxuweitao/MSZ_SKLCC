@@ -16,7 +16,26 @@
 <tr>
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
 </tr>
-
+<tr>
+<td>2015-03-17</br><h2>v2.1.3</h2>
+</td>
+<td> 
+<ul>
+<li>检验员部位测量审批页面数据刷新的BUG修复</li>
+<li>工艺测量中部位测量审批增添时间过滤，增添表头信息：审批员、审批时间、状态</li>
+<li>二检尺寸录入增加一组尺寸之后，使用回车可以在单元格内顺序向下移动</li>
+</ul>
+</td>
+<td>
+<ul>
+<li>views.py</li>
+<li>measure.py</li>
+<li>measure_check.html</li>
+<li>measure_check_recheck.html</li>
+<li>部分js文件</li>
+</ul>
+</td>
+</tr>
 <tr>
 <td>2015-03-16</br><h2>v2.1.2</h2>
 </td>
