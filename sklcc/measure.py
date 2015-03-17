@@ -306,9 +306,9 @@ def measure_check( request ):
 	for one in department_list:
 		dept_list.append( {'no':one,'name':find_department_name( one ) ,} )
 
-	if 'start' in request.GET.keys() and 'deptno' in request.GET.keys():
-		start          = request.GET['start']
-		end            = request.GET['end']
+	if 'deptno' in request.GET.keys():
+		start          = request.GET['start'] if 'start' in request.GET.keys() else Current_time.get_now_date()
+		end            = request.GET['end'] if 'end' in request.GET.keys() else Current_time.get_now_date()
 		departmentno   = request.GET['deptno']
 		batch          = request.GET['batch']
 		Raw.sql = "SELECT serialno, departmentno, left( createtime, 10 ), inspector_no, inspector, batch, size, measure_count FROM sklcc_measure_record" \
@@ -332,7 +332,6 @@ def measure_check( request ):
 				                   'batch':target[5],
 				                   'size':target[6],
 				                   'count':target[7] } )
-
 	return TemplateResponse( request, html, locals() )
 
 
@@ -350,12 +349,12 @@ def measure_check_recheck( request ):
 	for one in department_list:
 		dept_list.append( {'no':one,'name':find_department_name( one ) ,} )
 
-	if 'start' in request.GET.keys() and 'deptno' in request.GET.keys():
-		start          = request.GET['start']
-		end            = request.GET['end']
+	if 'deptno' in request.GET.keys():
+		start          = request.GET['start'] if 'start' in request.GET.keys() else Current_time.get_now_date()
+		end            = request.GET['end'] if 'end' in request.GET.keys() else Current_time.get_now_date()
 		departmentno   = request.GET['deptno']
 		batch          = request.GET['batch']
-		Raw.sql = "SELECT serialno, left( createtime, 10 ), inspector_no, inspector, batch, size, measure_count FROM sklcc_measure_record" \
+		Raw.sql = "SELECT serialno, left( createtime, 10 ), inspector_no, inspector, batch, size, measure_count, departmentno FROM sklcc_measure_record" \
 		          " WHERE left( createtime, 10 ) >= '%s' AND left( createtime, 10 ) <= '%s' AND is_first_check = 0"%( start, end )
 
 		if batch != "":
@@ -374,8 +373,9 @@ def measure_check_recheck( request ):
 				                   'inspector':target[3],
 				                   'batch':target[4],
 				                   'size':target[5],
-				                   'count':target[6] } )
-
+				                   'count':target[6],
+								   'deptno':target[7]
+				} )
 	return TemplateResponse( request, html, locals() )
 
 
@@ -389,13 +389,14 @@ def measure_check_info( request ):
 	return TemplateResponse( request, html, locals() )
 
 def get_batch_by_departmentno_and_date( request ):
-	departmentno = request.GET['deptno']
-	start        = request.GET['start']
-	end          = request.GET['end']
-	batch_list   = []
-	Raw          = Raw_sql()
-	Raw.sql      = "SELECT DISTINCT batch FROM sklcc_measure_record WHERE" \
-	               " left( createtime, 10 ) >= '%s' AND LEFT( createtime,10 ) <= '%s'"%( start, end )
+	departmentno   = request.GET['deptno']
+	start          = request.GET['start']
+	end            = request.GET['end']
+	is_first_check = int( request.GET['first_check'] )
+	batch_list     = []
+	Raw            = Raw_sql()
+	Raw.sql        = "SELECT DISTINCT batch FROM sklcc_measure_record WHERE" \
+	               " left( createtime, 10 ) >= '%s' AND LEFT( createtime,10 ) <= '%s' AND is_first_check = %d"%( start, end, is_first_check )
 	if departmentno != '':
 		Raw.sql += " AND departmentno = '%s'"%departmentno
 
@@ -443,11 +444,19 @@ def style_measure_check( request ):
 		return HttpResponseRedirect( '/warning/' )
 	Raw          = Raw_sql()
 	html         = get_template( 'style_measure_check.html' )
-	res        = []
-	Raw.sql = """select distinct styleno, size, left( createtime, 10 ) time, a.employeeno, b.employee
- 	   					FROM sklcc_style_measure a JOIN sklcc_employee b
-						ON a.employeeno = b.employeeno
-						WHERE state = 0 ORDER BY time desc"""
+	res          = []
+	if 'start' not in request.GET:
+		Raw.sql = "SELECT DISTINCT styleno, size, left( createtime, 16 ) time, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
+	               " FROM sklcc_style_measure a JOIN sklcc_employee b ON a.employeeno = b.employeeno" \
+	               " WHERE state = 0 " \
+	               " ORDER BY time desc"
+	else:
+		start        = request.GET['start']
+		end          = request.GET['end']
+
+		Raw.sql      = "SELECT DISTINCT styleno, size, left( createtime, 16 ) time, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
+	               " FROM sklcc_style_measure a JOIN sklcc_employee b ON a.employeeno = b.employeeno" \
+	               " WHERE LEFT( createtime, 10 ) >= '%s' AND LEFT( createtime, 10 ) <= '%s' ORDER BY time desc"%( start, end )
 
 	target_list = Raw.query_all()
 	if target_list != False:
@@ -462,10 +471,14 @@ def style_measure_check( request ):
 				temp = {}
 				temp['styleno']    = target[0]
 				temp['time']       = target[2]
-				temp['url']        = '/style_measure/?style=%s#check'%temp['styleno']
+				#加锚点代表审批页面跳入
+				temp['url']        = '/style_measure/?style=%s'%temp['styleno']
 				temp['employeeno'] = target[3]
 				temp['employee']   = target[4]
 				temp['size']       = [target[1]]
+				temp['state']      = target[5]
+				temp['assessor']   = find_em_name( target[6] ) if target[6] != None else ""
+				temp['assess_time']= target[7] if target[7] != None else ""
 				res.append( deepcopy( temp ) )
 	return TemplateResponse( request, html, locals() )
 

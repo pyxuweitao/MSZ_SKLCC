@@ -37,6 +37,12 @@
             bPaginate: false
 
         });
+         if (window.location.search.length != 0){
+            var start = window.location.search.split("?")[1].split("&")[0].split("=")[1];
+            var end = window.location.search.split("?")[1].split("&")[1].split("=")[1];
+            $("#start").val(start);
+            $("#end").val(end);
+         }
     });
 
 </script>
@@ -45,20 +51,36 @@
 {% block other %}
 <div class="row clearfix">
     <div class="col-md-12 column">
-        
+        <form class="form form-inline" action="/style_measure_check/">
+                    <div class="form-group">
+                        <label for="start">开始日期(含)：</label>
+                        <input class="form-control" id="start" name="start" style="width:200px;" type="date" required='required'>
+                    </div>
+                    <div class="form-group">
+                        <label for="end">结束日期(含)：</label>
+                        <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
+                    </div>
+                    
+                    <button class="btn btn-primary pull-right" type="submit">
+                        查询
+                    </button>
+                </form>
         <hr/>
         <div class="row clearfix">
             <div class="col-md-12 column">
                 <table style="width:100%" id="tar" class="display cell-border">
                     <thead>
                     <tr>
-                        <th colspan="5" id="table_title">  </th>
+                        <th colspan="8" id="table_title">  </th>
                     </tr>
                     <tr>
                         <th>工号</th>
                         <th>姓名</th>
                         <th>款号</th>
-                        <th>时间</th>
+                        <th>提交时间</th>
+                        <th>审批时间</th>
+                        <th>审批人</th>
+                        <th>状态</th>
                         <th>查看</th>
                     </tr>
                     </thead>
@@ -69,12 +91,41 @@
                             <td>{{temp.employee}}</td>
                             <td>{{temp.styleno}}</td>
                             <td>{{temp.time}}</td>
-                            <td><a href="{{temp.url}}">查看详情</a></td>
+                            <td>{{temp.assess_time}}</td>
+                            <td>{{temp.assessor}}</td>
+                            <td>
+                                {% ifequal temp.state 0 %}
+                                待审
+                                {% endifequal %}
+                                {% ifequal temp.state 1 %}
+                                已通过
+                                {% endifequal %}
+                                {% if temp.state = 2 and temp.assessor = "" %}
+                                录入中
+                                {% endif %}
+                                {% if temp.state = 2 and temp.assessor != ""%}
+                                退回
+                                {% endif %}
+                                
+                            </td>
+                            <td>
+                                {% ifequal temp.state 0 %}
+                                <a href="{{temp.url}}#check">进入审批</a>
+                                {% endifequal %}
+                                {% ifequal temp.state 1 %}
+                                <a href="{{temp.url}}">查看</a>
+                                {% endifequal %}
+                                
+                                
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                     <tfoot>
                     <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>

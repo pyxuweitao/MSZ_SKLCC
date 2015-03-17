@@ -489,17 +489,17 @@
         });
         if (!is_legal_2){
             alert("公差不能为空");
-            return ;
+            return false;
         }
         for (var i = 0; i < partions.length; i++) {
             if (partions[i].name == '') {
                 alert('有部位名为空');
-                return;
+                return false;
             }
         }
         if (!is_legal) {
             alert('部位存在重复');
-            return;
+            return false;
         }
         data = {
             'new_style': document.getElementById('style_input').value,
@@ -512,7 +512,7 @@
         }
         if (data.new_style == '') {
             alert('请填写款号');
-            return;
+            return false;
         }
         $.ajax({
             success: function (e) {
@@ -541,6 +541,7 @@
             timeout: 5000,
             async:n
         });
+        return true;
     }
 </script>
 
@@ -650,7 +651,9 @@
             }
         }
         function submit_to_check(){
-            submit(false);
+            if (!submit(false)){
+                return ;
+            }
             $.ajax({
                 url:"/commit_style_measure/",
                 data:{"styleno":document.getElementById("style_input").value},

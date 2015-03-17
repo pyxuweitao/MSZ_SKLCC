@@ -441,6 +441,13 @@ function bind_size_cells() {
                         "border":"none"
                     });
                 }
+            }).keydown(function(e){
+                if (e.keyCode == 13){
+                    var x = $(this).parents("td:first").next("td:first").find("input:first").focus();
+                    if (x.length == 0){
+                        $(this).parents("tr:first").next("tr:first").find("input:first").focus();
+                    }
+                }
             });
         }
     });
