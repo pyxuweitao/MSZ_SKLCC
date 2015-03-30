@@ -96,21 +96,26 @@ def get_question_return_date( questionno, start, end, departmentno ):
 	return target[0] if target[0] != False and target[0] != None else 0
 
 def bar_measure_chart( request ):
+	reload(sys)
+	sys.setdefaultencoding('utf-8')
 	if 21 not in request.session['status']:
 		return HttpResponseRedirect( '/warning/' )
 	em_number    = request.session['employeeno']
 	employeename = request.session['employee']
 	html = get_template('bar_measure_chart.html')
 	Raw  = Raw_sql()
-	Raw.sql = "select batch from ProduceMaster where FormState = " + "'审核'".decode('utf-8')
-	target_list = Raw.query_all('MSZ')
-	batch_list = [ target[0].decode('gbk') for target in target_list ] if target_list != False else []
+	#TODO:time_distance,页面显示中文乱码
+	Raw.sql = "select distinct batch from sklcc_measure_record"
+	target_list = Raw.query_all()
+	batch_list = [ target[0] for target in target_list ] if target_list != False else []
 	if 'batch' not in request.GET:
 		return TemplateResponse( request, html, locals() )
 
 	batch = request.GET['batch']
 
-	Raw.sql     = "select partition, symmetry1, symmetry2, measure_res, a.styleno from sklcc_measure_record a join sklcc_measure_info b on a.serialno = b.serialno where batch = '%s'"%batch
+	Raw.sql     = "select partition, symmetry1, symmetry2, measure_res, a.styleno, a.size from " \
+	              "sklcc_measure_record a join sklcc_measure_info b on a.serialno = b.serialno" \
+	              " where batch = '%s' order by partition"%batch
 	target_list = Raw.query_all()
 	res = []
 	#data_left position:
@@ -120,17 +125,18 @@ def bar_measure_chart( request ):
 	#3:right equal
 	#4:positive tolerance
 	#5:over positive tolerance
-
+	partition_list = []
 	if target_list != False:
 		for target in target_list:
 			partition  = target[0]
-			if partition not in [ t['partition'] for t in res ]:
-				temp = { 'partition': "", 'data_left':[0,0], 'data_right':[0,0,0,0,0] }
-				temp['partition'] = partition
+			if partition not in partition_list:
+				partition_list.append( partition )
+				res.append( { 'partition': partition, 'data_left':[0,0], 'data_right':[0,0,0,0,0] } )
 			else:
-				for temp in res:
-					if temp['partition'] == partition:
-						break
+				index = partition_list.index( partition )
+
+
+
 			for one in target[1:4]:
 				if one != None:
 					sub = one - get_measure_res( target[4], target[0] )

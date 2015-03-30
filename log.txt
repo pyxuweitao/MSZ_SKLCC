@@ -802,3 +802,66 @@ sysmessage>>><urlopen error [Errno 10060] >
 2015-03-14 12:01:25.514000
 sysmessage>>><urlopen error [Errno 10060] >
 ====================
+2015-03-26 15:00:51.469000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-26 17:01:12.655000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-26 17:01:33.653000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-26 18:00:33.704000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-27 17:01:08.847000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-27 17:01:29.877000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-27 20:46:53.918000
+pass_return_check>>>'inner_serialno'
+====================
+2015-03-27 20:47:12.643000
+pass_return_check>>>'inner_serialno'
+====================
+2015-03-27 20:47:19.492000
+pass_return_check>>>'inner_serialno'
+====================
+2015-03-28 17:01:04.981000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-28 17:01:26.004000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-28 18:00:26.152000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-29 15:00:16.309000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-29 17:00:50.059000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-29 17:01:11.061000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-30 12:00:14.768000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================
+2015-03-30 12:01:04.247000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-30 12:01:25.250000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-30 17:00:24.963000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-30 17:00:45.967000
+sysmessage>>><urlopen error [Errno 10060] >
+====================
+2015-03-30 18:00:13.208000
+run>>>'gbk' codec can't decode bytes in position 11-12: illegal multibyte sequence(EQ)
+====================

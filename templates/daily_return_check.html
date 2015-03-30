@@ -44,12 +44,13 @@
         document.getElementById('tar').getElementsByTagName('thead')[0].getElementsByTagName('th')[6].click();
         $('a.add_mistake').click(function (e) {
             current = e.target.parentNode.parentNode.getElementsByTagName('td')[7];
-            $('#mistake_modal').modal('show');
+            $('#mistake_modal').modal('show')
         });
         $('#mistake_modal').on('shown.bs.modal',function () {
             document.getElementById('mistake_num').focus();
             document.getElementById('mistake_num').click();
         }).on('hidden.bs.modal', function () {
+            judge_pass_or_not (current.parentNode);
             document.getElementById('mistake_num').value = '';
         });
         document.getElementById('mistake_list').onchange = function () {
@@ -57,6 +58,18 @@
         };
     };
     var number;
+    function judge_pass_or_not (tr) {
+        console.log(tr);
+        var has_mistake_flag = false;
+        $(tr).find("span.glyphicon-remove").each(function(){
+            has_mistake_flag = true;
+        });
+        if (has_mistake_flag){
+            $(tr).find("select").val(0);
+        }else{
+            $(tr).find("select").val(1);
+        }
+    }
     function OnClickNum(input) {
         var num = number.value;
         num = num + parseInt(input.innerHTML);
@@ -92,6 +105,7 @@
                 });
             }
             resjson.push({
+                'inner_serialno': this.getAttribute('inner_serialno'),
                 'serialno': this.getAttribute('serialno'),
                 'count': parseInt(this.getElementsByTagName('td')[5].getElementsByTagName('input')[0].value),
                 'conclusion': this.getElementsByTagName('select')[0].value,
@@ -107,7 +121,8 @@
         console.log(JSON.stringify(resjson));
         http.onreadystatechange = function () {
             if (http.readyState == 4 && http.status == 200) {
-                //window.location.reload(1);
+                alert("提交成功");
+                window.location.reload(1);
             }
         };
         http.send('res=' + JSON.stringify(resjson));
@@ -132,6 +147,7 @@
         }
         var resjson = [];
         resjson.push({
+            'inner_serialno': n.getAttribute('inner_serialno'),
             'serialno': n.getAttribute('serialno'),
             'count': parseInt(n.getElementsByTagName('td')[5].getElementsByTagName('input')[0].value),
             'conclusion': n.getElementsByTagName('select')[0].value,
@@ -190,11 +206,11 @@
             <tbody>
             {% for temp in return_check_list %}
             {% ifequal temp.state 1 %}
-            <tr serialno="{{ temp.serialno }}" >
+            <tr serialno="{{ temp.serialno }}" inner_serialno="{{ temp.inner_serialno }}">
             {% else %}
-            <tr serialno="{{ temp.serialno }}" class='not_submited'>
+            <tr serialno="{{ temp.serialno }}" inner_serialno="{{ temp.inner_serialno }}" class='not_submited'>
             {% endifequal %}
-                <td>{{ temp.type }}
+                <td>{{ temp.type }}</td>
                 <td>{{ temp.createtime }}</td>
                 <td>{{ temp.batch }}</td>
                 <td>{{ temp.totalnumber }}</td>
@@ -241,9 +257,15 @@
                 <td>
                     <a href="#" onclick="return submit(this.parentNode.parentNode)">提交</a>
                     /<a href="#" class="add_mistake">添加疵点</a>
+
                 </td>
                 {% else %}
-                <td>已提交</td>
+                <td>
+                    已提交
+                    {% ifequal temp.ok 0  %}
+                        <a href="/add_return_check/?serialno={{temp.serialno}}&type={{ temp.type }}#{{temp.totalnumber}}"  target="_blank">补录</a>
+                    {% endifequal %}
+                </td>
                 {% endifequal %}
             </tr>
             {% endfor %}
@@ -392,7 +414,10 @@
         }
         var a = document.createElement('a');
         a.onclick = function () {
+            var ss = this.parentNode.parentNode.parentNode;
             this.parentNode.parentNode.removeChild(this.parentNode);
+            judge_pass_or_not(ss);
+
         };
         a.style.cursor = 'pointer';
         a.innerHTML = ' <span class="glyphicon glyphicon-remove"></span>';

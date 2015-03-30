@@ -12,6 +12,11 @@ function size_confirm() {
     }
 }
 window.onload = function () {
+    window.onbeforeunload = function(event){
+        if (document.getElementById("scan_input").value.length != 0){
+            event.returnValue="有数据尚未提交"; 
+        }
+    }
     number = document.getElementById('scan_input');
     $('#size_modal').modal({
         backdrop: false,
@@ -247,15 +252,27 @@ function flush_info() {
             if (info == "timeout"){
                 Messenger().post({
                     message: "网络状况不良，请重试",
-                    hideAfter: 3,
-                    hideOnNavigate: true
+                    hideAfter: 1000000,
+                    showCloseButton: true
+                    //hideOnNavigate: true
                 });
             }else{
-                Messenger().post({
-                    message: "服务器出错，请点击刷新按钮刷新页面",
-                    hideAfter: 3,
-                    hideOnNavigate: true
-                });
+                if (err.status == "500"){
+                    Messenger().post({
+                        message: "服务器出错，请点击刷新按钮刷新页面",
+                        hideAfter: 1000000,
+                        showCloseButton: true
+                    //hideOnNavigate: true
+                    });
+                }else{
+                    Messenger().post({
+                        message: "网络状况不良，请重试",
+                        hideAfter: 1000000,
+                        showCloseButton: true
+                        //hideOnNavigate: true
+                    });
+                }
+                
             }
             initiallize();
         },
@@ -1213,6 +1230,13 @@ function OnCommit() {
 }
 var last_code ;
 function submit() {
+    if ($.trim(document.getElementById("hint_program").innerHTML) != "" &&
+        $.trim(document.getElementById("hint_employee").innerHTML) != "" &&
+        $.trim(document.getElementById("hint_mistake").innerHTML) != ""){
+        if (!confirm("缓冲区有数据，是否提交？")){
+            return 0;
+        }
+    }
     if (!style_measure_illeagl()) {
         alert('尺寸测量有数据不明确');
         return 0;
@@ -1271,17 +1295,29 @@ function submit() {
         },
         error: function (err,info) {
             if (info == "timeout"){
+
                 Messenger().post({
+                    type:"error",
                     message: last_code+"网络状况不良，请重试",
-                    hideAfter: 3,
-                    hideOnNavigate: true
+                    hideAfter: 1000000,
+                    showCloseButton: true
                 });
             }else{
-                Messenger().post({
-                    message: last_code+"服务器出错",
-                    hideAfter: 3,
-                    hideOnNavigate: true
-                });
+                if (err.status == '500'){
+                    Messenger().post({
+                        type:"error",
+                        message: last_code+"服务器出错",
+                        hideAfter: 1000000,
+                        showCloseButton: true
+                    });
+                }else{
+                    Messenger().post({
+                        type:"error",
+                        message: last_code+"网络状况不良，请重试",
+                        hideAfter: 1000000,
+                        showCloseButton: true
+                    });
+                }
             }
 
         },

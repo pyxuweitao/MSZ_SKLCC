@@ -1,4 +1,5 @@
 __author__ = 'Administrator'
+#*-* coding:utf-8 *-*
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template.response import TemplateResponse
 from django.template.loader import get_template
@@ -132,6 +133,12 @@ def find_em_name( em_number ):
 	return target[0] if target != False else None
 
 def find_department_authority_user( username, authorityid ):
+	"""
+	根据用户名和权限id获取对应的所有组别的组别号的列表
+	:param username:用户名
+	:param authorityid:权限的id
+	:return:返回username所拥有的权限authorityid对应的所有组别号列表
+	"""
 	Raw     = Raw_sql()
 	Raw.sql = "select DISTINCT departmentno from sklcc_employee_authority where username = '%s' and authorityid = %d order by departmentno"%( username, int( authorityid ) )
 	target_list = Raw.query_all()
@@ -225,14 +232,14 @@ def get_record_totalreturn( serialno ):
 def make_log( log_content ):
 	T        = Current_time()
 	log_time = T.time_str
-	file     = open( "log.txt", 'a+' )
-	log      = log_time + "\n" + log_content + "\n" + "=" * 20 + '\n'
-	file.write( log )
+	file     = open( "E:\\log.txt", 'a+' )
+	log      = unicode(log_time) + u"\n" + unicode(log_content) + u"\n" + u"=" * 20 + u'\n'
+	file.write( log.encode('utf-8') )
 	file.close()
 
 def test( request ):
-
-	return HttpResponse("%s\n%s"%(  Current_time.get_date(),Current_time.get_date() ))
+	#logging.debug("ok")
+	return HttpResponse(1)
 
 
 

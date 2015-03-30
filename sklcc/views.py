@@ -38,11 +38,12 @@ def initLogging( logFilename ):
 	console.setFormatter( formatter )
 	logging.getLogger( '' ).addHandler( console )
 
-initLogging( "E:\\debug.log" )
+#initLogging( "E:\\debug.log" )
 
 DEPT_SHOP1 = ['201', '202', '203', '204', '205', '206', '207', '208', '209', '210', '211', '212']
 DEPT_SHOP2 = ['213', '214', '215', '216', '217', '218', '219', '220', '221', '222', '223', '224']
 DEPT_SHOP3 = ['225', '226', '227', '228', '229', '230']
+
 
 
 class History:
@@ -373,9 +374,8 @@ class timer( threading.Thread ):
 	def run( self ):
 		department_list = get_all_department( )
 		while True:
-			Raw = Raw_sql( )
 			timenow = time.strftime( '%H:%M', time.localtime( time.time( ) ) )
-			print timenow
+			#print timenow
 			if timenow in self.timepoint_for_EQ:
 				try:
 					for department in department_list:
@@ -849,28 +849,12 @@ def number_off( request ):
 	return TemplateResponse( request, html, locals( ) )
 
 
-def get_measure_info_by_barcode( barcode, inspector_no ):
-	Raw = Raw_sql( )
-	Raw.sql = "select partition, measure_type, measure_res, symmetry1, symmetry2, count_id, a.serialno from sklcc_measure_info a" \
-	          " join sklcc_measure_record b on a.serialno = b.serialno where barcode" \
-	          " = '%s' and inspector_no = '%s' order by count_id" % ( barcode, inspector_no )
-	target_list = Raw.query_all( )
-	if target_list != False:
-		serialno = target_list[0][6]
-		res = { }
-		for target in target_list:
-			if target[0] not in res.iterkeys( ):
-				res[target[0]] = []
-			res[target[0]].append( [target[3], target[4]] ) if target[1] == 1 else res[target[0]].append( [target[2]] )
-
-		res['serialno'] = serialno
-		res['barcode'] = barcode
-		return res
-	else:
-		return False
-
-
 def get_partition_table( request ):
+	'''
+	二检录入页面用于刷新工艺信息的ajax
+	:param request:batch：批次号；size:尺码
+	:return:返回包含工艺信息和测量记录的XML
+	'''
 	Raw = Raw_sql( )
 	xml = ""
 	today = Current_time.get_now_date()
@@ -884,14 +868,14 @@ def get_partition_table( request ):
 	if target_list != False:
 		if size in [target[0] for target in target_list]:
 			Raw.sql = "select partition, common_difference, symmetry, measure_res from sklcc_style_measure where measure_or_not" \
-			          " = 1 and size = '%s' and styleno = '%s' and state = 1" % ( size, styleno )
+			          " = 1 and size = '%s' and styleno = '%s' and state = 1 order by serial" % ( size, styleno )
 			partition_list = Raw.query_all( )
 
 			if partition_list != False:
 				xml += """<ME>"""
 				for partition in partition_list:
-					xml += """<measure partition = "%s" common_difference = "%.2f" symmetry = "%.2f" measure_res = "%.2f"/>""" % (
-					partition[0], partition[1], partition[2], partition[3] )
+					xml += """<measure partition = "%s" common_difference = "%s" symmetry = "%.2f" measure_res = "%.2f"/>""" % (
+					partition[0], '+' + partition[1].replace('@', '/-'), partition[2], partition[3] )
 				xml += """</ME>"""
 
 	if contentid != False:
@@ -917,12 +901,12 @@ def update_info( request ):
 	try:
 		reload(sys)
 		sys.setdefaultencoding('utf-8')
-		Raw = Raw_sql( )
-		T = Current_time( )
+		Raw          = Raw_sql( )
+		T            = Current_time( )
 		inspector_no = request.session['employeeno']
-		barcode = request.GET['code']
-		info_ini = get_info( barcode, inspector_no )
-		xml = """"""
+		barcode      = request.GET['code']
+		info_ini     = get_info( barcode, inspector_no )
+		xml          = """"""
 		if info_ini['state'] == 0:
 			xml += """<state value = "0"></state></info></xml>"""
 			return HttpResponse( xml )
@@ -1082,7 +1066,7 @@ def update_info( request ):
 		xml += """</xml>"""
 		return HttpResponse( xml )
 	except Exception, e:
-		logging.debug( e )
+		make_log( e )
 
 def update_info_new_but_slow( request ):
 	try:
@@ -1098,7 +1082,7 @@ def update_info_new_but_slow( request ):
 		Raw.update( )
 		return HttpResponse( xml )
 	except Exception, e:
-		logging.debug( e )
+		make_log( e )
 
 
 def get_employee( request ):
@@ -1313,13 +1297,16 @@ def written_record_in_database( temp ):
 		Raw.update( )
 
 
-def written_return_check_in_datebase( temp, check_type ):
+def written_return_check_in_datebase( serialno ):
+	"""
+	@questionno->0第一次插入没有疵点
+	"""
 	Raw = Raw_sql( )
-	Raw.sql = "select * from sklcc_return_check where serialno = '%s'" % temp.serialno
+	Raw.sql = "select * from sklcc_return_check where serialno = '%s'" % serialno
 	target = Raw.query_all( )
 	if target == False:
-		Raw.sql = "insert into sklcc_return_check( serialno, real_return, ok, state )" \
-		          " values( '%s',  %d, %d, %d )" % ( temp.serialno, 0, 1, 0  )
+		Raw.sql = "insert into sklcc_return_check( serialno, real_return, ok, state, inner_serialno, questionno )" \
+		          " values( '%s',  %d, %d, %d, '%s', %d )" % ( serialno, 0, 1, 0, unicode(uuid.uuid1()), 0 )
 		Raw.update( )
 
 
@@ -1375,41 +1362,9 @@ def get_measure_res( styleno, partition ):
 	else:
 		return 0
 
-
-def prase_measure_json( barcode, serialno, styleno, departmentno, size, inspector_no, batch, measure_json ):
-	T = Current_time( )
-	now = T.time_str
-	insert_list = []
-	temp = { }
-	temp['barcode'] = barcode
-	temp['serialno'] = serialno
-	temp['styleno'] = styleno
-	temp['size'] = size
-	temp['batch'] = batch
-	temp['createtime'] = now
-	temp['inspector_no'] = inspector_no
-	temp['departmentno'] = departmentno
-	for one in measure_json:
-		temp['partition'] = one['name']
-		res = one['res']
-		for id, count in enumerate( res ):
-			temp['id'] = id + 1
-			if len( count ) != 1:
-				temp['symmetry1'] = float( count[0] )
-				temp['symmetry2'] = float( count[1] )
-				temp['measure_type'] = 1
-			else:
-				temp['measure_res'] = float( count[0] )
-				temp['measure_type'] = 2
-			insert_list.append( copy.deepcopy( temp ) )
-
-	return insert_list
-
-
-
-
 def commit_res( request ):
 	try:
+		a=1/0
 		reload( sys )
 		sys.setdefaultencoding( 'utf-8' )
 		Raw = Raw_sql( )
@@ -1498,11 +1453,12 @@ def commit_res( request ):
 			       insert_info['serialno'], T.time_str, insert_info['inspector'], insert_info['inspector_no'], 2,
 			       insert_info['number_pack'], insert_info['departmentno'], insert_info['batch'], totalreturn,
 			       insert_info['check_id'], insert_info['check_id'] )
-			SQL += u"insert into sklcc_return_check( serialno, real_return, ok, state )" \
-			       " values( '%s',  0, 1, 0 )" % ( insert_info['serialno'] )
+			#def written_return_check_database
+			SQL += u"insert into sklcc_return_check( serialno, real_return, ok, state, inner_serialno, questionno )" \
+		          " values( '%s',  %d, %d, %d, '%s', %d )" % ( insert_info['serialno'] , 0, 1, 0, unicode(uuid.uuid1()), 0 )
 		else:
 			SQL += u"update sklcc_record set totalnumber = dbo.get_totalnumber_by_serialno( '%s' )," \
-			       u" totalreturn = (SELECT sum( returnno ) FROM sklcc_info WHERE serialno =  '%s' ) " \
+			       u" totalreturn = (SELECT sum( returnno ) FROM sklcc_table WHERE serialno =  '%s' ) " \
 			       u"where serialno = '%s';" % (
 			       insert_info['serialno'], insert_info['serialno'], insert_info['serialno'] )
 		Raw.sql = SQL
@@ -1510,7 +1466,7 @@ def commit_res( request ):
 		return HttpResponse( )
 
 	except Exception, e:
-		logging.debug(e)
+		make_log(e)
 
 def commit_res_old( request ):
 	try:
@@ -1565,7 +1521,7 @@ def commit_res_old( request ):
 				#written_record_in_database( temp )
 				written_table_in_database( temp )
 		written_record_in_database( temp )
-		written_return_check_in_datebase( temp, 1 )
+		written_return_check_in_datebase( temp.serialno )
 
 		T = Current_time( )
 		Raw = Raw_sql( )
@@ -1898,7 +1854,7 @@ def update_table( request ):
 			if request.GET['code'] == record['serialno']:
 				xml = tables_xml( record )
 	except Exception, e:
-		logging.debug( e )
+		make_log( e )
 	return HttpResponse( xml )
 
 
@@ -1929,7 +1885,7 @@ def update_table_check( request ):
 			xml = tables_xml( record )
 		return HttpResponse( xml )
 	except  Exception, e:
-		logging.debug( e )
+		make_log( e )
 
 
 def choose( request ):
@@ -2068,95 +2024,6 @@ def table_read_only( request ):
 	else:
 		return HttpResponseRedirect( '/warning/' )
 
-
-def table_measure( request ):
-	Raw = Raw_sql( )
-	serialno = request.GET['serialno']
-	Raw.sql = "select distinct barcode from sklcc_measure_info where serialno = '%s'" % serialno
-	target_list = Raw.query_all( )
-	res = []
-	if target_list != False:
-		for target in target_list:
-			temp = get_measure_info_by_barcode( target[0], request.session['employeeno'] )
-			new_temp = { }
-			new_temp['serialno'] = temp['serialno']
-			new_temp['barcode'] = temp['barcode']
-			#for k,v in
-			res.append( get_measure_info_by_barcode( target[0], request.session['employeeno'] ) )
-	Raw.sql = "select createtime, assesstime, inspector, inspector_no, size, styleno, batch, departmentno, measure_count from sklcc_measure_record where serialno = '%s'" % serialno
-	info_list = Raw.query_one( )
-
-	if info_list != False:
-		createtime = info_list[0][0:10]
-		departmentno = info_list[7]
-		department = find_department_name( departmentno )
-		measure_count = info_list[8]
-		size = info_list[4]
-		inspector = info_list[2]
-		batch = info_list[6]
-	html = get_template( 'table_measure.html' )
-	return TemplateResponse( request, html, locals( ) )
-
-
-def table_measure_read_only( request ):
-	Raw = Raw_sql( )
-	serialno = request.GET['serialno']
-	is_check = int( request.GET['state'] ) if 'state' in request.GET else 0
-	Raw.sql = "select distinct barcode from sklcc_measure_info where serialno = '%s'" % serialno
-
-	target_list = Raw.query_all( )
-
-	res = []
-	if target_list != False:
-		for target in target_list:
-			temp = get_measure_info_by_barcode( target[0], request.session['employeeno'] )
-			new_temp = { }
-			new_temp['serialno'] = temp['serialno']
-			new_temp['barcode'] = temp['barcode']
-			#for k,v in
-			res.append( get_measure_info_by_barcode( target[0], request.session['employeeno'] ) )
-	Raw.sql = "select createtime, assesstime, inspector, inspector_no, size, styleno, batch, departmentno, measure_count from sklcc_measure_record where serialno = '%s'" % serialno
-	info_list = Raw.query_one( )
-	info_list = Raw.query_one( )
-
-	if info_list != False:
-		createtime = info_list[0][0:10]
-		departmentno = info_list[7]
-		measure_count = info_list[8]
-		size = info_list[4]
-		inspector = info_list[2]
-		batch = info_list[6]
-	html = get_template( 'table_measure_read_only.html' )
-	return TemplateResponse( request, html, locals( ) )
-
-
-def table_measure_data( request ):
-	Raw = Raw_sql( )
-	serialno = request.GET['serialno']
-	Raw.sql = "select distinct barcode, styleno from sklcc_measure_info where serialno = '%s'" % serialno
-	target_list = Raw.query_all( )
-
-	res = []
-	if target_list != False:
-		for target in target_list:
-			temp = get_measure_info_by_barcode( target[0], request.session['employeeno'] )
-			new_temp = { }
-			if temp != False:
-				new_temp.clear( )
-				new_temp['serialno'] = temp['serialno']
-				new_temp['barcode'] = temp['barcode']
-				new_temp['data'] = []
-				for k, v in dict( temp ).items( ):
-					if k not in ['barcode', 'serialno']:
-						new_temp['data'].append(
-							{ 'has_balance_error': 'true' if len( v[0] ) != 1 else 'false', 'partition_name': k,
-							  'res': v, 'common_difference': get_common_difference( target[1], k ),
-							  'symmetry': get_symmetry( target[1], k ), 'standard': get_measure_res( target[1], k ), } )
-
-			res.append( new_temp )
-
-
-	return HttpResponse( simplejson.dumps( res, ensure_ascii = False ) )
 
 
 def partion_set( request ):
@@ -2433,7 +2300,7 @@ def get_size_by_batch( employeeno, batch ):
 	target_list = Raw.query_all( )
 	size_list = []
 	Raw.sql = "select distinct size, serialno from sklcc_measure_record where inspector_no = '%s' and" \
-	          " left( createtime, 10 ) = '%s' and batch = '%s'"%( employeeno, Current_time.get_now_date(), batch )
+	          " left( createtime, 10 ) = '%s' and batch = '%s' and is_first_check = 0"%( employeeno, Current_time.get_now_date(), batch )
 	size_list_scaned = []
 	res_list = Raw.query_all()
 	if res_list != False:
@@ -2530,7 +2397,6 @@ def flush_buttons_recheck( request ):
 
 			Raw.sql = "SELECT TOP 1 b.size, a.serialno FROM sklcc_measure_info a JOIN sklcc_measure_record b ON a.serialno = b.serialno" \
 			          " WHERE a.contentid = '%s'"%contentid
-
 			target  = Raw.query_one()
 			if target != False:
 				size_list_temp = [target[0] + ',' +target[1]]
@@ -2652,118 +2518,110 @@ def find_department_no( department ):
 	target = Raw.query_one( )
 	return target[0]
 
+def written_into_recheck( recheckinfo ):
+	Raw = Raw_sql( )
+
+	Raw.sql = "insert into sklcc_recheck_content values( '%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s'," % (
+	recheckinfo['id'], recheckinfo['date'], recheckinfo['serialno'], int( recheckinfo['totalnumber'] ),
+	int( recheckinfo['sample'] ), int( recheckinfo['workno'] ), recheckinfo['workname'], recheckinfo['questionname'],
+	int( recheckinfo['questionno'] ), int( recheckinfo['returnno'] ), str( recheckinfo['ok'] ) )
+	if recheckinfo['is_recheck']:
+		Raw.sql += "'True' )"
+	else:
+		Raw.sql += "'False' )"
+	Raw.update( )
+	Raw.sql = "select * from sklcc_recheck_info where serialno = '%s'" % recheckinfo['serialno']
+	target = Raw.query_one( )
+
+	if target == False:
+		Raw.sql = "insert into sklcc_recheck_info values( %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )" % (
+		recheckinfo['state'], recheckinfo['serialno'], recheckinfo['date'], recheckinfo['departmentno'],
+		recheckinfo['department'], recheckinfo['inspector'], recheckinfo['inspector_no'], recheckinfo['recheckor'],
+		recheckinfo['recheckor_no'], recheckinfo['leader'], recheckinfo['leader_no'], recheckinfo['batch'], '' )
+		Raw.update( )
 
 def commit_res_recheck( request ):
 	try:
-		xml = request.POST['xml']
+		xml = request.POST[ 'xml']
 		Raw = Raw_sql( )
 		reload( sys )
 		sys.setdefaultencoding( 'utf-8' )
-		root = ElementTree.fromstring( xml )
-		id = root.getiterator( 'id' )[0].text
-		department = root.getiterator( 'group' )[0].text
+		root         = ElementTree.fromstring( xml )
+		id           = root.getiterator( 'id' )[0].text
+		department   = root.getiterator( 'group' )[0].text
 		departmentno = find_department_no( department )
-		T = Current_time( )
-		date = T.time_str
-		batch = root.getiterator( 'no' )[0].text
-		state = 2
-		is_recheck = True if root.getiterator( 'is_recheck' )[0].text == 'true' else False
+		T            = Current_time( )
+		date         = T.time_str
+		batch        = root.getiterator( 'no' )[0].text
+		state        = 2
+		is_recheck   = True if root.getiterator( 'is_recheck' )[0].text == 'true' else False
 		inspector_no = root.getiterator( 'inspector_no' )[0].text
-		inspector = find_em_name( inspector_no )
+		inspector    = find_em_name( inspector_no )
 		recheckor_no = request.session['employeeno']
-		recheckor = request.session['employee']
-		totalnumber = root.getiterator( 'totalnumber' )[0].text
-		sample = root.getiterator( 'sample' )[0].text
-		ok = root.getiterator( 'conclusion' )[0].text
+		recheckor    = request.session['employee']
+		totalnumber  = root.getiterator( 'totalnumber' )[0].text
+		sample       = root.getiterator( 'sample' )[0].text
+		ok           = root.getiterator( 'conclusion' )[0].text
+		is_new_record_flag = False
+		SQL          = u""
 
 		try:
 			size = root.getiterator( 'size' )[0].text
 		except Exception:
 			size = None
-		leader_no = ""
-		leader = ""
+		leader_no  = ""
+		leader     = ""
 		assesstime = ""
-		Raw.sql = "select serialno from sklcc_recheck_content where contentid = '%s'" % id
-		target = Raw.query_one( )
+		Raw.sql    = "select serialno from sklcc_recheck_content where contentid = '%s'" % id
+		target     = Raw.query_one( )
 		if target != False:
 			serialno = target[0]
+			SQL   += u"delete from sklcc_recheck_content where contentid = '%s';" % id
 		else:
 			Raw.sql = "select serialno from sklcc_recheck_info where left( createtime, 10 ) = '%s' and batch = '%s' and state = " \
 			          "2 and inspector_no = '%s' and recheckor_no = '%s'" % (
 			          T.get_date( ), batch, inspector_no, recheckor_no )
 			res = Raw.query_one( )
-			serialno = res[0] if res != False else uuid.uuid1( )
-		record_list = root.getiterator( 're' )
-		Raw.sql = "delete from sklcc_recheck_content where contentid = '%s'" % id
-		Raw.update( )
-		if len( record_list ) == 0:
-			recheckinfo = dict( ok = ok, state = state, departmentno = departmentno, department = department,
-			                    leader = leader, leader_no = leader_no, inspector = inspector,
-			                    inspector_no = inspector_no, recheckor_no = recheckor_no, recheckor = recheckor,
-			                    batch = batch, assesstime = assesstime, id = id, date = date, serialno = serialno,
-			                    totalnumber = int( totalnumber ), sample = int( sample ), workno = 0, workname = "",
-			                    questionname = "", questionno = 0, returnno = 0, is_recheck = is_recheck )
+			if res != False:
+				serialno = res[0]
+			else:
+				serialno = uuid.uuid1( )
+				is_new_record_flag = True
 
-			written_into_recheck( recheckinfo )
+		record_list = root.getiterator( 're' )
+		if len( record_list ) == 0:
+			SQL += "insert into sklcc_recheck_content values( '%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s'," % (
+				id, date, serialno, int( totalnumber ), int( sample ), 0, "", "", 0, 0, unicode( ok ) )
+			if is_recheck:
+				SQL += "'True' );"
+			else:
+				SQL += "'False' );"
 		else:
 			for record in record_list:
-				workno = record.attrib['program_no']
-				workname = record.attrib['program_name']
-				returnno = record.attrib['count']
-				questionno = record.attrib['mistake_no']
+				workno       = record.attrib['program_no']
+				workname     = record.attrib['program_name']
+				returnno     = record.attrib['count']
+				questionno   = record.attrib['mistake_no']
 				questionname = record.attrib['mistake_name']
-				recheckinfo = dict( ok = ok, state = state, departmentno = departmentno, department = department,
-				                    leader = leader, leader_no = leader_no, inspector = inspector,
-				                    inspector_no = inspector_no, recheckor_no = recheckor_no, recheckor = recheckor,
-				                    batch = batch, assesstime = assesstime, id = id, date = date, serialno = serialno,
-				                    totalnumber = int( totalnumber ), sample = int( sample ), workno = int( workno ),
-				                    workname = workname, questionname = questionname, questionno = int( questionno ),
-				                    returnno = int( returnno ), is_recheck = is_recheck )
-				written_into_recheck( recheckinfo )
-		# if request.POST['json'] != '[]':
-		# 	measure_json = simplejson.loads( request.POST['json'] )
-		# 	today = date[0:10]
-		# 	Raw.sql = "select serialno from sklcc_measure_info a join sklcc_measure_record b on a.serialno = b.serialno" \
-		# 	          " where barcode = '%s' and inspector_no = '%s'" % (id, recheckor_no)
-		# 	target = Raw.query_one( )
-		# 	if target != False:
-		# 		serialno = target[0]
-		# 	else:
-		# 		Raw.sql = "select serialno from sklcc_measure_record where batch = '%s' and state = 2 and " \
-		# 		          "departmentno = '%s' and inspector_no = '%s' and size = '%s' and is_first_check = 0 and left( createtime, 10 ) = '%s'" % (
-		# 		          batch, departmentno, recheckor_no, size, today )
-		# 		target = Raw.query_one( )
-		# 		serialno = uuid.uuid1( ) if target == False else target[0]
-		# 	insert_list = prase_measure_json( id, serialno, batch.split( '-' )[0], departmentno, size, recheckor_no,
-		# 	                                  batch, measure_json )
-		# 	insert_res = { }
-		#
-		# 	#first delete sklcc_measure_info and sklcc_measure_record
-		# 	Raw.sql = "delete sklcc_measure_info from sklcc_measure_info a join sklcc_measure_record b on a.serialno = b.serialno where" \
-		# 	          " barcode = '%s' and inspector_no = '%s' and state = 2" % ( id, recheckor_no )
-		# 	Raw.update( )
-		# 	Raw.sql = "select TOP 1 * from sklcc_measure_info where serialno = '%s'" % serialno
-		# 	target = Raw.query_one( )
-		# 	if target == False:
-		# 		Raw.sql = "delete from sklcc_measure_record where serialno = '%s'" % serialno
-		# 		Raw.update( )
-		# 	else:
-		# 		Raw.sql = "select sum( count_i )  from(  select max( count_id ) count_i from sklcc_measure_info where " \
-		# 		          "serialno = '%s' group by barcode ) a" % serialno
-		# 		measure_count = Raw.query_one( )[0]
-		# 		Raw.sql = "update sklcc_measure_record set measure_count = %d where serialno = '%s'" % (
-		# 		measure_count, serialno )
-		# 		Raw.update( )
-		#
-		# 	for insert in insert_list:
-		# 		insert_res = written_into_measure_info( insert )
-		# 	written_into_measure_record( insert_res, 'False' )
 
-		temp = temp_Info( )
-		temp.serialno = serialno
-		temp.inspector = recheckor
-		temp.inspector_no = recheckor_no
-		written_return_check_in_datebase( temp, 2 )
+				SQL += "insert into sklcc_recheck_content values( '%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s'," % (
+				id, date, serialno, int( totalnumber ), int( sample ), int( workno ), workname, questionname,
+				int( questionno ), int( returnno ), unicode( ok ) )
+				if is_recheck:
+					SQL += "'True' );"
+				else:
+					SQL += "'False' );"
+		if is_new_record_flag:
+			SQL += "insert into sklcc_recheck_info " \
+				    "values( %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );" % (
+					state, serialno, date, departmentno,department, inspector, inspector_no,
+					recheckor, recheckor_no, leader, leader_no, batch, '' )
+
+			SQL += "insert into sklcc_return_check( serialno, real_return, ok, state, inner_serialno, questionno ) " \
+		           "values( '%s',  %d, %d, %d, '%s', %d )" % ( serialno, 0, 1, 0, unicode(uuid.uuid1()), 0 )
+
+		Raw.sql = SQL
+		Raw.update()
 		return HttpResponse( )
 	except Exception, e:
 		make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) )
@@ -2800,27 +2658,6 @@ def commit_bald_recheck( request ):
 	return HttpResponse( )
 
 
-def written_into_recheck( recheckinfo ):
-	Raw = Raw_sql( )
-
-	Raw.sql = "insert into sklcc_recheck_content values( '%s', '%s', '%s', %d, %d, %d, '%s', '%s', %d, %d, '%s'," % (
-	recheckinfo['id'], recheckinfo['date'], recheckinfo['serialno'], int( recheckinfo['totalnumber'] ),
-	int( recheckinfo['sample'] ), int( recheckinfo['workno'] ), recheckinfo['workname'], recheckinfo['questionname'],
-	int( recheckinfo['questionno'] ), int( recheckinfo['returnno'] ), str( recheckinfo['ok'] ) )
-	if recheckinfo['is_recheck']:
-		Raw.sql += "'True' )"
-	else:
-		Raw.sql += "'False' )"
-	Raw.update( )
-	Raw.sql = "select * from sklcc_recheck_info where serialno = '%s'" % recheckinfo['serialno']
-	target = Raw.query_one( )
-
-	if target == False:
-		Raw.sql = "insert into sklcc_recheck_info values( %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )" % (
-		recheckinfo['state'], recheckinfo['serialno'], recheckinfo['date'], recheckinfo['departmentno'],
-		recheckinfo['department'], recheckinfo['inspector'], recheckinfo['inspector_no'], recheckinfo['recheckor'],
-		recheckinfo['recheckor_no'], recheckinfo['leader'], recheckinfo['leader_no'], recheckinfo['batch'], '' )
-		Raw.update( )
 
 
 ################################## *@*       end of recheck_dataentry        *@* #######################################
@@ -4014,261 +3851,352 @@ def change_password( request ):
 		return HttpResponseRedirect( '/myinfo/?用户信息有误！请联系管理员！#1' )
 
 
+
+#########################################################return_check#######################################################
+
 def return_check( request ):
-	html = get_template( 'daily_return_check.html' )
-	username = request.session['username']
-	employeename = request.session['employee']
-	em_number = request.session['employeeno']
-	start = request.GET['start']
-	end = request.GET['end']
-	distance = get_time_distance_list( start, end )
-	distance_have_year = change_distance_date_to_str_have_year( distance )
+	"""
+	一检返修活检验页面
+	:param request:开始日期,start;结束日期,end
+	:return:模板变量hash表
+	"""
+	html               = get_template( 'daily_return_check.html' )
+	username           = request.session['username']
+	employeename       = request.session['employee']
+	em_number          = request.session['employeeno']
+	start              = request.GET['start']
+	end                = request.GET['end']
 
 	return_check_list = []
-	for date in distance_have_year:
-		Raw = Raw_sql( )
+	Raw = Raw_sql()
+	Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.check_type, re.totalreturn, re.inspector_no, re.inspector,
+						c.real_return, c.assesstime, re.totalnumber, c.ok, c.state, c.inner_serialno
+ 					FROM
+ 					(SELECT * FROM sklcc_record WHERE left( createtime, 10 ) >= '%s'
+  						AND left( createtime, 10 ) <= '%s' AND inspector_no = '%s' ) as re
+  					JOIN
+					( SELECT * FROM sklcc_return_check a JOIN
+  						( SELECT  serialno as serial, min(assesstime) as time FROM sklcc_return_check group by serialno )as b
+  							ON  a.serialno = b.serial and (a.assesstime = b.time  or a.assesstime is NULL )
+					) as c
+			 		ON c.serialno = re.serialno
+					ORDER BY c.state asc"""%( start, end, em_number )
 
-		Raw.sql = "select distinct sklcc_record.serialno, batch, createtime, check_type, totalreturn, sklcc_record.inspector_no, sklcc_record.inspector, real_return, sklcc_return_check.assesstime, totalnumber," \
-		          " ok, sklcc_return_check.state from sklcc_return_check, sklcc_record where" \
-		          " sklcc_record.serialno = sklcc_return_check.serialno and left( createtime, 10 ) = '%s' and sklcc_record.inspector_no = '%s' order by sklcc_return_check.state asc" % (
-		          date, em_number )
-		target_list = Raw.query_all( )
 
-		if target_list != False:
-			for target in target_list:
-				return_check_info = Return_check_info( )
-				return_check_info.type = target[3]
-				return_check_info.ok = target[10]
-				return_check_info.serialno = target[0]
-				return_check_info.batch = target[1]
-				return_check_info.createtime = target[2].split( ' ' )[0]
-				return_check_info.realreturn = target[7]
-				return_check_info.totalreturn = target[4]
-				return_check_info.totalnumber = target[9]
-				return_check_info.state = target[11]
-				return_check_info.question_list = []
-				Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where serialno = '%s'" % \
-				          target[0]
+	target_list = Raw.query_all( )
+	if target_list != False:
+		for target in target_list:
+			return_check_info                   = dict()
+			return_check_info['type']           = target[3]
+			return_check_info['ok']             = target[10]
+			return_check_info['serialno']       = target[0]
+			return_check_info['batch']          = target[1]
+			return_check_info['createtime']     = target[2].split( ' ' )[0]
+			return_check_info['realreturn']     = target[7]
+			return_check_info['totalreturn']    = target[4]
+			return_check_info['totalnumber']    = target[9]
+			return_check_info['state']          = target[11]
+			return_check_info['inner_serialno'] = target[12]
+			return_check_info['question_list']  = []
+			#assesstime为None表示只有第一次返修活检验还未提交,就一定不存在疵点,否则就一定存在inner_serialno
+			if target[8] != None:
+				Raw.sql = "select questionname, questionno, returnno from sklcc_return_check " \
+				          "where inner_serialno = '%s'"% ( target[12] )
 				QC_list = Raw.query_all( )
-
 				for QC in QC_list:
 					temp = { }
 					if QC[0] == None:
 						pass
 					else:
-						temp['name'] = QC[0]
-						temp['no'] = QC[1]
+						temp['name']  = QC[0]
+						temp['no']    = QC[1]
 						temp['count'] = QC[2]
-						return_check_info.question_list.append( temp )
-				return_check_list.append( return_check_info )
-	return_check_list.sort( lambda t1, t2: cmp( t1.state, t2.state ) )
+						return_check_info['question_list'].append( temp )
+			return_check_list.append( return_check_info )
+	return_check_list.sort( lambda t1, t2: cmp( t1['state'], t2['state'] ) )
 	url = '/return_check/'
 	question_list = get_all_question( )
 
 	return TemplateResponse( request, html, locals( ) )
 
 
+def add_return_check( request ):
+	"""
+	查找父流水号对应的链返修检验结果
+	:param request:serialno:父流水号
+	                type:检验类型区分表连接对象 一检1 二检2
+	:return:模板返回
+	"""
+	html          = get_template('add_return_check.html')
+	serialno      = request.GET['serialno']
+	check_type    = 2 if request.GET['type'] == u"抽验" else 1
+	type_name     = request.GET['type']
+	question_list = get_all_question( )
+	Raw           = Raw_sql()
+	data          = dict()
+	if check_type == 1:
+		Raw.sql = "SELECT a.inner_serialno, a.serialno, batch, createtime, a.assesstime, questionno, questionname, returnno," \
+		          " ok, real_return, a.totalreturn FROM sklcc_return_check a JOIN sklcc_record b" \
+		          " ON a.serialno = b.serialno WHERE a.serialno = '%s' order by a.assesstime "%serialno
+	else:
+		Raw.sql = "SELECT a.inner_serialno, a.serialno, batch, createtime, a.assesstime, questionno, questionname, returnno," \
+		          " ok, real_return, a.totalreturn FROM sklcc_return_check a JOIN sklcc_recheck_info b" \
+		          " ON a.serialno = b.serialno WHERE a.serialno = '%s' order by a.assesstime "%serialno
+	#最后一个是否通过
+	last_ok = 0
+	target_list = Raw.query_all()
+	if target_list != False:
+		batch            = target_list[0][2]
+		data['sons']     = list()
+		assesstime_list  = list()
+		for one in target_list:
+			if one[4] not in assesstime_list:
+				assesstime_list.append(one[4])
+				#第一条记录totalreturn 为NULL，不与sklcc_record联动，检验返修数量由前台从汇总页面获取
+				temp_son =  { 'assesstime':one[4].split(' ')[0] if one[4] != None else 0, 'inner_serialno':one[0], 'res':[], 'ok':one[8], 'real':one[9],
+				              'totalreturn':'none' if one[9] == None else one[9] }
+				data['sons'].append( deepcopy(temp_son) )
+			if one[5] != 0:
+				data['sons'][-1]['res'].append( {'name':one[6], 'no':one[5], 'count':one[7] } )
+
+	last_ok = 1 if data.has_key('sons') and data['sons'][-1]['ok'] == 1 else 0
+	em_number    = request.session['employeeno']
+	employeename = request.session['employee']
+	return TemplateResponse( request, html, locals() )
+
 def pass_return_check( request ):
+	"""
+	返修活检验不合格才能进入的补录界面提交和返修活检验的提交页面
+	:param request: 最后一次提交的json
+	:return:数据库中插入新的记录
+	"""
 	try:
-		Raw = Raw_sql( )
+		Raw  = Raw_sql( )
 		json = request.POST['res']
-		res = simplejson.loads( json )
-		T = Current_time( )
+		res  = simplejson.loads( json )
+		T    = Current_time( )
 
 		for one in res:
-			serialno = one['serialno']
-			Raw.sql = "select * from sklcc_return_check where serialno = '%s'" % serialno
-			target_list = Raw.query_all( )
-			if target_list != False:
-				Raw.sql = "delete from sklcc_return_check where serialno = '%s'" % serialno
-				Raw.update( )
-
-			realreturn = int( one['count'] )
-			ok = int( one['conclusion'] )
-			question_list = one['mistakes']
-			if len( question_list ) == 0:
-				Raw.sql = "insert into sklcc_return_check( serialno, real_return, ok, state ) values( '%s',  %d, %d, %d )" % (
-				serialno, realreturn, ok, 1  )
+			if one['inner_serialno'] != "":
+				inner_serialno = one['inner_serialno']
+				Raw.sql        = "delete from sklcc_return_check where inner_serialno = '%s'" % inner_serialno
 				Raw.update( )
 			else:
-				for question in question_list:
-					questionname = question['name']
-					questionno = int( question['no'] )
-					returnno = int( question['count'] )
-					Raw.sql = "insert into sklcc_return_check( serialno, real_return, ok, state, questionname, questionno, returnno, assesstime )" \
-					          " values( '%s', %d, %d, %d, '%s', '%  s', %d, '%s' )" % (
-					          serialno, realreturn, ok, 1, questionname, questionno, returnno, T.time_str )
+				inner_serialno = unicode(uuid.uuid1())
+			serialno       = one['serialno']
 
-					Raw.update( )
+
+			realreturn    = int( one['count'] )
+			ok            = int( one['conclusion'] )
+			question_list = one['mistakes']
+			#第一次不记录所有的检验返修数量，之后每次补录都需要记录
+			totalreturn   = -1 if 'totalreturn' not in one.keys() else int(one['totalreturn'])
+			if len( question_list ) == 0:
+				if totalreturn < 0:
+					Raw.sql = "insert into sklcc_return_check( serialno, real_return, ok, state, inner_serialno, questionno, assesstime, returnno )" \
+		                " values( '%s',  %d, %d, %d, '%s', %d, '%s', %d )" % ( serialno, realreturn, ok, 1, inner_serialno, 0, T.time_str, 0 )
+				else:
+					Raw.sql = "insert into sklcc_return_check( totalreturn, serialno, real_return, ok, state, inner_serialno, questionno, assesstime, returnno )" \
+		                " values( %d, '%s',  %d, %d, %d, '%s', %d, '%s', %d )" % ( totalreturn, serialno, realreturn, ok, 1, inner_serialno, 0, T.time_str, 0 )
+				Raw.update()
+			else:
+				Raw.sql = ""
+				if totalreturn < 0:
+					for question in question_list:
+						questionname = question['name']
+						questionno = int( question['no'] )
+						returnno = int( question['count'] )
+						Raw.sql += "insert into sklcc_return_check( serialno, real_return, ok, state, questionname, questionno, returnno, " \
+					           "assesstime, inner_serialno )" \
+					          " values( '%s', %d, %d, %d, '%s', '%  s', %d, '%s', '%s' )" % (
+					          serialno, realreturn, ok, 1, questionname, questionno, returnno, T.time_str, inner_serialno )
+				else:
+					for question in question_list:
+						questionname = question['name']
+						questionno = int( question['no'] )
+						returnno = int( question['count'] )
+						Raw.sql += "insert into sklcc_return_check( totalreturn, serialno, real_return, ok, state, questionname, questionno, returnno, " \
+					           "assesstime, inner_serialno )" \
+					          " values( %d, '%s', %d, %d, %d, '%s', '%  s', %d, '%s', '%s' )" % ( totalreturn,
+					          serialno, realreturn, ok, 1, questionname, questionno, returnno, T.time_str, inner_serialno )
+				Raw.update( )
 	except Exception, e:
 		make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) )
 	return HttpResponse( )
 
 
 def return_check_check( request ):
-	html = get_template( 'daily_return_check.html' )
-	Raw = Raw_sql( )
-	username = request.session['username']
-	employeename = request.session['employee']
-	em_number = request.session['employeeno']
-	departmentno_list = find_department_authority_user( username, 4 )
-	start = request.GET['start']
-	end = request.GET['end']
-	distance = get_time_distance_list( start, end )
-	distance_have_year = change_distance_date_to_str_have_year( distance )
-
+	html                = get_template( 'daily_return_check.html' )
+	Raw                 = Raw_sql( )
+	username            = request.session['username']
+	employeename        = request.session['employee']
+	em_number           = request.session['employeeno']
+	departmentno_list   = find_department_authority_user( username, 4 )
+	start               = request.GET['start']
+	end                 = request.GET['end']
 	return_check_list = []
-	for date in distance_have_year:
-		for departmentno in departmentno_list:
-			Raw.sql = "select sklcc_record.serialno, batch, createtime, totalreturn, sklcc_record.inspector_no, sklcc_record.inspector, real_return, sklcc_return_check.assesstime, totalnumber, ok, sklcc_return_check.state, " \
-			          "check_type from sklcc_return_check, sklcc_record where" \
-			          " sklcc_record.serialno = sklcc_return_check.serialno  and left( createtime, 10 ) = '%s' and departmentno = '%s' and sklcc_return_check.state = 1" % (
-			          date, departmentno )
-			target_list = Raw.query_all( )
+	if len( departmentno_list ) != 0:
+		departmentno_str = reduce( lambda x,y:unicode(x)+','+unicode(y), departmentno_list )
+		Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.totalreturn, re.inspector_no, re.inspector,
+							c.real_return, c.assesstime, re.totalnumber, c.ok, c.state, re.check_type, c.inner_serialno
+ 	    				FROM
+ 	    				(SELECT * FROM sklcc_record WHERE left( createtime, 10 ) >= '%s'
+  	    					AND left( createtime, 10 ) <= '%s' AND departmentno in ( %s ) ) as re
+  	    				JOIN
+						( SELECT * FROM sklcc_return_check a JOIN
+  	    					( SELECT  serialno as serial, min(assesstime) as time FROM sklcc_return_check group by serialno )as b
+  	    						ON  a.serialno = b.serial and (a.assesstime = b.time  or a.assesstime is NULL )
+						) as c
+				 		ON c.serialno = re.serialno
+						WHERE c.state = 1 """%( start, end, departmentno_str )
+		target_list = Raw.query_all( )
 
-			if target_list != False:
-				for target in target_list:
-					return_check_info = Return_check_info( )
-					return_check_info.type = target[11]
-					return_check_info.ok = target[9]
-					return_check_info.serialno = target[0]
-					return_check_info.batch = target[1]
-					return_check_info.createtime = target[2].split( ' ' )[0]
-					return_check_info.realreturn = target[6]
-					return_check_info.totalreturn = target[3]
-					return_check_info.totalnumber = target[8]
-					return_check_info.state = target[10]
-					return_check_info.question_list = []
-					Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where serialno = '%s'" % \
-					          target[0]
-					QC_list = Raw.query_all( )
+		if target_list != False:
+			for target in target_list:
+				return_check_info                  = dict()
+				return_check_info['type']          = target[11]
+				return_check_info['ok']            = target[9]
+				return_check_info['serialno']      = target[0]
+				return_check_info['batch']         = target[1]
+				return_check_info['createtime']    = target[2].split( ' ' )[0]
+				return_check_info['realreturn']    = target[6]
+				return_check_info['totalreturn']   = target[3]
+				return_check_info['totalnumber']   = target[8]
+				return_check_info['state']         = target[10]
+				return_check_info['inner_serialno']= target[12]
+				return_check_info['question_list'] = []
+				Raw.sql = "select questionname, questionno, returnno from sklcc_return_check " \
+							"where inner_serialno = '%s' "% ( target[12] )
+				QC_list = Raw.query_all( )
+				for QC in QC_list:
+					temp = { }
+					if QC[0] == None:
+						pass
+					else:
+						temp['name']  = QC[0]
+						temp['no']    = QC[1]
+						temp['count'] = QC[2]
+						return_check_info['question_list'].append( temp )
+				return_check_list.append( return_check_info )
 
-					for QC in QC_list:
-						temp = { }
-						if QC[0] == None:
-							pass
-						else:
-							temp['name'] = QC[0]
-							temp['no'] = QC[1]
-							temp['count'] = QC[2]
-							return_check_info.question_list.append( temp )
-					return_check_list.append( return_check_info )
+		return_check_list.sort( lambda t1, t2: cmp( t1['state'], t2['state'] ) )
 
-	return_check_list.sort( lambda t1, t2: cmp( t1.state, t2.state ) )
 	url = '/return_check_check/'
 	question_list = get_all_question( )
 	return TemplateResponse( request, html, locals( ) )
 
 
 def recheck_return_check( request ):
-	html = get_template( 'daily_return_check.html' )
-	username = request.session['username']
-	employeename = request.session['employee']
-	em_number = request.session['employeeno']
-	start = request.GET['start']
-	end = request.GET['end']
-	distance = get_time_distance_list( start, end )
-	distance_have_year = change_distance_date_to_str_have_year( distance )
-
+	html                = get_template( 'daily_return_check.html' )
+	username            = request.session['username']
+	employeename        = request.session['employee']
+	em_number           = request.session['employeeno']
+	start               = request.GET['start']
+	end                 = request.GET['end']
+	distance            = get_time_distance_list( start, end )
+	Raw = Raw_sql( )
 	return_check_list = []
-	for date in distance_have_year:
-		Raw = Raw_sql( )
+	Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.recheckor, re.recheckor_no,
+						c.real_return, c.assesstime, c.ok, c.state, c.inner_serialno
+ 					FROM
+ 					(SELECT * FROM sklcc_recheck_info WHERE left( createtime, 10 ) >= '%s'
+  						AND left( createtime, 10 ) <= '%s' AND recheckor_no = '%s' ) as re
+  					JOIN
+					( SELECT * FROM sklcc_return_check a JOIN
+  						( SELECT  serialno as serial, min(assesstime) as time FROM sklcc_return_check group by serialno )as b
+  							ON  a.serialno = b.serial and (a.assesstime = b.time  or a.assesstime is NULL )
+					) as c
+			 		ON c.serialno = re.serialno
+					ORDER BY c.state asc"""%( start, end, em_number  )
 
-		Raw.sql = "select sklcc_recheck_info.serialno, batch, createtime, sklcc_recheck_info.inspector_no," \
-		          " sklcc_recheck_info.inspector, real_return, sklcc_return_check.assesstime, ok, sklcc_return_check.state " \
-		          "from sklcc_return_check, sklcc_recheck_info" \
-		          " where" \
-		          " sklcc_recheck_info.serialno = sklcc_return_check.serialno and left( createtime, 10 ) = '%s' " \
-		          "and sklcc_recheck_info.recheckor_no = '%s' order by sklcc_return_check.state asc" % (
-		          date, em_number )
-
-		target_list = Raw.query_all( )
-
-		if target_list != False:
-			for target in target_list:
-				return_check_info = Return_check_info( )
-				return_check_info.ok = target[7]
-				return_check_info.serialno = target[0]
-				return_check_info.batch = target[1]
-				return_check_info.createtime = target[2].split( ' ' )[0]
-				return_check_info.realreturn = target[5]
-				return_check_info.state = target[8]
-				return_check_info.type = "抽验"
-				return_check_info.totalreturn = get_recheck_serialno_totalreturn( target[0] )
-				return_check_info.totalnumber = get_recheck_serialno_totalnumber( target[0] )
-				return_check_info.question_list = []
-				Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where serialno = '%s'" % \
-				          target[0]
-				QC_list = Raw.query_all( )
-
-				for QC in QC_list:
-					temp = { }
-					if QC[0] == None:
-						pass
-					else:
-						temp['name'] = QC[0]
-						temp['no'] = QC[1]
-						temp['count'] = QC[2]
-						return_check_info.question_list.append( temp )
-				return_check_list.append( return_check_info )
-
-	return_check_list.sort( lambda t1, t2: cmp( t1.state, t2.state ) )
+	target_list = Raw.query_all( )
+	if target_list != False:
+		for target in target_list:
+			return_check_info                  = dict()
+			return_check_info['ok']            = target[7]
+			return_check_info['serialno']      = target[0]
+			return_check_info['batch']         = target[1]
+			return_check_info['createtime']    = target[2].split( ' ' )[0]
+			return_check_info['realreturn']    = target[5]
+			return_check_info['state']         = target[8]
+			return_check_info['inner_serialno']= target[9]
+			return_check_info['type']          = "抽验"
+			return_check_info['totalreturn']   = get_recheck_serialno_totalreturn( target[0] )
+			return_check_info['totalnumber']   = get_recheck_serialno_totalnumber( target[0] )
+			return_check_info['question_list'] = []
+			Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where inner_serialno = '%s'" % \
+			          target[9]
+			QC_list = Raw.query_all( )
+			for QC in QC_list:
+				temp = { }
+				if QC[0] == None:
+					pass
+				else:
+					temp['name'] = QC[0]
+					temp['no'] = QC[1]
+					temp['count'] = QC[2]
+					return_check_info['question_list'].append( temp )
+			return_check_list.append( return_check_info )
+		return_check_list.sort( lambda t1, t2: cmp( t1['state'], t2['state'] ) )
 	url = '/recheck_return_check/'
 	question_list = get_all_question( )
 	return TemplateResponse( request, html, locals( ) )
 
 
 def recheck_return_check_check( request ):
-	html = get_template( 'daily_return_check.html' )
-	username = request.session['username']
-	employeename = request.session['employee']
-	em_number = request.session['employeeno']
-	Raw = Raw_sql( )
-	departmentno_list = find_department_authority_user( username, 5 )
-	start = request.GET['start']
-	end = request.GET['end']
-	distance = get_time_distance_list( start, end )
-	distance_have_year = change_distance_date_to_str_have_year( distance )
+	html               = get_template( 'daily_return_check.html' )
+	username           = request.session['username']
+	employeename       = request.session['employee']
+	em_number          = request.session['employeeno']
+	Raw                = Raw_sql( )
+	departmentno_list  = find_department_authority_user( username, 5 )
+	start              = request.GET['start']
+	end                = request.GET['end']
 
 	return_check_list = []
-	for date in distance_have_year:
-		for departmentno in departmentno_list:
-			Raw.sql = "select sklcc_recheck_info.serialno, batch, createtime, sklcc_recheck_info.inspector_no," \
-			          " sklcc_recheck_info.inspector, real_return, sklcc_return_check.assesstime, ok, sklcc_return_check.state" \
-			          " from sklcc_return_check, sklcc_recheck_info where" \
-			          " sklcc_recheck_info.serialno = sklcc_return_check.serialno and left( createtime, 10 ) = '%s' and departmentno = '%s' and sklcc_return_check.state = 1" % (
-			          date, departmentno, )
-			target_list = Raw.query_all( )
-
-			if target_list != False:
-				for target in target_list:
-					return_check_info = Return_check_info( )
-					return_check_info.type = "抽验"
-					return_check_info.ok = target[7]
-					return_check_info.serialno = target[0]
-					return_check_info.batch = target[1]
-					return_check_info.createtime = target[2].split( ' ' )[0]
-					return_check_info.realreturn = target[5]
-					return_check_info.state = target[8]
-					return_check_info.totalreturn = get_recheck_serialno_totalreturn( target[0] )
-					return_check_info.totalnumber = get_recheck_serialno_totalnumber( target[0] )
-					return_check_info.question_list = []
-					Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where serialno = '%s'" % \
-					          target[0]
-					QC_list = Raw.query_all( )
-
-					for QC in QC_list:
-						temp = { }
-						if QC[0] == None:
-							pass
-						else:
-							temp['name'] = QC[0]
-							temp['no'] = QC[1]
-							temp['count'] = QC[2]
-							return_check_info.question_list.append( temp )
-					return_check_list.append( return_check_info )
-
-	return_check_list.sort( lambda t1, t2: cmp( t1.state, t2.state ) )
+	if len( departmentno_list ) != 0:
+		departmentno_str = reduce( lambda x,y:unicode(x)+','+unicode(y), departmentno_list )
+		Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.recheckor_no, re.recheckor,
+							c.real_return, c.assesstime, c.ok, c.state, c.inner_serialno
+ 	    				FROM
+ 	    				(SELECT * FROM sklcc_recheck_info WHERE left( createtime, 10 ) >= '%s'
+  	    					AND left( createtime, 10 ) <= '%s' AND departmentno in ( %s ) ) as re
+  	    				JOIN
+						( SELECT * FROM sklcc_return_check a JOIN
+  	    					( SELECT  serialno as serial, min(assesstime) as time FROM sklcc_return_check group by serialno )as b
+  	    						ON  a.serialno = b.serial and (a.assesstime = b.time  or a.assesstime is NULL )
+						) as c
+				 		ON c.serialno = re.serialno
+						WHERE c.state = 1 """%( start, end, departmentno_str )
+		target_list = Raw.query_all( )
+		if target_list != False:
+			for target in target_list:
+				return_check_info                  = dict()
+				return_check_info['ok']            = target[7]
+				return_check_info['serialno']      = target[0]
+				return_check_info['batch']         = target[1]
+				return_check_info['createtime']    = target[2].split( ' ' )[0]
+				return_check_info['realreturn']    = target[5]
+				return_check_info['state']         = target[8]
+				return_check_info['inner_serialno']= target[9]
+				return_check_info['type']          = "抽验"
+				return_check_info['totalreturn']   = get_recheck_serialno_totalreturn( target[0] )
+				return_check_info['totalnumber']   = get_recheck_serialno_totalnumber( target[0] )
+				return_check_info['question_list'] = []
+				Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where inner_serialno = '%s'" % \
+				          target[9]
+				QC_list = Raw.query_all( )
+				for QC in QC_list:
+					temp = { }
+					if QC[0] == None:
+						pass
+					else:
+						temp['name']  = QC[0]
+						temp['no']    = QC[1]
+						temp['count'] = QC[2]
+						return_check_info['question_list'].append( temp )
+				return_check_list.append( return_check_info )
+		return_check_list.sort( lambda t1, t2: cmp( t1['state'], t2['state'] ) )
 	url = '/recheck_return_check_check/'
 	question_list = get_all_question( )
 	return TemplateResponse( request, html, locals( ) )

@@ -1157,7 +1157,7 @@ def form_return_check( request ):
 	return_check_list      = []
 	for departmentno in departmentno_list:
 		Raw.sql = "select distinct a.serialno, inspector_no, inspector, check_id, check_type, real_return, ok, totalreturn, b.batch, " \
-		          " b.createtime from sklcc_return_check a join sklcc_record b on a.serialno = b.serialno where left( b.createtime, 10 ) " \
+		          " b.createtime, b.totalnumber from sklcc_return_check a join sklcc_record b on a.serialno = b.serialno where left( b.createtime, 10 ) " \
 		          ">= '%s' and left( b.createtime, 10 ) <= '%s' and departmentno = '%s' and a.state = 1" % (
 		          start, end, departmentno )
 
@@ -1178,6 +1178,7 @@ def form_return_check( request ):
 			temp.batch       = target[8]
 			temp.state       = 1
 			temp.createtime  = target[9][0:16]
+			temp.totalnumber = target[10]
 			Raw.sql = "select questionname, questionno, returnno from sklcc_return_check where serialno = '%s'" % \
 			          target[0]
 			QC_list = Raw.query_all( )

@@ -10,6 +10,11 @@ from utilitys import *
 from copy import deepcopy
 #============================================================ measure partiton =================================================
 def toTypehorizon( res ):
+	"""
+	为了方便Html模板编写而建立的转换函数
+	:param res: 包含工艺信息和测量结果数据的列表
+	:return:转换后的列表
+	"""
 	horizon_list = [[],[],[],[]]
 	if res != False and len( res ) != 0:
 		for i in range(0,len(res[0]['data'])):
@@ -26,20 +31,34 @@ def toTypehorizon( res ):
 	return horizon_list
 
 def get_measure_info_by_styleno_and_size( styleno, size ):
+	"""
+	根据款号和型号获取工艺员录入的工艺信息
+	:param styleno:款号
+	:param size: 型号(尺码)
+	:return:按格式组织的列表
+	"""
 	Raw = Raw_sql()
 	#按部位排序是为了在data字段添加数据时不必再次进行遍历查找部位所在的dict
 	Raw.sql = "select partition, measure_res, common_difference, symmetry from sklcc_style_measure " \
-	          "where styleno = '%s' and size = '%s' and measure_or_not = 1 and state = 1 order by partition"%( styleno, size )
+	          "where styleno = '%s' and size = '%s' and measure_or_not = 1 and state = 1 order by serial"%( styleno, size )
 	target_list = Raw.query_all()
 	res = []
 	if target_list != False:
 		for target in target_list:
 			if target[0] not in [ one['partition'] for one in res ]:
-				res.append( { 'partition':target[0], 'common_difference':target[2], 'symmetry':target[3], 'standard':target[1], 'data': [] } )
+				#common_difference包含正负公差，以@分割，前为正公差，后为负公差
+				res.append( { 'partition':target[0], 'common_difference':'+' + target[2].replace('@', '/-'), 'symmetry':target[3], 'standard':target[1], 'data': [] } )
 
 	return res
 
 def get_measure_data_by_serialno( serialno, styleno, size ):
+	"""
+	根据流水号和款号型号获得检验员测量数据，只在measure_check_info中用到，和get_inspector_measure_data类似
+	:param serialno: 测量记录单流水号
+	:param styleno: 款号
+	:param size: 型号（尺码）
+	:return:按格式组织的列表
+	"""
 	Raw = Raw_sql()
 	measure_info = get_measure_info_by_styleno_and_size( styleno, size )
 	Raw.sql = "SELECT partition, measure_res, measure_type, symmetry1, symmetry2" \
@@ -56,6 +75,16 @@ def get_measure_data_by_serialno( serialno, styleno, size ):
 	return measure_info
 
 def get_inspector_measure_data( inspector_no, date, batch = None, size = None, contentid = None, measure_force_recheck = False ):
+	"""
+	获取检验员（一检、二检）测量数据，res_list中也包含对应款和尺码的工艺员测量数据
+	:param inspector_no: 检验员工号
+	:param date: 时间，年-月-日
+	:param batch: 批次号
+	:param size: 型号（尺码）
+	:param contentid: 二检提交的contentid
+	:param measure_force_recheck: 用来区分一检和二检的measure_force页面以写入数据库中的字段is_first_check
+	:return:res_list：包含测量数据和工艺信息，与batch_list一一对应，batch_list为记录的表头信息
+	"""
 	#measure_force兼容
 	if batch == None:
 		styleno = None
@@ -131,31 +160,6 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 		return res_list, batch_list
 
 
-def get_inspector_measure_data_OLD( inspector_no, date ):
-	Raw = Raw_sql()
-	res_list     = []
-	styleno_list = []
-	Raw.sql      = "select distinct batch, size from sklcc_measure_record where inspector_no = '%s' and left( createtime, 10 ) = '%s'"%( inspector_no, date )
-	target_list  = Raw.query_all()
-	if target_list != False:
-		for target in target_list:
-			styleno_list.append( {'model':target[0],'size':target[1], 'serialno': "" } )
-
-	for one in styleno_list:
-		res_list.append( get_measure_info_by_styleno_and_size( one['model'].split('-')[0], one['size'] ) )
-
-	Raw.sql = "select distinct serialno, batch, size from sklcc_measure_record where inspector_no = '%s' and left( createtime, 10 ) = '%s'"%( inspector_no, date )
-	target_list = Raw.query_all()
-
-	if target_list != False:
-		for target in target_list:
-			for i, one in enumerate(styleno_list):
-				if one['model'] == target[1] and one['size'] == target[2]:
-					one['serialno'] = target[0]
-					get_measure_data_by_serialno( target[0], res_list[i] )
-
-	return res_list, styleno_list
-
 def measure_in( request ):
 	try:
 		inspector_no = request.session['employeeno']
@@ -209,7 +213,6 @@ def written_into_measure_info( info ):
 		          %( info['serialno'], info['styleno'], info['createtime'],
 	                   info['partition'], info['measure_res'], info['measure_type'], info['id'], info['contentid'] )
 	Raw.update()
-	return info
 
 def written_into_measure_record( info, is_first_check = 'True' ):
 	Raw = Raw_sql()
@@ -218,19 +221,24 @@ def written_into_measure_record( info, is_first_check = 'True' ):
 		          ", %d, 2, '%s', '%s' )"%( info['serialno'], info['createtime'], info['inspector_no'],
 	                                        info['inspector'], info['batch'], info['styleno'], info['size'],
 	                                        info['measure_count'], is_first_check, info['departmentno'] )
+
 	Raw.update()
 
 def measure_commit( request ):
+	start = time.clock()
 	try:
-		Raw          = Raw_sql()
-		T            = Current_time()
-		createtime   = T.time_str
-		json         = request.POST['JSON']
+		Raw             = Raw_sql()
+		T               = Current_time()
+		createtime      = T.time_str
+		json            = request.POST['JSON']
 		#contentid = False
-		contentid    = request.POST['contentid'] if 'contentid' in request.POST else False
-		inspector_no = request.session['employeeno']
-		inspector    = request.session['employee']
-		data         = simplejson.loads( json )
+		contentid       = request.POST['contentid'] if 'contentid' in request.POST else False
+		inspector_no    = request.session['employeeno']
+		inspector       = request.session['employee']
+		count_contentid = 0
+		data            = simplejson.loads( json )
+		SQL             = ""
+
 		for one in data:
 			batch    = one['model']
 			Raw.sql  = "SELECT TOP 1 departmentno FROM producemaster WHERE batch = '%s'"%batch
@@ -244,23 +252,23 @@ def measure_commit( request ):
 			res      = one['res']
 
 			if contentid == False:
-				Raw.sql = "delete from sklcc_measure_info where serialno = '%s'"%serialno
-				Raw.update()
-				Raw.sql = "delete from sklcc_measure_record where serialno = '%s'"%serialno
-				Raw.update()
+				SQL += "delete from sklcc_measure_info where serialno = '%s';"%serialno
+				#Raw.update()
+				SQL += "delete from sklcc_measure_record where serialno = '%s';"%serialno
+				#Raw.update()
 			else:
 				Raw.sql = "delete from sklcc_measure_info where contentid = '%s'"%contentid
 				Raw.update()
 				Raw.sql = "SELECT COUNT( DISTINCT contentid ) FROM sklcc_measure_info WHERE serialno = '%s' "%serialno
 				target = Raw.query_one()
-				count_contentid = 0
+
 				if target != False:
 					count_contentid = target[0]
 				if count_contentid == 0:
-					Raw.sql = "DELETE FROM sklcc_measure_record WHERE serialno = '%s'"%serialno
-				else:
-					Raw.sql = "UPDATE sklcc_measure_record SET measure_count = %d WHERE serialno = '%s'"%( count_contentid, serialno )
-				Raw.update()
+					SQL += "DELETE FROM sklcc_measure_record WHERE serialno = '%s';"%serialno
+				#else:
+					#SQL += "UPDATE sklcc_measure_record SET measure_count = %d WHERE serialno = '%s';"%( count_contentid, serialno )
+				#Raw.update()
 
 			count_flag = res[0]['name'] if len( res ) != 0 else ""
 			count_id   = 0
@@ -272,22 +280,45 @@ def measure_commit( request ):
 					data        = part['data']
 					if len( data ) == 1:
 						measure_res = float( data[0] )
-
-						insert = dict( serialno = serialno, styleno = styleno, createtime = createtime, partition = partition,
-						               measure_res = measure_res, measure_type = 0, id = count_id, contentid = contentid )
+						SQL += "insert into sklcc_measure_info( serialno, styleno, createtime, partition," \
+	                        "measure_res, measure_type, count_id, contentid ) values( '%s', '%s', '%s', '%s', %f, %d, %d, '%s' );"\
+		                    %( serialno, styleno, createtime,
+	                        partition, measure_res, 0, count_id, contentid )
 					else:
 						symmetry1 = float( data[0] )
 						symmetry2 = float( data[1] )
-						insert = dict( serialno = serialno, styleno = styleno, createtime = createtime, partition = partition,
-						               symmetry1 = symmetry1, symmetry2 = symmetry2, measure_type = 1, id = count_id, contentid = contentid )
+						SQL += "insert into sklcc_measure_info( serialno, styleno, createtime, partition," \
+	                        "measure_type, symmetry1, symmetry2, count_id, contentid ) values( '%s', '%s', '%s', '%s', %d, %f, %f, %d, '%s');"\
+		                %( serialno, styleno, createtime, partition,
+		                    1, symmetry1, symmetry2, count_id, contentid )
 
-					written_into_measure_info( insert )
 				if contentid != False:
-					written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
-			                                   batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ), 'False' )
+					#二检插入sklcc_measure_record
+					if count_contentid == 0:
+						SQL += "insert into sklcc_measure_record( serialno, createtime, inspector_no, inspector, batch, styleno, size, " \
+		                "measure_count, state, is_first_check, departmentno ) values( '%s', '%s', '%s', '%s', '%s', '%s', '%s'" \
+		                ", %d, 2, '%s', '%s' );"%( serialno, createtime, inspector_no,
+	                                        inspector, batch, styleno, size,
+	                                        count_id, 'False', departmentno )
+					else:
+						SQL += "UPDATE sklcc_measure_record SET measure_count = (" \
+						       " SELECT COUNT( DISTINCT contentid ) FROM sklcc_measure_info WHERE serialno = '%s' )" \
+						       " WHERE serialno = '%s';"%( serialno, serialno )
+					#written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
+			                                   #batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ), 'False' )
 				else:
-					written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
-			                                   batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ), 'True' )
+					#一检插入sklcc_measure_record
+					SQL += "insert into sklcc_measure_record( serialno, createtime, inspector_no, inspector, batch, styleno, size, " \
+		            "measure_count, state, is_first_check, departmentno ) values( '%s', '%s', '%s', '%s', '%s', '%s', '%s'" \
+		            ", %d, 2, '%s', '%s' );"%( serialno, createtime, inspector_no,
+	                                        inspector, batch, styleno, size,
+	                                        count_id, 'True', departmentno )
+					#written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
+			                                   #batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ), 'True' )
+		Raw.sql = SQL
+
+		Raw.update()
+
 		return HttpResponse()
 	except Exception,e:
 		pass
@@ -431,6 +462,7 @@ def measure_force_recheck( request ):
 		res_list  = measure_data[0]
 		info_list = measure_data[1]
 		ok = []
+
 		for one in res_list:
 			ok.append( toTypehorizon(one) )
 		return TemplateResponse( request, html, locals() )
@@ -521,15 +553,15 @@ def style_measure( request ):
 		#sys.setdefaultencoding('utf-8')
 		em_number    = request.session['employeeno']
 		employeename = request.session['employee']
-		Raw = Raw_sql( )
-		Raw.sql = "select measure_type_id, measure_type_name from sklcc_measure_type"
-		target_list = Raw.query_all( )
+		Raw          = Raw_sql( )
+		Raw.sql      = "select measure_type_id, measure_type_name from sklcc_measure_type"
+		target_list  = Raw.query_all( )
 		measure_list = []
 		state = 0
 		if target_list != False:
 			for target in target_list:
-				temp = { 'id': target[0], 'name': target[1] }
-				partiton_list = get_all_partition( target[0] )
+				temp                   = { 'id': target[0], 'name': target[1] }
+				partiton_list          = get_all_partition( target[0] )
 				temp['partition_list'] = partiton_list
 				measure_list.append( temp )
 		html = get_template( 'measure_size_set.html' )
@@ -569,26 +601,26 @@ def style_measure( request ):
 					          style.decode( 'utf-8' ), target[0] )
 					info_list = Raw.query_all( )
 					if info_list != False:
-						temp['common']    = str( info_list[0][0] ) if info_list[0][0] != 0 else ''
-						temp['symmetry']  = str( info_list[0][1] ) if info_list[0][0] != 0 else ''
+						temp['common']    = unicode( info_list[0][0] ) if info_list[0][0] != 0 else ''
+						temp['symmetry']  = unicode( info_list[0][1] ) if info_list[0][0] != 0 else ''
 						temp['partition'] = target[0]
-						temp['hint'] = info_list[0][6] if info_list[0][6] != None else ''
+						temp['hint']      = info_list[0][6] if info_list[0][6] != None else ''
 						temp['measure_or_not'] = 1 if info_list[0][5] else 0
-						temp['data'] = []
+						temp['data']      = []
 						for info in info_list:
-							one = { }
+							one         = { }
 							one['size'] = info[2]
 							size_list.append( info[2] )
-							one['no'] = str( info[4] ) if info[4] != 0 else ''
+							one['no']   = unicode( info[4] ) if info[4] != 0 else ''
 							temp['data'].append( one )
 					res.append( temp )
-				state = 2
+				state            = 2
 				#measure_state表示工艺测量的状态，2->0->1
-				measure_state = target_list[0][4]
+				measure_state    = target_list[0][4]
 				is_mine = 1 if em_number == target_list[0][2] else 0
 				measure_employee = target_list[0][3]
 				if target_list[0][5] != None:
-					assessor = find_em_name( target_list[0][5] )
+					assessor         = find_em_name( target_list[0][5] )
 					measure_assessor = assessor if assessor else target_list[0][5]
 					assessor_time    = target_list[0][6]
 				else:
@@ -601,10 +633,11 @@ def style_measure( request ):
 
 def written_into_style_measure( record ):
 	Raw = Raw_sql( )
-	T = Current_time( )
+	T   = Current_time( )
 	now = T.time_str
+	#TODO:common_difference
 	Raw.sql = u"insert into sklcc_style_measure( state, employeeno,serial,styleno, common_difference, createtime, symmetry, size, partition, " \
-	          u"measure_res, note, measure_or_not  ) values( 2, '%s', '%d', '%s', %f, '%s', %f, '%s', '%s', %f, '%s', " % (
+	          u"measure_res, note, measure_or_not  ) values( 2, '%s', '%d', '%s', '%s', '%s', %f, '%s', '%s', %f, '%s', " % (
 	          record['employeeno'], record['index'], record['styleno'], record['common_difference'], now, record['symmetry'], record['size'],
 	          record['partition'], record['number'], record['note'] )
 	Raw.sql += '1 )' if record['measure_or_not'] == True else '0 )'
@@ -632,13 +665,13 @@ def submit_style_measure( request ):
 		record['employeeno'] = request.session['employeeno']
 		data = res['data']
 		for one in data:
-
 			record['partition']         = one['name']
 			record['index']             = int( one['index'] )
 			record['measure_or_not']    = one['is_need']
 			record['note']              = one['hint']
 			record['symmetry']          = float( one['balance_error'] ) if one['balance_error'] != None else 0
-			record['common_difference'] = float( one['common_difference'] ) if one['common_difference'] != None else 0
+			#TODO:common_difference
+			record['common_difference'] = one['common_difference'] if one['common_difference'] != None else 0
 			for temp in one['res']:
 				if temp.has_key( 'size' ):
 					record['size'] = temp['size']

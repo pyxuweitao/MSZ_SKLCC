@@ -431,10 +431,11 @@ function bind_size_cells() {
                 placement: 'auto',
                 type: "type_with_number_and_point"
             }).on('blur',function(){
-                console.log(patterm_float.test(this.value));
+                //console.log(patterm_float.test(this.value));
                 if (!patterm_float.test(this.value)){
                     $(this).css({
                         "border":"1px solid red"
+                        //"padding":"2px 2px 2px 2px"
                     });
                 }else{
                     $(this).css({
@@ -442,10 +443,74 @@ function bind_size_cells() {
                     });
                 }
             }).keydown(function(e){
+                function jump_to_next_row(node,index,is){
+                    if (is == "2"){
+                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function(i){
+                            if (i == index && this.parentNode.getAttribute("colspan") == "2"){
+                                this.focus();
+                            }else if (i == index*2 && this.parentNode.getAttribute("colspan") != "2"){
+                                this.focus();
+                            }
+                        });
+                        if (temp.length == 0){
+                            var has_target = false;
+                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function(i){
+                                if (i-1 == index && this.parentNode.getAttribute("colspan") == "2"){
+                                    this.focus();
+                                    has_target = true;
+                                }else if (i == index*2+2 && this.parentNode.getAttribute("colspan") != "2"){
+                                    this.focus();
+                                    has_target = true;
+                                }
+                            });
+                            if (!has_target){
+                                $("#measure_partition_add_col_button").click();
+                                jump_to_next_row(node,index,is);
+                            }
+                            console.log("none");
+                        }
+                    }else{
+                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function(i){
+                            if (i == (index-1)/2 && this.parentNode.getAttribute("colspan") == "2"){
+                                this.focus();
+                            }else if (i+1 == index && this.parentNode.getAttribute("colspan") != "2"){
+                                this.focus();
+                            }
+                        });
+                        if (temp.length == 0){
+                            var has_target = false;
+                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function(i){
+                                if (i-1 == (index-1)/2 && this.parentNode.getAttribute("colspan") == "2"){
+                                    this.focus();
+                                    has_target = true;
+                                }else if (i-1 == index && this.parentNode.getAttribute("colspan") != "2"){
+                                    this.focus();
+                                    has_target = true;
+                                }
+                            });
+                            if (!has_target){
+                                $("#measure_partition_add_col_button").click();
+                                jump_to_next_row(node,index,is);
+                            }
+                        }
+                    }
+                }
                 if (e.keyCode == 13){
-                    var x = $(this).parents("td:first").next("td:first").find("input:first").focus();
-                    if (x.length == 0){
-                        $(this).parents("tr:first").next("tr:first").find("input:first").focus();
+                    var index;
+                    var target_node = this;
+                    $(this).parents("tr:first").find("input").each(function(i){
+                        if (target_node == this){
+                             index = i;
+                             return false;
+                        }
+                    });
+                    console.log(index);
+                    if (index % 2 != 0 && this.parentNode.getAttribute("colspan") != "2"){
+                        jump_to_next_row(target_node,index,target_node.parentNode.getAttribute("colspan"));
+                    }else if (index % 2 == 0 && this.parentNode.getAttribute("colspan") != "2"){
+                        $(this).parents("td:first").next("td:first").find("input").focus();
+                    }else if (this.parentNode.getAttribute("colspan") == "2"){
+                        jump_to_next_row(target_node,index,target_node.parentNode.getAttribute("colspan"));
                     }
                 }
             });

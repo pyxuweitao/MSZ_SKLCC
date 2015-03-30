@@ -1,4 +1,3 @@
-# Django settings for WJ_test_1_4 project.
 import os
 
 DEBUG = True
@@ -16,9 +15,9 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',
+        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
+        'HOST': '192.168.135.45',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '1344',
         'OPTIONS':{
 	        'host_is_server':True
         }},
@@ -26,9 +25,9 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': 'sklcc503',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',
+        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
+        'HOST': '192.168.135.45',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '1344',
         'OPTIONS':{
 	        'host_is_server':True
         }

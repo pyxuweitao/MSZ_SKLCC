@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" filepath="$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" filepath="$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" />
     </modules>
   </component>
 </project>
