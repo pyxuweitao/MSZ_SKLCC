@@ -1364,7 +1364,6 @@ def get_measure_res( styleno, partition ):
 
 def commit_res( request ):
 	try:
-		a=1/0
 		reload( sys )
 		sys.setdefaultencoding( 'utf-8' )
 		Raw = Raw_sql( )
