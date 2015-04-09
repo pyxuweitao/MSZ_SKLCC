@@ -165,6 +165,8 @@
                                 <li>
                                     <a href="/style_measure_check/">部位测量审批</a>
                                 </li>
+
+                                <li></li>
                             </ul>
                         </li>
                     </ul>
@@ -239,6 +241,9 @@
                         }
                     }
                 }
+            }
+            if(window.location.pathname == '/style_measure_check/'){
+                return ;
             }
             setTimeout(function(){
                 if (window.location.search == ''){

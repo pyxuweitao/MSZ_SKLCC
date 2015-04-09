@@ -242,6 +242,23 @@ def test( request ):
 	return HttpResponse(1)
 
 
+def get_styleno_by_batch( batch ):
+	"""
+	根据批次号获取款号
+	:param batch: 批次号
+	:return:款号，查询不到返回字符串NULL
+	"""
+	Raw = Raw_sql()
+	Raw.sql = u"SELECT TOP 1 styleno FROM producemaster WHERE batch = '%s' and Formstate='审核'"%batch
+
+	styleno = Raw.query_one('MSZ')[0]
+	if styleno != False:
+		return styleno
+	else:
+		return "NULL"
+
+	
+
 
 
 

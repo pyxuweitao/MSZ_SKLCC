@@ -74,7 +74,7 @@ def get_measure_data_by_serialno( serialno, styleno, size ):
 				measure_info[partition_list.index( target[0] )]['data'].append( [target[1]] )
 	return measure_info
 
-def get_inspector_measure_data( inspector_no, date, batch = None, size = None, contentid = None, measure_force_recheck = False ):
+def get_inspector_measure_data( inspector_no, date, batch = None, size = None, contentid = None, measure_force_recheck = False, styleno = None ):
 	"""
 	获取检验员（一检、二检）测量数据，res_list中也包含对应款和尺码的工艺员测量数据
 	:param inspector_no: 检验员工号
@@ -88,11 +88,9 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 	#measure_force兼容
 	if batch == None:
 		styleno = None
-	else:
-		styleno = batch.split('-')[0]
 	Raw          = Raw_sql()
 	res_list     = []
-	batch_list = []
+	batch_list   = []
 	#二检
 	if contentid != None:
 		res = []
@@ -127,9 +125,8 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 					symmetry1, symmetry2, count_id, measure_type, a.serialno FROM sklcc_measure_record a JOIN sklcc_measure_info b
 					ON a.serialno = b.serialno
 					WHERE inspector_no = '%s' AND left( a.createtime, 10 ) = '%s' AND is_first_check = %d
-					ORDER BY a.batch, a.size, %s count_id, partition"""%( inspector_no, date,
+					ORDER BY a.batch, a.size, %s count_id"""%( inspector_no, date,
 		            0 if measure_force_recheck else 1, 'contentid, ' if measure_force_recheck else "" )
-
 		raw_data = Raw.query_all()
 		if raw_data != False:
 			for i, data in enumerate( raw_data ):
@@ -157,6 +154,7 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 		if batch != None:
 			batch_list.insert( 0, { 'model':batch, 'size':size, 'serialno':uuid.uuid1() } )
 			res_list.insert( 0, get_measure_info_by_styleno_and_size( styleno, size ) )
+
 		return res_list, batch_list
 
 
@@ -165,10 +163,11 @@ def measure_in( request ):
 		inspector_no = request.session['employeeno']
 		batch        = request.GET['batch']
 		size         = request.GET['size']
+		styelno      = request.GET['styleno']
 		Raw          = Raw_sql()
 		T            = Current_time()
 		today        = T.get_date()
-		measure_data = get_inspector_measure_data( inspector_no, today, batch, size )
+		measure_data = get_inspector_measure_data( inspector_no, today, batch, size, styleno=styelno )
 		res_list     = measure_data[0]
 		ok        = []
 
@@ -241,13 +240,14 @@ def measure_commit( request ):
 
 		for one in data:
 			batch    = one['model']
-			Raw.sql  = "SELECT TOP 1 departmentno FROM producemaster WHERE batch = '%s'"%batch
+			Raw.sql  = "SELECT TOP 1 departmentno, styleno FROM producemaster WHERE batch = '%s'"%batch
 			target   = Raw.query_one('MSZ')
 			departmentno = ""
+			styleno  = "measure_commit_cannot_find_styleno"
 			if target != False:
 				departmentno = target[0]
+				styleno      = target[1]
 			size     = one['size']
-			styleno  = batch.split('-')[0]
 			serialno = one['serialno']
 			res      = one['res']
 
@@ -411,8 +411,12 @@ def measure_check_recheck( request ):
 
 
 def measure_check_info( request ):
+	em_number    = request.session['employeeno']
+	employeename = request.session['employee']
 	serialno = request.GET['serialno']
-	styleno  = request.GET['batch'].split('-')[0]
+	styleno  = get_styleno_by_batch( request.GET['batch'] )
+	if styleno == "NULL":
+		styleno = request.GET['batch'].split('-')[0]
 	size     = request.GET['size']
 	Raw      = Raw_sql()
 	html     = get_template( 'measure_check_info.html' )
@@ -470,6 +474,7 @@ def measure_force_recheck( request ):
 		pass
 
 def style_measure_check( request ):
+	bydate       = request.GET['bydate'] if 'bydate' in request.GET.keys() else 'off'
 	em_number    = request.session['employeeno']
 	employeename = request.session['employee']
 	if 26 not in request.session['status']:
@@ -483,13 +488,19 @@ def style_measure_check( request ):
 	               " WHERE state = 0 " \
 	               " ORDER BY time desc"
 	else:
-		start        = request.GET['start']
-		end          = request.GET['end']
+		if bydate == 'on':
+			start        = request.GET['start']
+			end          = request.GET['end']
 
-		Raw.sql      = "SELECT DISTINCT styleno, size, left( createtime, 16 ) time, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
+			Raw.sql      = "SELECT DISTINCT styleno, size, left( createtime, 16 ) time, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
 	               " FROM sklcc_style_measure a JOIN sklcc_employee b ON a.employeeno = b.employeeno" \
 	               " WHERE LEFT( createtime, 10 ) >= '%s' AND LEFT( createtime, 10 ) <= '%s' ORDER BY time desc"%( start, end )
-
+		else:
+			#加四个百分号是因为该SQL传入django_pyodbc中正式调用时仍然会引起参数缺失异常，需要四个百分号将真正带%的SQL传入
+			styleno = request.GET['styleno']
+			Raw.sql = "SELECT DISTINCT styleno, size, left( createtime, 16 ) time, a.employeeno, b.employee, state, assessor_no, left( assesstime, 16 )" \
+	               " FROM sklcc_style_measure a JOIN sklcc_employee b ON a.employeeno = b.employeeno" \
+	               " WHERE styleno LIKE '%%%%%s%%%%' ORDER BY time desc"%( styleno )
 	target_list = Raw.query_all()
 	if target_list != False:
 		for target in target_list:

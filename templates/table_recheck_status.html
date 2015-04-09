@@ -100,7 +100,7 @@
                 <table style="width:100%" id="tar" class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th id="table_title" style="text-align: center" colspan="8"></th>
+                            <th id="table_title" style="text-align: center" colspan="9"></th>
                         </tr>
                         <tr>
                             <th>工号</th>
@@ -109,6 +109,7 @@
                             <th>完成件数</th>
                             <!-- <th>工价</th> -->
                             <th>工时</th>
+                            <th>套灯模工时</th>
                             <!-- <th>合计完成收入</th> -->
                             <th>合计完成工时</th>
                             <th>实际工作工时</th>
@@ -128,6 +129,7 @@
                                         <!-- <td>{{tt.price}}</td> -->
                                         <td>{{tt.time}}</td>
                                         <!-- <td>{{tt.tincome}}</td> -->
+                                        <td>{{tt.taodengmo}}</td>
                                         <td>{{tt.ttime}}</td>
                                 {% if forloop.first %}
                                     {% ifequal temp.real_time 0 %}
@@ -140,9 +142,8 @@
                                 </tr>
                             {% endfor %}
                             <tr>
-                                <td>合计</td>
-                                <td></td>
-                                <td></td>
+                                <td colspan="4">合计</td>
+                                
                                 <!-- <td>{{temp.total_income}}</td> -->
                                 <td no="{{temp.no}}" class='total_time'>{{temp.total_time}}</td>
                             </tr>
@@ -183,7 +184,7 @@
                     alert("数据错误");
                     return ;
                 }
-                var tar_cell = current.getElementsByTagName('td')[6];
+                var tar_cell = current.getElementsByTagName('td')[7];
                 console.log(tar_cell);
                 tar_cell.innerHTML = real_time;
                 var a = document.createElement('a');
@@ -201,13 +202,13 @@
                         total_time = parseFloat(this.innerHTML);
                     }
                 });
-                current.getElementsByTagName('td')[7].innerHTML = (total_time*100/real_time).toFixed(2)+'%';
+                current.getElementsByTagName('td')[8].innerHTML = (total_time*100/real_time).toFixed(2)+'%';
                 var xml = new XMLHttpRequest();
                 var res = '/update_recheck_efficent/?';
                 res += 'name='+current.getElementsByTagName('td')[1].innerHTML+'&';
                 res += 'no='+current.getElementsByTagName('td')[0].innerHTML+'&';
                 res += 'real_time='+real_time+'&';
-                res += 'efficent='+current.getElementsByTagName('td')[7].innerHTML.slice(0,-1)+'&';
+                res += 'efficent='+current.getElementsByTagName('td')[8].innerHTML.slice(0,-1)+'&';
                 res += 'date='+window.location.search.toString().split('&')[0].split('=')[1];
                 console.log(res);
                 xml.open('GET',res,false);

@@ -195,7 +195,7 @@
         $("tr").each(function(){
             var temp = $(this).find("input.number_input");
             temp.each(function(i){
-                if (i >= (temp.length)/2 && temp.length>=6){
+                if (i >= (temp.length)/2 && temp.length>=4){
                     $(this).number_keyboard({
                         placement:'left',
                         type:'type_with_number_and_point',
@@ -281,7 +281,7 @@
                         $(tb).parents("table:first").addClass("to_sub");
                         var temp = $(tr_last).find(".number_input");
                         temp.each(function(i){
-                            if (i >= (temp.length)/2 && temp.length>=6){
+                            if (i >= (temp.length)/2 && temp.length>=4){
                                 $(this).number_keyboard({
                                     placement:'left',
                                     type:'type_with_number_and_point',

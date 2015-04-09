@@ -143,8 +143,7 @@ def get_check_slowtime( batch ):
 		return 0.0
 	else:
 		ProduceMasterID = target[0]
-		Raw.sql = "select SlowTime from ProduceStyle where produceMasterID = '%s' and WorkName = '检验'".decode(
-			'utf-8' ) % ProduceMasterID
+		Raw.sql = "select SlowTime from ProduceStyle where produceMasterID = '%s' and qcbz = 1" % ProduceMasterID
 		SlowTime = Raw.query_one( 'MSZ' )
 		if SlowTime == False:
 			return 0.0
@@ -513,7 +512,7 @@ def form2_config( request ):
 		else:
 			return HttpResponse( 0 )
 	except Exception,e:
-		print e
+		pass
 
 def delete_type_name( request ):
 	Raw  = Raw_sql()
@@ -557,9 +556,7 @@ def form2_bonus( request ):
 						row['bonus'] = round( ( return_percentage - one[6] ) * one[7], 2 )
 						break
 			except Exception,e:
-				print '===='
-				print e
-				print '======'
+				pass
 			else:
 				Raw.sql = "select type_name, left_range, left_border, right_range, right_border, standard, multiple," \
 			          "return_limit from [BDDMS_MSZ].[dbo].producemaster a, [SKLCC].[dbo].sklcc_form11_config b " \
@@ -589,7 +586,7 @@ def form2_bonus( request ):
 			row['bonus'] = 0 if row['bonus'] < 0 else row['bonus'] * 400
 		return  HttpResponse( simplejson.dumps( bonus, ensure_ascii=False ) )
 	except Exception,e:
-		print e
+		pass
 
 def form2_change_config( request ):
 	try:
@@ -610,7 +607,7 @@ def form2_change_config( request ):
 			Raw.update()
 		return HttpResponse( 1 )
 	except Exception, e:
-		print e
+		pass
 
 # form3
 def get_employee_total_strong_question_count_day( employeeno, date ):
@@ -975,32 +972,31 @@ def get_real_work_time( employeeno, date ):
 def recheck_quality_check( request ):
 	if 14 not in request.session['status']:
 		return HttpResponseRedirect( '/warning/' )
-	html = get_template( 'table_recheck_status.html' )
+	html         = get_template( 'table_recheck_status.html' )
 	employeename = request.session['employee']
-	em_number = request.session['employeeno']
+	em_number    = request.session['employeeno']
 	if 'date' not in request.GET or request.GET['date'] == '':
 		res = []
 		return TemplateResponse( request, html, locals( ) )
 	start = request.GET['date'].replace( '/', '-' )
-	end = request.GET['date'].replace( '/', '-' )
+	end   = request.GET['date'].replace( '/', '-' )
 
 	time_list = get_time_distance_list( start, end )
-	Raw = Raw_sql( )
+	Raw       = Raw_sql( )
 	Raw.sql = '''
-    select recheckor_no,recheckor,total,temp_count.batch,slowtime,slowprice from
+    select distinct recheckor_no,recheckor,total,temp_count.batch,slowtime,slowprice from
     (select recheckor_no,recheckor,batch,sum(samplenumber) total from
     (select  distinct(contentid),recheckor_no,recheckor,batch,samplenumber from sklcc_recheck_info join sklcc_recheck_content
     on sklcc_recheck_info.serialno = sklcc_recheck_content.serialno
     and left(sklcc_recheck_info.createtime,10)>='%s' and left(sklcc_recheck_info.createtime,10)<='%s') x
     group by recheckor_no,recheckor,batch) temp_count,
-    (select batch,slowtime,slowprice from [BDDMS_MSZ].[dbo].ProduceMaster,[BDDMS_MSZ].[dbo].ProduceStyle
-    where [BDDMS_MSZ].[dbo].ProduceStyle.producemasterid = [BDDMS_MSZ].[dbo].ProduceMaster.producemasterid and workname = ''' % (
-	start, end) + "'检验'".decode( 'utf-8' ) + ''') temp_price
+    (select batch,slowtime,slowprice from [BDDMS_MSZ].[dbo].ProduceMaster INNER JOIN [BDDMS_MSZ].[dbo].ProduceStyle
+    ON [BDDMS_MSZ].[dbo].ProduceStyle.producemasterid = [BDDMS_MSZ].[dbo].ProduceMaster.producemasterid WHERE qcbz = 1''' % (
+	start, end ) + ''') temp_price
     where temp_count.batch = temp_price.batch
     order by recheckor_no,temp_count.batch
     '''
 	res = []
-	#print Raw.sql
 	if Raw.query_all( ) != False:
 		for temp in Raw.query_all( ):
 			append_ro_form_7_res( temp[0], temp[1], temp[3], temp[2], temp[5], temp[4], res )
@@ -1022,6 +1018,8 @@ def recheck_quality_check( request ):
 		temp.real_time = get_real_work_time(temp.no,start)
 		temp.real_time = 27000 if temp.real_time == 0 else temp.real_time
 		temp.efficent = round(temp.total_time*100/temp.real_time,2)
+
+
 	return TemplateResponse( request, html, locals( ) )
 
 def update_recheck_efficent( request ):
@@ -1045,14 +1043,22 @@ class form_7_row( ):
 		self.length = 1
 		self.real_time = 0
 		self.efficent = 0
+		self.taodengmototal = 0
 
 	def append( self, batch, count, price, time ):
+		Raw = Raw_sql()
+		Raw.sql = u"SELECT dbo.get_worktime_of_taodengmo( '%s', '套灯模' )"%batch
+		worktime = Raw.query_one()[0]
 		self.res.append(
 			{ 'batch': batch, 'count': count, 'price': price, 'time': time, 'tincome': round( price * count, 2 ),
-			  'ttime': round( count * time, 2 ) } )
+			  'ttime': round( count * time, 2 )+round( count * worktime, 2 ), 'taodengmo': round( worktime, 2 ) } )
 		self.total_income += round( price * count, 2 )
-		self.total_time += round( count * time, 2 )
+		self.total_time += round( count * time, 2 )+round( count * worktime, 2 )
 		self.length += 1
+		self.taodengmototal += round( worktime, 2 )
+
+	def get_batch(self):
+		return [ one['batch'] for one in self.res ]
 
 def append_ro_form_7_res( no, name, batch, count, price, time, res ):
 	exist = False
@@ -1343,7 +1349,7 @@ def recheckor_total_strong_problem( request ):
 		else:
 			return TemplateResponse( request, html, locals() )
 	except Exception,e:
-		print e
+		pass
 
 
 
@@ -1368,7 +1374,6 @@ def return_percentage_by_batch( request ):
 			Raw.sql = "select left( createtime, 10 ), sum( totalreturn ), sum( totalnumber ) from sklcc_record" \
 			          " where batch = '%s' and left( createtime, 10 ) >= '%s' and left( createtime, 10 ) <= '%s'" \
 			          " group by left( createtime, 10 )"%( batch, start, end )
-			print Raw.sql
 			target_list = Raw.query_all()
 
 			if target_list != False:

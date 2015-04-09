@@ -15,11 +15,22 @@
 <script type="text/javascript" src='{% static "js/scripts.js" %}'></script>
 <script type="text/javascript" src='{% static "js/jquery.dataTables.min.js" %}'></script>
 <script type="text/javascript" src='{% static "js/jquery.battatech.excelexport.min.js" %}'></script>
+<script type="text/javascript" src='{% static "js/jquery.cookie.js" %}'></script>
 <!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.min.js" %}'></script>-->
 <!--<script type="text/javascript" src='{% static "js/bootstrap-datetimepicker.zh-CN.js" %}'></script>-->
 <script>
     $(document).ready(function () {
-        
+        console.log($.cookie("bydate") );
+        if ($.cookie("bydate") == "on"){
+            document.getElementById("bydate").checked = true;
+        }
+        $("#bydate").on("click",function(){
+            if (document.getElementById("bydate").checked){
+                $.cookie("bydate","on",{expires:365});
+            }else{
+                $.cookie("bydate","off",{expires:365});
+            }
+        });
          var table = $('#tar').DataTable({
             "oLanguage": {
                 "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
@@ -35,14 +46,47 @@
                     "sLast": " 最后一页 " }
             },
             bPaginate: false
-
         });
-         if (window.location.search.length != 0){
-            var start = window.location.search.split("?")[1].split("&")[0].split("=")[1];
-            var end = window.location.search.split("?")[1].split("&")[1].split("=")[1];
-            $("#start").val(start);
-            $("#end").val(end);
-         }
+        window.onbeforeload = function(){
+            console.log(document.getElementById('bydate').value);
+        }
+        if (window.location.search.length != 0){
+           var start = window.location.search.split("?")[1].split("&")[0].split("=")[1];
+           var end = window.location.search.split("?")[1].split("&")[1].split("=")[1];
+           var styleno = window.location.search.split("?")[1].split("&")[2].split("=")[1];
+           $("#start").val(start);
+           $("#end").val(end);
+           $("#styleno").val(styleno);
+        }else{
+            var date = new Date();
+            var year = date.getFullYear().toString();
+            var month = date.getMonth()+1;
+            if (month<=9){
+                month = '0'+ month.toString();
+            }
+            month = month.toString();
+            var day = date.getDate();
+            if (day<=9){
+                day = '0'+ day.toString();
+            }
+            day = day.toString();
+            $("#start").each(function(){
+            //console.log('-----------------');
+                if (this.getAttribute("type") == "date"){
+                    //console.log((new DateFormat("yy-mm-dd")).toLocaleDateString());
+                    this.value = year+'-'+month+'-'+"01";
+                }
+            });
+            $("#end").each(function(){
+            //console.log('-----------------');
+                if (this.getAttribute("type") == "date"){
+                    //console.log((new DateFormat("yy-mm-dd")).toLocaleDateString());
+                    var  day = new Date(year,month,0);   
+
+                    this.value = year+'-'+month+'-'+day.getDate();
+                }
+            });
+        }
     });
 
 </script>
@@ -52,19 +96,23 @@
 <div class="row clearfix">
     <div class="col-md-12 column">
         <form class="form form-inline" action="/style_measure_check/">
-                    <div class="form-group">
-                        <label for="start">开始日期(含)：</label>
-                        <input class="form-control" id="start" name="start" style="width:200px;" type="date" required='required'>
-                    </div>
-                    <div class="form-group">
-                        <label for="end">结束日期(含)：</label>
-                        <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
-                    </div>
-                    
-                    <button class="btn btn-primary pull-right" type="submit">
-                        查询
-                    </button>
-                </form>
+            <div class="form-group">
+                <label for="start">开始日期(含)：</label>
+                <input class="form-control" id="start" name="start" style="width:200px;" type="date" required='required'>
+            </div>
+            <div class="form-group">
+                <label for="end">结束日期(含)：</label>
+                <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
+            </div>
+            <div class="form-group">
+                <label for="end">款号：</label>
+                <input class="form-control" id="styleno" name="styleno" style="width:200px;" type="text">
+            </div>
+            <input type="checkbox" name="bydate" id="bydate">按日期筛选
+            <button class="btn btn-primary pull-right" type="submit">
+                查询
+            </button>
+        </form>
         <hr/>
         <div class="row clearfix">
             <div class="col-md-12 column">
@@ -113,7 +161,7 @@
                                 <a href="{{temp.url}}#check">进入审批</a>
                                 {% endifequal %}
                                 {% ifequal temp.state 1 %}
-                                <a href="{{temp.url}}">查看</a>
+                                <a href="{{temp.url}}#check">查看</a>
                                 {% endifequal %}
                                 
                                 

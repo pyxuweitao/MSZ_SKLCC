@@ -206,6 +206,9 @@ function initiallize() {
     document.getElementById("hint_program").innerHTML = '';
     document.getElementById("hint_employee").innerHTML = '';
     document.getElementById("scan_input").focus();
+    $("button.messenger-close").each(function(){
+        this.disabled = false;
+    });
 }
 
 function bind_to_size() {
@@ -251,24 +254,27 @@ function flush_info() {
         error: function (err,info) {
             if (info == "timeout"){
                 Messenger().post({
+                    //showCloseButton: true,
                     message: "网络状况不良，请重试",
-                    hideAfter: 1000000,
-                    showCloseButton: true
+                    hideAfter: 2,
+                    type:"error"
                     //hideOnNavigate: true
                 });
             }else{
                 if (err.status == "500"){
                     Messenger().post({
+                        //showCloseButton: true,
                         message: "服务器出错，请点击刷新按钮刷新页面",
-                        hideAfter: 1000000,
-                        showCloseButton: true
+                        hideAfter: 2,
+                        type:"error"
                     //hideOnNavigate: true
                     });
                 }else{
                     Messenger().post({
+                        //showCloseButton: true,
                         message: "网络状况不良，请重试",
-                        hideAfter: 1000000,
-                        showCloseButton: true
+                        hideAfter: 2,
+                        type:"error"
                         //hideOnNavigate: true
                     });
                 }
@@ -522,17 +528,18 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&styleno='+xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
         tabs[8].appendChild(iframe);
-        iframe.onload = function () {
+        //iframe.onload = function () {
             flush_state_info(xmlDoc);
-        };
-        activate();
+        //};
+        
         flush_catalog_mistake(xmlDoc);
         flush_catalog_program(xmlDoc);
+        activate();
         console.log(xmlDoc.getElementsByTagName('measure'));
     } else if (state[0].getAttribute("value") == '3') {
         alert('已提交，暂时无法编辑');
@@ -548,22 +555,22 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&href='+Math.random();
+        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&styleno='+xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue+'&href='+Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
         tabs[8].appendChild(iframe);
 
         alert('条码已扫描过，进入继续编辑');
-        iframe.onload = function () {
+        //iframe.onload = function () {
             flush_state_info(xmlDoc);
-        }
+        //}
         //flush_state_info(xmlDoc);
         flush_catalog_mistake(xmlDoc);
         flush_catalog_program(xmlDoc);
         //flush_style_measure(xmlDoc);
         //flush_style_measure_history(xmlDoc);
-        activate();
+        
         var record = xmlDoc.getElementsByTagName("Record");
         for (var i = 0; i < record.length; i++) {
             res_count[i] = record[i].getAttribute("number");
@@ -575,6 +582,7 @@ function build_page(info) {
             res_employeeno[i] = record[i].getAttribute('employeeno');
         }
         flush_status();
+        activate();
 
     } else if (state[0].getAttribute('value') == '5') {
         alert('尺寸测量数据量达不到要求，请进行尺寸测量');
@@ -783,6 +791,12 @@ function flush_state_info(xmlDoc) {
 
     ele = xmlDoc.getElementsByTagName('scan_package_id');
     id1 = document.getElementById("scan_package_id");
+    id1.innerHTML = ele[0].firstChild.nodeValue;
+    id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
+    //id1.style.fontSize = '10px';
+
+    ele = xmlDoc.getElementsByTagName('scan_styleno');
+    id1 = document.getElementById("scan_styleno");
     id1.innerHTML = ele[0].firstChild.nodeValue;
     id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
     //id1.style.fontSize = '10px';
@@ -1229,6 +1243,7 @@ function OnCommit() {
     submit();
 }
 var last_code ;
+var commit_cache = [];
 function submit() {
     if ($.trim(document.getElementById("hint_program").innerHTML) != "" &&
         $.trim(document.getElementById("hint_employee").innerHTML) != "" &&
@@ -1251,6 +1266,7 @@ function submit() {
         return;
     }
     resultxml += 'batch=' + document.getElementById('scan_id').innerHTML + '&';
+    resultxml += 'styleno=' + document.getElementById('scan_styleno').innerHTML + '&';
     resultxml += 'size=' + document.getElementById('scan_model').innerHTML + '&';
     resultxml += 'count=' + document.getElementById('scan_count').innerHTML + '&';
     resultxml += 'group=' + document.getElementById('scan_group').innerHTML + '&';
@@ -1280,13 +1296,89 @@ function submit() {
     //resultxml += JSON.stringify(json);
     //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
-    last_code = $.trim(document.getElementById('scan_input').value);
-    $.ajax({
+    last_code = $.trim(document.getElementById('scan_input').value)+"";
+    // var aj = $.ajax({
+    //     url: '/commit_res/',
+    //     type: 'POST',
+    //     data: resultxml,
+    //     success: function () {
+    //         return last_code+"提交成功";
+    //         clear_cache(last_code);
+    //         Messenger().post({
+    //             message: last_code+"提交成功",
+    //             hideAfter: 1,
+    //             hideOnNavigate: true
+    //         });
+    //     },
+    //     error: function (err,info) {
+    //         if (info == "timeout"){
+    //             return last_code+":网络状况不良，请重试";
+    //             Messenger().post({
+    //                 type:"error",
+    //                 message: last_code+":网络状况不良，请重试",
+    //                 hideAfter: 1000000,
+    //                 showCloseButton: true,
+    //                 actions:{
+    //                     cancel:{
+    //                         label:'重试'
+    //                     }
+
+    //                 }
+    //             });
+    //         }else{
+    //             if (err.status == '500'){
+    //                 return last_code+":服务器出错";
+    //                 Messenger().post({
+    //                     type:"error",
+    //                     message: last_code+":服务器出错",
+    //                     hideAfter: 1000000,
+    //                     showCloseButton: true
+    //                 });
+    //             }else{
+    //                 return last_code+":网络状况不良，请重试";
+    //                 Messenger().post({
+                        
+    //                     type:"error",
+    //                     message: last_code+":网络状况不良，请重试",
+    //                     hideAfter: 1000000,
+    //                     showCloseButton: true
+    //                 });
+    //             }
+    //         }
+
+    //     },
+    //     timeout: 15000,
+    //     async: true
+    // });
+    var x = function(){
+        var last_code = resultxml.split("&")[0].split("=")[1];
+        var msg = Messenger().run({
+            action: $.ajax,
+            successMessage: last_code+'提交成功',
+            errorMessage: last_code+'提交失败',
+            progressMessage: '提交中...',
+            showCloseButton:true,
+            
+        },
+    {
         url: '/commit_res/',
         type: 'POST',
         data: resultxml,
         success: function () {
-            
+            return {
+                action: $.ajax,
+                message:last_code+"提交成功",
+                hideAfter:1
+                // actions:{
+                //     retry:{
+                //         label: "重新提交",
+                //         action: function(){
+                //             return 0;
+                //         }
+                //     }
+                // }
+            };
+            //clear_cache(last_code);
             Messenger().post({
                 message: last_code+"提交成功",
                 hideAfter: 1,
@@ -1294,26 +1386,92 @@ function submit() {
             });
         },
         error: function (err,info) {
+            //Messenger().hideAll();
             if (info == "timeout"){
-
+                //return last_code+"网络状况不良，请重试";
+                return {
+                    action: $.ajax,
+                    //successMessage: '提交成功',
+                    message: last_code+'网络状况不良，请重试',
+                    //progressMessage: '提交中...',
+                    hideAfter:10000,
+                    showCloseButton:true,
+                    actions:{
+                        retry:{
+                            label: "重新提交",
+                            action: function(){
+                                x();
+                                msg.hide();
+                                //return x();
+                            }
+                        }
+                    }
+                    
+                };
                 Messenger().post({
                     type:"error",
-                    message: last_code+"网络状况不良，请重试",
+                    message: last_code+":网络状况不良，请重试",
                     hideAfter: 1000000,
-                    showCloseButton: true
+                    showCloseButton: true,
+
+                    actions:{
+                        cancel:{
+                            label:'重试'
+                        }
+
+                    }
                 });
             }else{
                 if (err.status == '500'){
+                    //return last_code+"服务器出错，请重试";
+                    return {
+                    action: $.ajax,
+                    //successMessage: '提交成功',
+                    message: last_code+'服务器出错，请重试',
+                    //progressMessage: '提交中...',
+                    hideAfter:10000,
+                    showCloseButton:true,
+                    actions:{
+                        retry:{
+                            label: "重新提交",
+                            action: function(){
+                                x();
+                                msg.hide();
+                                //return x();
+                            }
+                        }
+                    }
+                };
                     Messenger().post({
                         type:"error",
-                        message: last_code+"服务器出错",
+                        message: last_code+":服务器出错",
                         hideAfter: 1000000,
                         showCloseButton: true
                     });
                 }else{
+                    //return last_code + "网络状况不良，请重试";
+                    return {
+                    action: $.ajax,
+                    //successMessage: '提交成功',
+                    message: last_code+'网络状况不良，请重试',
+                    //progressMessage: '提交中...',
+                    hideAfter:10000,
+                    showCloseButton:true,
+                    actions:{
+                        retry:{
+                            label: "重新提交",
+                            action: function(){
+                                x();
+                                msg.hide();
+                                //return x();
+                            }
+                        }
+                    }
+                };
                     Messenger().post({
+                        
                         type:"error",
-                        message: last_code+"网络状况不良，请重试",
+                        message: last_code+":网络状况不良，请重试",
                         hideAfter: 1000000,
                         showCloseButton: true
                     });
@@ -1323,7 +1481,10 @@ function submit() {
         },
         timeout: 15000,
         async: true
-    });
+    }
+    );
+    }
+    x();
     initiallize();
     /*
      xmlhttp.onload = function(e) {
@@ -1356,7 +1517,14 @@ function submit() {
 
 
 }
-
+function clear_cache(codenumber){
+    for (var i=0;i<commit_cache.length;i++){
+        if (commit_cache[i].codenumber == codenumber){
+            alert();
+            commit_cache.splice(i,1); 
+        }
+    }
+}
 function OnClickClear() {
     if (current_edit_index != -1) {
         alert('请修改完记录后再添加');

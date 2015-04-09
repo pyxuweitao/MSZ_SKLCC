@@ -282,17 +282,25 @@ def written_into_sklcc_effciency( ):
 			recheckor_list.append( { 'employeeno': employeeno, 'employee': find_em_name( employeeno ) } )
 
 	Raw.sql = '''select recheckor_no, recheckor, sum( total * slowtime )  from
-				( select recheckor, recheckor_no, batch, sum( samplenumber ) total from sklcc_recheck_info a join sklcc_recheck_content b
+				( select distinct recheckor, recheckor_no, batch, sum( samplenumber ) total from sklcc_recheck_info a join sklcc_recheck_content b
 					on  a.serialno = b.serialno  where left( a.createtime, 10 ) = '%s' group by batch, recheckor, recheckor_no ) recheck,
-				( select batch, slowtime from [BDDMS_MSZ].[dbo].ProduceMaster, [BDDMS_MSZ].[dbo].ProduceStyle
-					where [BDDMS_MSZ].[dbo].ProduceStyle.producemasterid = [BDDMS_MSZ].[dbo].ProduceMaster.producemasterid and workname = ''' % date + "'检验'".decode(
-		'utf-8' ) + ''') produce where produce.batch = recheck.batch group by recheckor_no, recheckor'''
+				( select distinct batch, slowtime from [BDDMS_MSZ].[dbo].ProduceMaster, [BDDMS_MSZ].[dbo].ProduceStyle
+					where [BDDMS_MSZ].[dbo].ProduceStyle.producemasterid = [BDDMS_MSZ].[dbo].ProduceMaster.producemasterid and qcbz = 1 ''' % date  + ''') produce where produce.batch = recheck.batch group by recheckor_no, recheckor'''
 	res_list = Raw.query_all( )
 	if res_list != False:
 		for res in res_list:
 			recheckor_no = res[0]
+			Raw.sql   = u"""select SUM(samplenumber) * ( SELECT dbo.get_worktime_of_taodengmo( a.batch, '套灯模' ) ), a.batch
+							from sklcc_recheck_info a join sklcc_recheck_content b ON a.serialno = b.serialno
+							WHERE recheckor_no = '%s' AND left( a.createtime, 10 ) = '%s'
+							GROUP BY a.batch"""%( recheckor_no, date )
+			worktime_taodengmo = Raw.query_one()
+			if worktime_taodengmo != False:
+				worktime_taodengmo = reduce( lambda x,y:x+y, [one[0] for one in Raw.query_all()] )
+			else:
+				worktime_taodengmo = 0
 			recheckor = res[1]
-			work_time = res[2]
+			work_time = res[2] + worktime_taodengmo
 			Raw.sql = "insert into sklcc_effciency( employeeno, employee, date, work_time, real_work_time, effciency )" \
 			          "values( '%s', '%s', '%s', %f, %f, %f )" % (
 			          recheckor_no, recheckor, date, work_time, real_work_time,
@@ -385,7 +393,7 @@ class timer( threading.Thread ):
 						timesend( departmentno, '300', content, '1', '0' )
 				except Exception, e:
 					make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) + '(EQ)' )
-			if timenow == '14:28':
+			if timenow == "20:00":
 				try:
 					written_into_sklcc_effciency( )
 				except Exception, e:
@@ -762,7 +770,7 @@ def get_info( barcode_num, inspector_no ):
 	T = Current_time( )
 	today = T.get_date( )
 
-	Raw.sql = "SELECT TOP 1 b.inspector_no, b.state FROM [SKLCC].DBO.sklcc_info a JOIN [SKLCC].DBO.sklcc_record b" \
+	Raw.sql = "SELECT TOP 1 b.inspector_no, b.state FROM [SKLCC].DBO.sklcc_info a WITH(NOLOCK) JOIN [SKLCC].DBO.sklcc_record b" \
 	          " WITH(NOLOCK) ON a.serialno = b.serialno WHERE barcode = '%s'" % barcode_num
 	target = Raw.query_one( )
 
@@ -781,7 +789,7 @@ def get_info( barcode_num, inspector_no ):
 	barcode = int( barcode_num[0:5] )
 	packno  = int( barcode_num[6:10] )
 	Raw.sql = """SELECT TOP 1 a.Batch, a.DepartmentNo, a.number, a.styleno, b.packid, b.size, b.number, a.producemasterid
-	 FROM ProduceMaster a JOIN producepack b WITH (NOLOCK) ON a.producemasterid = b.producemasterid
+	 FROM ProduceMaster a WITH(NOLOCK) JOIN producepack b WITH (NOLOCK) ON a.producemasterid = b.producemasterid
 	  WHERE Barcode = SUBSTRING('%s',1,5) AND FormState = '审核' AND packno = SUBSTRING( '%s', 6, 5 )"""%( barcode_num, barcode_num )
 	target_mas = Raw.query_one( 'MSZ' )
 	#if cannot find this barcode, return state = 0 | can find, return state = 1 | can find in info table and can be edited, state = 2 | can find in info table but cannot be edited, state = 3
@@ -861,7 +869,7 @@ def get_partition_table( request ):
 	batch = request.GET['batch']
 	size  = request.GET['size']
 	contentid = request.GET['contentid'] if 'contentid' in request.GET else False
-	styleno = batch.split('-')[0]
+	styleno = get_styleno_by_batch(batch)
 	Raw.sql = "select distinct size from sklcc_style_measure where styleno = '%s' and state = 1" % styleno
 
 	target_list = Raw.query_all( )
@@ -870,7 +878,6 @@ def get_partition_table( request ):
 			Raw.sql = "select partition, common_difference, symmetry, measure_res from sklcc_style_measure where measure_or_not" \
 			          " = 1 and size = '%s' and styleno = '%s' and state = 1 order by serial" % ( size, styleno )
 			partition_list = Raw.query_all( )
-
 			if partition_list != False:
 				xml += """<ME>"""
 				for partition in partition_list:
@@ -879,7 +886,7 @@ def get_partition_table( request ):
 				xml += """</ME>"""
 
 	if contentid != False:
-		res_list = get_inspector_measure_data( request.session['employeeno'], today, batch, size, contentid=contentid )
+		res_list = get_inspector_measure_data( request.session['employeeno'], today, batch, size, contentid=contentid, styleno=styleno )
 		xml += """<MERC>"""
 		for one in res_list:
 			xml += """<RE>"""
@@ -921,18 +928,6 @@ def update_info( request ):
 		if info_ini['state'] == 6:
 			return HttpResponse( """<xml><info><state value = "6"></state></info></xml>""" )
 
-		# Raw.sql = "select serialno, measure_count from sklcc_measure_record where inspector_no = '%s' and left( createtime, 10 ) = '%s' and " \
-		#           "batch = '%s' and size = '%s'" % ( inspector_no, today, info_ini['batch'], info_ini['size'] )
-		# target = Raw.query_one( )
-		#
-		# if target == False:
-		# 	serialno = uuid.uuid1( )
-		# 	createtime = T.time_str
-		# 	written_into_measure_record(
-		# 		dict( serialno = serialno, createtime = createtime, inspector_no = inspector_no, inspector = inspector,
-		# 		      batch = info_ini['batch'], styleno = info_ini['styleno'], size = info_ini['size'],
-		# 		      measure_count = 0 ) )
-		#get_info return False refers to not finish measuring task today
 
 		xml += """<xml>"""
 		xml += """<info>"""
@@ -953,6 +948,7 @@ def update_info( request ):
 		xml += """<scan_model>%s</scan_model>""" % info_ini['size']
 		xml += """<scan_total_number>%s</scan_total_number>""" % info_ini['total_number']
 		xml += """<scan_package_id>%s</scan_package_id>""" % info_ini['packno']
+		xml += """<scan_styleno>%s</scan_styleno>"""%info_ini['styleno']
 		xml += """<scan_measure_count>0</scan_measure_count>"""
 		xml += """</info>"""
 
@@ -979,7 +975,7 @@ def update_info( request ):
 
 		#最初直接从packproc表中获取工序对应的员工姓名，因为两张表producestyle和producepackproc有关数据大多数情况下同步，但会有少数情况
 		#存在有变动的情况修改了style表但是packproc表没有同步，但是员工姓名仍然存在于packproc表，所以变动查询方法 改动的时候没有
-		Raw.sql = "select a.worklineno, a.workname, b.employee, b.employeeno from producestyle a left" \
+		Raw.sql = "select a.worklineno, a.workname, b.employee, b.employeeno from producestyle a WITH (NOLOCK) left" \
 		          " join producepackproc b WITH (NOLOCK) on a.worklineno = b.worklineno " \
 		          "where a.producemasterid = '%s' and b.packid = '%s' and a.FlowInfoID<>'CF0E3C88-DB2F-4608-888B-5A19BA6FA7DC'" \
 		          " order by a.worklineno" % ( info_ini['masterid'], info_ini['packid'] )
@@ -1012,7 +1008,7 @@ def update_info( request ):
 		if info_ini['state'] == 2:
 			xml += "<RC>"
 			Raw.sql = "select a.serialno, a.employeeno, a.workname, a.workno, a.questionname, a.questionno, a.returnno," \
-			          " a.employee, a.number_pack  from sklcc_info a join sklcc_record b on a.serialno = b.serialno" \
+			          " a.employee, a.number_pack  from sklcc_info a WITH(NOLOCK) join sklcc_record b WITH(NOLOCK) on a.serialno = b.serialno" \
 			          " where barcode = '%s' and a.batch = '%s' and b.inspector_no = '%s'" % ( barcode, info_ini['batch'], inspector_no )
 			res_list = Raw.query_all( )
 			returnno_sum = 0
@@ -1029,7 +1025,7 @@ def update_info( request ):
 				xml += """<Record workname = "%s" workno = "%d" question ="%s" questionno = "%d" number = "%d" employee = "%s" employeeno = "%s"/>""" % (
 				info_one[2], info_one[3], info_one[4], info_one[5], info_one[6], info_one[7], info_one[1] )
 				#cause will be delete in info table, so update in Table table
-				Raw.sql = "select returnno from sklcc_table where serialno = '%s' and employeeno = '%s' and questionno = %d" % (
+				Raw.sql = "select returnno from sklcc_table WITH(NOLOCK) where serialno = '%s' and employeeno = '%s' and questionno = %d" % (
 					info_one[0], info_one[1], info_one[5] )
 				Table_target = Raw.query_one( )
 				returnno     = Table_target[0] - info_one[6]
@@ -1046,7 +1042,7 @@ def update_info( request ):
 
 				#update record table
 
-			Raw.sql = "select totalnumber, totalreturn from sklcc_record where serialno = '%s'" % serialno
+			Raw.sql = "select totalnumber, totalreturn from sklcc_record WITH(NOLOCK) where serialno = '%s'" % serialno
 			Record_target = Raw.query_one( )
 			totalnumber   = Record_target[0]
 			totalnumber  -= number_pack
@@ -1377,6 +1373,7 @@ def commit_res( request ):
 		insert_info['inspector_no'] = request.POST.get( 'inspectorno' )
 		insert_info['check_id']     = request.POST.get( 'type' )
 		insert_info['size']         = request.POST.get('size')
+		insert_info['styleno']      = request.POST.get('styleno')
 		insert_info['res']          = list( )
 		totalreturn                 = 0
 		json  = simplejson.loads( request.POST.get( 'res_json' ) )
@@ -1384,7 +1381,7 @@ def commit_res( request ):
 		today = T.get_date( )
 
 		Raw.sql = "SELECT TOP 1 * FROM sklcc_style_measure " \
-		          "WHERE styleno = '%s' AND SIZE = '%s' "%( insert_info['batch'].split('-')[0], insert_info['size'] )
+		          "WHERE styleno = '%s' AND SIZE = '%s' "%( insert_info['styleno'], insert_info['size'] )
 		target  = Raw.query_one()
 		if target != False:
 			Raw.sql = "select serialno, measure_count from sklcc_measure_record where inspector_no = '%s' " \
@@ -1396,7 +1393,7 @@ def commit_res( request ):
 				createtime = T.time_str
 				written_into_measure_record(
 					dict( serialno = serialno, createtime = createtime, inspector_no = insert_info['inspector_no'],
-					    inspector = insert_info['inspector'], batch = insert_info['batch'], styleno = insert_info['batch'].split('-')[0], size = insert_info['size'],
+					    inspector = insert_info['inspector'], batch = insert_info['batch'], styleno = insert_info['styleno'], size = insert_info['size'],
 				         measure_count = 0, departmentno = insert_info['departmentno'] ) )
 
 		Raw.sql = u"select serialno from sklcc_record where state = 2 and batch = '%s' and inspector_no = '%s' and" \
@@ -1457,7 +1454,7 @@ def commit_res( request ):
 		          " values( '%s',  %d, %d, %d, '%s', %d )" % ( insert_info['serialno'] , 0, 1, 0, unicode(uuid.uuid1()), 0 )
 		else:
 			SQL += u"update sklcc_record set totalnumber = dbo.get_totalnumber_by_serialno( '%s' )," \
-			       u" totalreturn = (SELECT sum( returnno ) FROM sklcc_table WHERE serialno =  '%s' ) " \
+			       u" totalreturn = (SELECT COALESCE(SUM( returnno ),0) FROM sklcc_table WHERE serialno =  '%s' ) " \
 			       u"where serialno = '%s';" % (
 			       insert_info['serialno'], insert_info['serialno'], insert_info['serialno'] )
 		Raw.sql = SQL
@@ -2294,11 +2291,12 @@ def recheck( request ):
 
 
 def get_size_by_batch( employeeno, batch ):
-	Raw = Raw_sql( )
-	Raw.sql = """select DISTINCT size from sklcc_style_measure where styleno = '%s' and state = 1""" % ( batch.split( '-' )[0])
+	Raw     = Raw_sql( )
+	styleno = get_styleno_by_batch( batch )
+	Raw.sql = """select DISTINCT size from sklcc_style_measure WITH (NOLOCK) where styleno = '%s' and state = 1""" % ( styleno )
 	target_list = Raw.query_all( )
 	size_list = []
-	Raw.sql = "select distinct size, serialno from sklcc_measure_record where inspector_no = '%s' and" \
+	Raw.sql = "select distinct size, serialno from sklcc_measure_record WITH (NOLOCK) where inspector_no = '%s' and" \
 	          " left( createtime, 10 ) = '%s' and batch = '%s' and is_first_check = 0"%( employeeno, Current_time.get_now_date(), batch )
 	size_list_scaned = []
 	res_list = Raw.query_all()
@@ -2365,7 +2363,7 @@ def flush_buttons_recheck( request ):
 		size_list_temp = []
 		serialno = ""
 		if contentid != False:
-			Raw.sql = "select workno, workname, questionname, questionno, returnno from sklcc_recheck_content where" \
+			Raw.sql = "select workno, workname, questionname, questionno, returnno from sklcc_recheck_content WITH (NOLOCK) where" \
 			          " contentid = '%s'" % contentid
 			RC_list = Raw.query_all( )
 			if RC_list != False:
@@ -2376,7 +2374,7 @@ def flush_buttons_recheck( request ):
 				xml += "</RC>"
 
 
-			Raw.sql = "select TOP 1 samplenumber, totalnumber, inspector_no from sklcc_recheck_content a join sklcc_recheck_info b on a.serialno = b.serialno where contentid = '%s'" % contentid
+			Raw.sql = "select TOP 1 samplenumber, totalnumber, inspector_no from sklcc_recheck_content a WITH (NOLOCK) join sklcc_recheck_info b WITH (NOLOCK) on a.serialno = b.serialno where contentid = '%s'" % contentid
 			target = Raw.query_one( )
 			samplenumber = 0
 			totalnumber  = 0
@@ -2394,7 +2392,7 @@ def flush_buttons_recheck( request ):
 			xml += """</IF>"""
 
 
-			Raw.sql = "SELECT TOP 1 b.size, a.serialno FROM sklcc_measure_info a JOIN sklcc_measure_record b ON a.serialno = b.serialno" \
+			Raw.sql = "SELECT TOP 1 b.size, a.serialno FROM sklcc_measure_info a WITH (NOLOCK) JOIN sklcc_measure_record b WITH (NOLOCK) ON a.serialno = b.serialno" \
 			          " WHERE a.contentid = '%s'"%contentid
 			target  = Raw.query_one()
 			if target != False:
@@ -3712,8 +3710,7 @@ def get_worktime_by_batch( batch ):
 	target = Raw.query_one( 'MSZ' )
 	if target != False:
 		producemasterid = target[0]
-		Raw.sql = "select slowtime from ProduceStyle WITH (NOLOCK) where producemasterid = '%s' and workname = " % producemasterid + "'检验'".decode(
-			'utf-8' )
+		Raw.sql = "select slowtime from ProduceStyle WITH (NOLOCK) where producemasterid = '%s' and qcbz = 1" % producemasterid
 		temp = Raw.query_one( 'MSZ' )
 		if temp != False:
 			res = float( temp[0] )

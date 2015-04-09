@@ -55668,3 +55668,123 @@
 	第1块电子屏打开电子屏失败
 The current date/time is: Mon Mar 30 18:01:13 2015
 	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 12:00:08 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 12:00:08 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 12:01:10 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 12:01:10 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 12:02:08 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 12:02:08 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 12:03:08 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 12:03:08 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 12:04:08 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 12:04:08 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 15:00:50 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 15:00:50 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 15:01:50 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 15:01:50 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 15:02:50 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 15:02:50 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 15:03:50 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 15:03:50 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 15:04:50 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 15:04:50 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 18:00:32 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 18:00:32 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 18:01:32 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 18:01:32 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 18:02:32 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 18:02:32 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 18:03:32 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 18:03:32 2015
+	第1块电子屏发送失败
+The current date/time is: Wed Apr 01 18:04:32 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Wed Apr 01 18:04:32 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 12:00:14 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 12:00:14 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 12:01:14 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 12:01:14 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 12:02:12 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 12:02:12 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 12:03:12 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 12:03:12 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 12:04:12 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 12:04:12 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 15:00:58 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 15:00:58 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 15:01:58 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 15:01:58 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 15:02:58 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 15:02:58 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 15:03:58 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 15:03:58 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 15:04:58 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 15:04:58 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 18:00:40 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 18:00:40 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 18:01:40 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 18:01:40 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 18:02:40 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 18:02:40 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 18:03:40 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 18:03:40 2015
+	第1块电子屏发送失败
+The current date/time is: Thu Apr 09 18:04:40 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Thu Apr 09 18:04:40 2015
+	第1块电子屏发送失败
