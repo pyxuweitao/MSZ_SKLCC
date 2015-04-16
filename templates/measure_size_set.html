@@ -478,7 +478,8 @@
             for (var i = 3; i < set_res.length; i++) {
                 res.push({
                     'size': size_map[i - 3],
-                    'data': $.trim(set_res[i].value) != '' ? $.trim(set_res[i].value) : null
+                    'data': $.trim(set_res[i].value) != '' ? parseFloat($.trim(set_res[i].value)) : null,
+                    'size_index':i-3
                 });
             }
             partions.push({
@@ -749,7 +750,7 @@
                     <td value = "{{temp.common}}">
                         <!-- <input class="table-input" value="{{temp.common}}"/> -->
                         <select name="" id="">
-                            <option value=""></optionn>
+                            <option value=""></option>
                             <option >0.1</option>
                             <option >0.2</option>
                             <option >0.3</option>
@@ -765,12 +766,27 @@
                             <option >1.3</option>
                             <option >1.4</option>
                             <option >1.5</option>
+                            <option >1.6</option>
+                            <option >1.7</option>
+                            <option >1.8</option>
+                            <option >1.9</option>
+                            <option >2.0</option>
+                            <option >2.1</option>
+                            <option >2.2</option>
+                            <option >2.3</option>
+                            <option >2.4</option>
+                            <option >2.5</option>
+                            <option >2.6</option>
+                            <option >2.7</option>
+                            <option >2.8</option>
+                            <option >2.9</option>
+                            <option >3.0</option>
                         </select>
                     </td>
                     <td value = "{{temp.common}}">
                         <!-- <input class="table-input" value="{{temp.common}}"/> -->
                         <select name="" id="">
-                            <option value=""></optionn>
+                            <option value=""></option>
                             <option >0.1</option>
                             <option >0.2</option>
                             <option >0.3</option>
@@ -786,6 +802,21 @@
                             <option >1.3</option>
                             <option >1.4</option>
                             <option >1.5</option>
+                            <option >1.6</option>
+                            <option >1.7</option>
+                            <option >1.8</option>
+                            <option >1.9</option>
+                            <option >2.0</option>
+                            <option >2.1</option>
+                            <option >2.2</option>
+                            <option >2.3</option>
+                            <option >2.4</option>
+                            <option >2.5</option>
+                            <option >2.6</option>
+                            <option >2.7</option>
+                            <option >2.8</option>
+                            <option >2.9</option>
+                            <option >3.0</option>
                         </select>
                     </td>
                     <td value = "{{temp.symmetry}}">

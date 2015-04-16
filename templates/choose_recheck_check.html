@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}一检查看汇总{% endblock %}
+{% block title %}二检审批{% endblock %}
 
 {% block staticfiles %}
 {% load staticfiles %}
@@ -20,16 +20,25 @@
     function submit(input) {
         var xmlhttp = new XMLHttpRequest();
         console.log(input);
-        if (input.parentNode.getElementsByTagName('td')[1].innerHTML != '部位测量'){
-            xmlhttp.open("GET", '/pass_recheck_table/?serialno='+input.getAttribute('no'), false);
-            xmlhttp.setRequestHeader("Content-type", "text/xml");
-            xmlhttp.send();
-        }else{
-            xmlhttp.open("GET", '/pass_table?code=' + input.getAttribute("no")+'&is_measure='+1, false);
-            xmlhttp.setRequestHeader("Content-type", "text/xml");
-            xmlhttp.send();
-        }
+        xmlhttp.open("GET", '/pass_recheck_table/?serialno='+input+"&state=1", false);
+        xmlhttp.setRequestHeader("Content-type", "text/xml");
+        xmlhttp.send();
+        //if (input.parentNode.getElementsByTagName('td')[1].innerHTML != '部位测量'){
+        //    
+        //}else{
+        //    xmlhttp.open("GET", '/pass_table?code=' + input.getAttribute("no")+'&is_measure='+1, false);
+        //    xmlhttp.setRequestHeader("Content-type", "text/xml");
+        //    xmlhttp.send();
+        //}
         
+    }
+    function reject(input) {
+       var xmlhttp = new XMLHttpRequest();
+        console.log(input);
+        xmlhttp.open("GET", '/pass_recheck_table/?serialno='+input+"&state=2", false);
+        xmlhttp.setRequestHeader("Content-type", "text/xml");
+        xmlhttp.send();
+       
     }
     window.onload = function () {
         var table = $('#tar').DataTable({
@@ -95,13 +104,13 @@
     var received = 0;
     function pass_all(){
         $("a.to_submit").each(function(){
-            submit(this.parentNode);
+            submit(this.parentNode.getAttribute("no"));
         });
         window.location.reload(1);
     }
     function pass_selected(){
         $("tr.selected").each(function(){
-            submit(this.getElementsByTagName('td')[8]);
+            submit(this.getElementsByTagName('td')[8].getAttribute("no"));
         });
         window.location.reload(1);
     }
@@ -123,6 +132,7 @@
                 <th>状态</th>
                 <th>批号</th>
                 <th>一检检验员</th>
+                <th>二检检验员</th>
                 <th>批量/样本量(检验次数)</th>
                 <th>返工数</th>
                 <th>操作</th>
@@ -146,6 +156,7 @@
                 <td>{{temp.batch}}</td>
                 {% ifequal temp.check_id 0 %}
                 <td>{{temp.inspector}}</td>
+                <td>{{temp.recheckor}}</td>
                 <td>{{temp.batchnumber}}/{{ temp.totalnumber }}{{ temp.check_type }}</td>
                 <td>{{temp.totalreturn}}</td>
                 {% else %}
@@ -157,6 +168,8 @@
                     <a href="{{ temp.url }}" target="_blank">查看</a>/
                     <a href="#" class="to_submit"
                        onclick="submit(this.parentNode.getAttribute('no'));window.location.reload(1);">通过</a>/
+                    <a href="#" class="reject"
+                       onclick="reject(this.parentNode.getAttribute('no'));window.location.reload(1);">退回</a>/
                 </td>
             </tr>
             {% endfor %}
@@ -187,6 +200,7 @@
                 <td>{{ temp.batch }}</td>
                 {% ifequal temp.check_id 0 %}
                 <td>{{temp.inspector}}</td>
+                <td>{{temp.recheckor}}</td>
                 <td>{{temp.batchnumber}}/{{ temp.totalnumber }}{{ temp.check_type }}</td>
                 <td>{{temp.totalreturn}}</td>
                 {% else %}
@@ -201,6 +215,7 @@
             {% endfor %}
             </tbody>
             <tfoot>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>

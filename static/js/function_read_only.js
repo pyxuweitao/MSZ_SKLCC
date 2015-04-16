@@ -19,7 +19,16 @@ window.onbeforeunload = function () {
         opener.location.reload(true);
     }
 };
-
+function flush_barcode(n){
+     var domparser = new DOMParser();
+    var xmlDoc = domparser.parseFromString(n, 'text/xml');
+    var list = xmlDoc.getElementsByTagName("barcode");
+    var temp = "";
+    for (var i = 0;i<list.length;i++){
+        temp += list[i].getAttribute("code")+',';
+    }
+    document.getElementById("barcode").innerHTML = temp;
+}
 var xmlfile = "<?xml version='1.0'?><xml><info><group>XX组</group><count>50</count><date>2014-4-2</date><no>SGG-333</no><inspector>李某某</inspector><inspector_no>检验员工号</inspector_no></info><RC><record2 name='致命03' no='23' employee_name='陆恺' employee_no='11' count='4' program_no='10' program_name='工序10' /><record0 name='轻微01' no='01' employee_name='赵某' employee_no='01' count='1' program_no='01' program_name='工序1' /><record0 name='轻微02' no='02' employee_name='钱某' employee_no='02' count='3' program_no='02' program_name='工序2' /><record0 name='轻微03' no='03' employee_name='孙某' employee_no='03' count='5' program_no='03' program_name='工序3' /><record1 name='严重01' no='11' employee_name='李某某' employee_no='04' count='7' program_no='04' program_name='工序4' /><record1 name='严重02' no='12' employee_name='钱某' employee_no='05' count='3' program_no='02' program_name='工序2' /><record1 name='严重03' no='13' employee_name='吴某' employee_no='06' count='4' program_no='05' program_name='工序5' /><record1 name='严重04' no='14' employee_name='郑某' employee_no='07' count='5' program_no='06' program_name='工序6' /><record1 name='严重05' no='15' employee_name='王某' employee_no='08' count='2' program_no='07' program_name='工序7' /><record2 name='致命01' no='21' employee_name='徐维涛' employee_no='09' count='1' program_no='08' program_name='工序8' /><record2 name='致命02' no='22' employee_name='陈旭山' employee_no='10' count='3' program_no='09' program_name='工序9' /><record2 name='致命04' no='24' employee_name='是朕' employee_no='12' count='6' program_no='11' program_name='工序11' /><record2 name='致命04' no='24' employee_name='陆恺' employee_no='11' count='4' program_no='10' program_name='工序10' /></RC></xml>";
 window.onload = function () {
 
@@ -29,7 +38,7 @@ window.onload = function () {
             xmlfile = xmlhttp.responseText.toString();
             xmlfile = xmlfile.replace(/unknown/g, '未知');
             build_page(xmlfile);
-
+            flush_barcode(xmlfile);
         }
     };
     var code = window.location.hash.toString();

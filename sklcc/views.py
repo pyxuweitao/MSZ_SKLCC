@@ -118,6 +118,7 @@ class Record_info:
 	check_id = ""
 	check_type = ""
 	batchnumber = 0
+	recheckor = ""
 
 
 class Record_number_off:
@@ -393,7 +394,7 @@ class timer( threading.Thread ):
 						timesend( departmentno, '300', content, '1', '0' )
 				except Exception, e:
 					make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) + '(EQ)' )
-			if timenow == "20:00":
+			if timenow == "21:00":
 				try:
 					written_into_sklcc_effciency( )
 				except Exception, e:
@@ -766,8 +767,8 @@ def url_dataentry( request ):
 
 
 def get_info( barcode_num, inspector_no ):
-	Raw = Raw_sql( )
-	T = Current_time( )
+	Raw   = Raw_sql( )
+	T     = Current_time( )
 	today = T.get_date( )
 
 	Raw.sql = "SELECT TOP 1 b.inspector_no, b.state FROM [SKLCC].DBO.sklcc_info a WITH(NOLOCK) JOIN [SKLCC].DBO.sklcc_record b" \
@@ -913,6 +914,9 @@ def update_info( request ):
 		inspector_no = request.session['employeeno']
 		barcode      = request.GET['code']
 		info_ini     = get_info( barcode, inspector_no )
+		# for i in range(5):
+		# 	print 2
+		# 	time.sleep(5)
 		xml          = """"""
 		if info_ini['state'] == 0:
 			xml += """<state value = "0"></state></info></xml>"""
@@ -1014,6 +1018,7 @@ def update_info( request ):
 			returnno_sum = 0
 			number_pack  = info_ini['number_pack']
 			serialno     = res_list[0][0]
+
 			for info_one in res_list:
 				if info_one[6] == 0:
 					xml += """</RC>"""
@@ -1062,7 +1067,7 @@ def update_info( request ):
 		xml += """</xml>"""
 		return HttpResponse( xml )
 	except Exception, e:
-		make_log( e )
+		make_log( sys._getframe( ).f_code.co_name + ">>>" +  e  )
 
 def update_info_new_but_slow( request ):
 	try:
@@ -1078,7 +1083,7 @@ def update_info_new_but_slow( request ):
 		Raw.update( )
 		return HttpResponse( xml )
 	except Exception, e:
-		make_log( e )
+		make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) )
 
 
 def get_employee( request ):
@@ -1359,12 +1364,12 @@ def get_measure_res( styleno, partition ):
 		return 0
 
 def commit_res( request ):
+	SQL = ""
 	try:
 		reload( sys )
 		sys.setdefaultencoding( 'utf-8' )
 		Raw = Raw_sql( )
 		insert_info = dict( )
-		SQL = ""
 		insert_info['barcode']      = request.POST.get( 'codenumber' )
 		insert_info['batch']        = request.POST.get( 'batch' )
 		insert_info['number_pack']  = int( request.POST.get( 'count' ) )
@@ -1459,87 +1464,15 @@ def commit_res( request ):
 			       insert_info['serialno'], insert_info['serialno'], insert_info['serialno'] )
 		Raw.sql = SQL
 		Raw.update( )
-		return HttpResponse( )
+		#返回检验员当前批号总产量 防止出现漏刷情况
+		Raw.sql = "SELECT totalnumber FROM sklcc_record WHERE serialno = '%s'"%insert_info['serialno']
+		totalnumber = Raw.query_one()
+		totalnumber = 0 if totalnumber == False else totalnumber[0]
+		return HttpResponse( totalnumber )
 
 	except Exception, e:
-		make_log(e)
+		make_log("commit_res" + unicode(e) + unicode(SQL) )
 
-def commit_res_old( request ):
-	try:
-		reload( sys )
-		sys.setdefaultencoding( 'utf-8' )
-		barcode = request.POST.get( 'codenumber' )
-		batch = request.POST.get( 'batch' )
-		number_pack = int( request.POST.get( 'count' ) )
-		departmentno = request.POST.get( 'group' )
-		inspector = request.POST.get( 'inspectorname' )
-		inspector_no = request.POST.get( 'inspectorno' )
-		check_id = request.POST.get( 'type' )
-		check_id = request.POST.get( 'type' )
-		res = request.POST.get( 'xml' )
-		root = ElementTree.fromstring( res )
-		node = root.getiterator( "re" )
-		styleno = batch.split( '-' )[0]
-		size = request.POST['size'] if 'size' in request.POST else ""
-		temp = temp_Info( )
-		T = Current_time( )
-		Raw = Raw_sql( )
-		today = T.get_date( )
-
-		Raw.sql = "select serialno from sklcc_record where state = 2 and batch = '%s' and inspector_no = '%s' and check_id = '%s' and left( createtime, 10 ) = '%s'" % (
-		batch, inspector_no, check_id, today )
-		target = Raw.query_one( )
-		if target == False:
-			serialno = str( uuid.uuid1( ) )
-		else:
-			serialno = target[0]
-
-
-		#if not any question in a box, also need to save data in database
-		if len( node ) == 0:
-			temp = written_info_in_database( serialno = serialno, batch = batch, number_pack = number_pack,
-			                                 check_id = check_id, departmentno = departmentno,
-			                                 inspector_no = inspector_no, inspector = inspector, barcode = barcode,
-			                                 request = request )
-		else:
-			#unique employeeno, unique prog
-			for node_t in node:
-				workno = int( node_t.attrib['prog'] )
-				question = int( node_t.attrib['mist'] )
-				returnno = int( node_t.attrib['count'] )
-				employee = node_t.attrib['employee']
-				employeeno = node_t.attrib['employeeno']
-
-				#to do:make written_record_in_database out of the for loop
-				temp = written_info_in_database( serialno, barcode, check_id, batch, departmentno, workno, question,
-				                                 number_pack, returnno, inspector_no, inspector, employeeno, employee )
-
-				#written_record_in_database( temp )
-				written_table_in_database( temp )
-		written_record_in_database( temp )
-		written_return_check_in_datebase( temp.serialno )
-
-		T = Current_time( )
-		Raw = Raw_sql( )
-		Raw.sql = "select EQ_return_percentage from sklcc_config"
-		EQ_return_percentage = 0.0
-		target_list = Raw.query_all( )
-		if target_list != False:
-			EQ_return_percentage = target_list[0][0]
-
-		return_percentage = get_return_percentage( temp.departmentno, T.get_date( ) ) * 100
-		mes = str( return_percentage ) + '%'
-		if ( return_percentage - EQ_return_percentage ) > 1e-6:
-			message = '当前返修率过高@@@返修率:%s@@@当前统计数据截止到%s#0' % ( mes, T.get_time( )[0:8] )
-			imsend( temp.departmentno, '300', message.decode( 'utf-8' ), '1', '0' )
-
-		if inspector_no != request.session['employeeno']:
-			update_all_state_to( temp.serialno, 1 )
-		return HttpResponse( )
-	except Exception, e:
-		make_log(
-			sys._getframe( ).f_code.co_name + ">>>" + str( e ) + '|' + str( request.POST.get( 'codenumber' ) ) + '|' +
-			request.session['employee'] + '|' )
 
 
 def get_check_type( check_id ):
@@ -1752,6 +1685,11 @@ def tables_xml( record ):
 	xml += """<check_type>%s</check_type>""" % record['check_type']
 	xml += """</info>"""
 
+	barcode_list = get_all_barcode_by_serialno(record['serialno'])
+	xml += """<CODE>"""
+	for barcode in barcode_list:
+		xml += """<barcode code='%s' />"""%barcode
+	xml += """</CODE>"""
 	if record['totalreturn'] == 0:
 		xml += """</xml>"""
 		return xml
@@ -1776,6 +1714,7 @@ def tables_xml( record ):
 	xml += xml_bad
 	xml += xml_strong
 	xml += """</RC>"""
+
 	xml += """</xml>"""
 
 	return xml
@@ -1839,16 +1778,20 @@ def tables( request ):
 		return HttpResponseRedirect( '/warning/' )
 
 
+
+
 #tables in /choose/
 def update_table( request ):
-	state = int( request.GET['state'] )
-	username = request.session['username']
+	state       = int( request.GET['state'] )
+	username    = request.session['username']
 	record_list = find_record_state_is( state, username, 2, 0 )
 	xml = """"""
+
 	try:
 		for record in record_list:
 			if request.GET['code'] == record['serialno']:
 				xml = tables_xml( record )
+
 	except Exception, e:
 		make_log( e )
 	return HttpResponse( xml )
@@ -1870,10 +1813,10 @@ def update_table_check( request ):
 		if target != False:
 			record = dict( )
 			record['departmentno'] = target[0]
-			record['totalreturn'] = target[7]
-			record['totalnumber'] = target[1]
-			record['createtime'] = target[2]
-			record['batch'] = target[3]
+			record['totalreturn']  = target[7]
+			record['totalnumber']  = target[1]
+			record['createtime']   = target[2]
+			record['batch']        = target[3]
 			record['inspector'] = target[4]
 			record['inspector_no'] = target[5]
 			record['check_type'] = target[6]
@@ -2723,6 +2666,7 @@ def find_recheck_info_help_function( Raw_Sql, authorityid_in_use ):
 			record.strong = 0
 			record.weak = 0
 			record.batchnumber = 0
+			record.recheckor = recheckor
 			#normal_check 0 partition_measure 1
 			record.check_id = 0
 			Raw = Raw_sql( )
@@ -3097,11 +3041,16 @@ def pass_gather_recheck_table( request ):
 
 
 def pass_recheck_table( request ):
+	"""
+	二检审批提交结论
+	:param request:serialno 流水号 state:[ 2 | 1 ] [不通过|通过]
+	"""
 	serialno = request.GET['serialno']
-	Raw = Raw_sql( )
-	Raw.sql = "update sklcc_recheck_info set state = 1 where serialno = '%s'" % serialno
+	state    = request.GET['state']
+	Raw     = Raw_sql( )
+	Raw.sql = "update sklcc_recheck_info set state = %d where serialno = '%s'" % ( int(state), serialno )
 	Raw.update( )
-	T = Current_time( )
+	T       = Current_time( )
 	Raw.sql = "update sklcc_recheck_info set leader = '%s', leader_no = '%s', assesstime = '%s'" % (
 	request.session['employee'], request.session['employeeno'], T.time_str )
 	Raw.update( )
@@ -3865,7 +3814,7 @@ def return_check( request ):
 
 	return_check_list = []
 	Raw = Raw_sql()
-	Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.check_type, re.totalreturn, re.inspector_no, re.inspector,
+	Raw.sql = """SELECT distinct c.serialno, re.batch, re.createtime, re.check_type, re.totalreturn, re.inspector_no, re.inspector,
 						c.real_return, c.assesstime, re.totalnumber, c.ok, c.state, c.inner_serialno
  					FROM
  					(SELECT * FROM sklcc_record WHERE left( createtime, 10 ) >= '%s'
@@ -4033,7 +3982,7 @@ def return_check_check( request ):
 	return_check_list = []
 	if len( departmentno_list ) != 0:
 		departmentno_str = reduce( lambda x,y:unicode(x)+','+unicode(y), departmentno_list )
-		Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.totalreturn, re.inspector_no, re.inspector,
+		Raw.sql = """SELECT distinct c.serialno, re.batch, re.createtime, re.totalreturn, re.inspector_no, re.inspector,
 							c.real_return, c.assesstime, re.totalnumber, c.ok, c.state, re.check_type, c.inner_serialno
  	    				FROM
  	    				(SELECT * FROM sklcc_record WHERE left( createtime, 10 ) >= '%s'
@@ -4092,7 +4041,7 @@ def recheck_return_check( request ):
 	distance            = get_time_distance_list( start, end )
 	Raw = Raw_sql( )
 	return_check_list = []
-	Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.recheckor, re.recheckor_no,
+	Raw.sql = """SELECT distinct c.serialno, re.batch, re.createtime, re.recheckor, re.recheckor_no,
 						c.real_return, c.assesstime, c.ok, c.state, c.inner_serialno
  					FROM
  					(SELECT * FROM sklcc_recheck_info WHERE left( createtime, 10 ) >= '%s'
@@ -4152,7 +4101,7 @@ def recheck_return_check_check( request ):
 	return_check_list = []
 	if len( departmentno_list ) != 0:
 		departmentno_str = reduce( lambda x,y:unicode(x)+','+unicode(y), departmentno_list )
-		Raw.sql = """SELECT c.serialno, re.batch, re.createtime, re.recheckor_no, re.recheckor,
+		Raw.sql = """SELECT distinct c.serialno, re.batch, re.createtime, re.recheckor_no, re.recheckor,
 							c.real_return, c.assesstime, c.ok, c.state, c.inner_serialno
  	    				FROM
  	    				(SELECT * FROM sklcc_recheck_info WHERE left( createtime, 10 ) >= '%s'

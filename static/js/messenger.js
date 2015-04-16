@@ -1022,6 +1022,7 @@ window.Messenger.Events = (function() {
       }
       handlers = {};
       _.each(['error', 'success'], function(type) {
+         _this.options.hideAfter = 3;
         var originalHandler;
         originalHandler = opts[type];
         return handlers[type] = function() {
@@ -1062,7 +1063,7 @@ window.Messenger.Events = (function() {
           if (typeof ((_ref7 = msgOpts.retry) != null ? _ref7.allow : void 0) === 'number') {
             msgOpts.retry.allow--;
           }
-          if (type === 'error' && (xhr != null ? xhr.status : void 0) >= 500 && ((_ref8 = msgOpts.retry) != null ? _ref8.allow : void 0)) {
+          if (type === 'error' && (xhr != null ? xhr.status : void 0) != 0 && ((_ref8 = msgOpts.retry) != null ? _ref8.allow : void 0)) {
             if (msgOpts.retry.delay == null) {
               if (msgOpts.errorCount < 4) {
                 msgOpts.retry.delay = 10;
@@ -1079,9 +1080,9 @@ window.Messenger.Events = (function() {
             msgOpts._retryActions = true;
             msgOpts.actions = {
               retry: {
-                label: 'retry now',
+                label: '重试',
                 phrase: 'Retrying TIME',
-                auto: msgOpts.retry.auto,
+                //auto: msgOpts.retry.auto,
                 delay: msgOpts.retry.delay,
                 action: function() {
                   msgOpts.messageInstance = msg;
@@ -1091,6 +1092,7 @@ window.Messenger.Events = (function() {
                 }
               },
               cancel: {
+                label: '取消',
                 action: function() {
                   return msg.cancel();
                 }
@@ -1103,6 +1105,7 @@ window.Messenger.Events = (function() {
           }
           msg.update(msgOpts);
           if (responseOpts && msgOpts.message) {
+            _this.options.hideAfter = 3;
             Messenger(_.extend({}, _this.options, {
               instance: _this
             }));

@@ -1,15 +1,13 @@
 __author__ = 'Administrator'
 #*-* coding:utf-8 *-*
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.template.response import TemplateResponse
-from django.template.loader import get_template
+
 import datetime
-import time
 from django.db.transaction import connections
 from django.db import transaction
-import os, sys
 from copy import deepcopy
-
+# import requests
+# import thread
+# import time
 
 class Current_time:
 	time_str = ""
@@ -83,6 +81,7 @@ class Raw_sql:
 			return res
 		except Exception,e:
 			print e
+
 class Employee:
 	employeeno   = ""
 	employee     = ""
@@ -238,9 +237,7 @@ def make_log( log_content ):
 	file.close()
 
 def test( request ):
-	#logging.debug("ok")
-	return HttpResponse(1)
-
+	pass
 
 def get_styleno_by_batch( batch ):
 	"""
@@ -258,7 +255,40 @@ def get_styleno_by_batch( batch ):
 		return "NULL"
 
 	
-
-
-
-
+def get_all_barcode_by_serialno( serialno ):
+	Raw = Raw_sql()
+	Raw.sql = "SELECT distinct barcode FROM sklcc_info WHERE serialno = '%s' ORDER BY barcode"%serialno
+	target_list = Raw.query_all()
+	if target_list != False:
+		return [ barcode[0] for barcode in target_list ]
+	else:
+		return []
+#
+# def get_lock():
+# 	lock = thread.allocate_lock()
+# 	lock.acquire()
+# 	return lock
+#
+# ####################
+# #for tests
+# def test_request( url, para, lock ):
+# 	requests.post(url[0], params = para )
+# 	requests.get(url[1])
+# 	requests.get(url[1])
+# 	lock.release()
+#
+# if __name__=="__main__":
+# 	locks = []
+# 	para  = {"username":"0000","password":"0000"}
+# 	url   = ["http://192.168.135.45:2333/submit_id", "http://192.168.135.45:2333/login"]
+#
+# 	for i in range(400):
+# 		locks.append( get_lock() )
+#
+# 	for i in range(400):
+# 		thread.start_new_thread( test_request,(  url, para, locks[i] ) )
+#
+# 	for i in range(400):
+# 		while locks[i].locked(): pass
+#
+# 	print "all done!"

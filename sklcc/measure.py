@@ -5,9 +5,11 @@ from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.utils import simplejson
 import uuid
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from utilitys import *
 from copy import deepcopy
+import time
+import sys
 #============================================================ measure partiton =================================================
 def toTypehorizon( res ):
 	"""
@@ -151,6 +153,8 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 						res_list.insert( 0, res_list.pop( i ) )
 						return res_list, batch_list
 
+		#Raw.sql = "SELECT distinct size FROM sklcc_style_measure WHERE styleno = '%s' AND size LIKE '%s%%'"%size
+		Raw.query_one()
 		if batch != None:
 			batch_list.insert( 0, { 'model':batch, 'size':size, 'serialno':uuid.uuid1() } )
 			res_list.insert( 0, get_measure_info_by_styleno_and_size( styleno, size ) )
@@ -607,8 +611,8 @@ def style_measure( request ):
 				for target in target_list:
 					temp = { }
 					size_list = []
-					Raw.sql = "select distinct common_difference, symmetry, size, partition, measure_res, measure_or_not, note" \
-					          " from sklcc_style_measure where styleno = '%s' and partition = '%s' order by size" % (
+					Raw.sql = "select distinct common_difference, symmetry, size, partition, measure_res, measure_or_not, note, size_serial" \
+					          " from sklcc_style_measure where styleno = '%s' and partition = '%s' order by size_serial" % (
 					          style.decode( 'utf-8' ), target[0] )
 					info_list = Raw.query_all( )
 					if info_list != False:
@@ -646,11 +650,10 @@ def written_into_style_measure( record ):
 	Raw = Raw_sql( )
 	T   = Current_time( )
 	now = T.time_str
-	#TODO:common_difference
 	Raw.sql = u"insert into sklcc_style_measure( state, employeeno,serial,styleno, common_difference, createtime, symmetry, size, partition, " \
-	          u"measure_res, note, measure_or_not  ) values( 2, '%s', '%d', '%s', '%s', '%s', %f, '%s', '%s', %f, '%s', " % (
+	          u"measure_res, note, size_serial, measure_or_not  ) values( 2, '%s', '%d', '%s', '%s', '%s', %f, '%s', '%s', %f, '%s', %d, " % (
 	          record['employeeno'], record['index'], record['styleno'], record['common_difference'], now, record['symmetry'], record['size'],
-	          record['partition'], record['number'], record['note'] )
+	          record['partition'], record['number'], record['note'], record['size_serial'] )
 	Raw.sql += '1 )' if record['measure_or_not'] == True else '0 )'
 	Raw.update( )
 
@@ -685,8 +688,9 @@ def submit_style_measure( request ):
 			record['common_difference'] = one['common_difference'] if one['common_difference'] != None else 0
 			for temp in one['res']:
 				if temp.has_key( 'size' ):
-					record['size'] = temp['size']
-					record['number'] = float( temp['data'] ) if temp['data'] != None else 0
+					record['size_serial'] = int( temp['size_index'] )
+					record['size']        = temp['size']
+					record['number']      = float( temp['data'] ) if temp['data'] != None else 0
 					written_into_style_measure( record )
 				else:
 					continue

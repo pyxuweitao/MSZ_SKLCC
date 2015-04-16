@@ -59,6 +59,29 @@ function onclickfin(n){
          document.getElementById('change_num').focus();
     }
 }
+function flush_barcode(n){
+     var domparser = new DOMParser();
+    var xmlDoc = domparser.parseFromString(n, 'text/xml');
+    var list = xmlDoc.getElementsByTagName("barcode");
+    var table = document.createElement("table");
+    $(table).addClass("table table-bordered");
+    var temp = document.createElement("tr");
+    for (var i = 0;i<list.length;i++){
+        var x = document.createElement("td");
+        x.innerHTML = list[i].getAttribute("code");
+        temp.appendChild(x);
+        if ((i+1)%7 == 0){
+            table.appendChild(temp);
+            temp = document.createElement("tr");
+        }
+    }
+    if (temp.innerHTML != ""){
+        table.appendChild(temp);
+    }
+    document.getElementById("barcode").innerHTML = "本单包含的条码：<br>"
+    document.getElementById("barcode").appendChild(table);
+    //document.getElementById("barcode").innerHTML = temp;
+}
 window.onload = function () {
     document.getElementsByTagName('body')[0].appendChild(change_num);
     $('#change_num').popover({
@@ -75,6 +98,7 @@ window.onload = function () {
             xmlfile = xmlhttp.responseText.toString();
             xmlfile = xmlfile.replace(/unknown/g, '未知');
             build_page(xmlfile);
+            flush_barcode(xmlfile);
         }
     }
     var code = window.location.hash.toString();

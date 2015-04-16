@@ -273,8 +273,31 @@
                     a.innerHTML = '添加';
                     a.style.cursor = 'pointer';
                     a.onclick = function () {
-                        //$('input.popover_is_shown').click();
-                        var node = this.parentNode.parentNode.cloneNode(1);
+                        $('input.popover_is_shown').click();
+                        
+                        var node = document.createElement("tr");
+                        $(this).parents("tr:first").find("td").each(function(i){
+                            if (i == 0){
+                                var value = "";
+                            }else{
+                                var value = this.getElementsByTagName("input")[0].value;
+                            }
+                            
+                            if (this.getAttribute("colspan") == "2"){
+                                console.log(this.getElementsByTagName("input"));
+                                var input = "<input class='number_input' value='"+value+"'/>";
+                                var td = document.createElement("td");
+                                td.setAttribute("colspan","2");
+                                td.innerHTML = input;
+                                node.appendChild(td);
+                            }else{
+                                 var input = "<input class='number_input' value='"+value+"'/>";
+                                var td = document.createElement("td");
+                                td.setAttribute("colspan","1");
+                                td.innerHTML = input;
+                                node.appendChild(td);
+                            }
+                        });
 
                         tb.appendChild(node);
                         var tr_last = tb.getElementsByTagName("tr")[tb.getElementsByTagName("tr").length-1];

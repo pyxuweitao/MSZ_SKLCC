@@ -988,7 +988,7 @@ def recheck_quality_check( request ):
     (select recheckor_no,recheckor,batch,sum(samplenumber) total from
     (select  distinct(contentid),recheckor_no,recheckor,batch,samplenumber from sklcc_recheck_info join sklcc_recheck_content
     on sklcc_recheck_info.serialno = sklcc_recheck_content.serialno
-    and left(sklcc_recheck_info.createtime,10)>='%s' and left(sklcc_recheck_info.createtime,10)<='%s') x
+    and left(sklcc_recheck_info.createtime,10)>='%s' and left(sklcc_recheck_info.createtime,10)<='%s' and state = 1) x
     group by recheckor_no,recheckor,batch) temp_count,
     (select batch,slowtime,slowprice from [BDDMS_MSZ].[dbo].ProduceMaster INNER JOIN [BDDMS_MSZ].[dbo].ProduceStyle
     ON [BDDMS_MSZ].[dbo].ProduceStyle.producemasterid = [BDDMS_MSZ].[dbo].ProduceMaster.producemasterid WHERE qcbz = 1''' % (

@@ -2,6 +2,7 @@
 需要引入bootstrap 3的相关文件和jQuery后使用
 */
 (function() {
+
     jQuery.fn.number_keyboard = function(opt_in) {
         var opts = jQuery.extend({}, jQuery.fn.number_keyboard.defaults, opt_in);
         //console.log(opts);
@@ -47,6 +48,79 @@
         placement: "auto",
         viewport:"body"
     };
+    jQuery.fn.number_keyboard.insert = function (myField, myValue) 
+    {
+        //IE support
+        if (document.selection) 
+        {
+            myField.focus();
+            sel            = document.selection.createRange();
+            sel.text    = myValue;
+            sel.select();
+        }
+        //MOZILLA/NETSCAPE support
+        else if (myField.selectionStart || myField.selectionStart == '0') 
+        {
+            var startPos    = myField.selectionStart;
+            var endPos        = myField.selectionEnd;
+            // save scrollTop before insert
+            var restoreTop    = myField.scrollTop;
+            myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+            if (restoreTop > 0)
+            {
+                // restore previous scrollTop
+                myField.scrollTop = restoreTop;
+            }
+            myField.focus();
+            myField.selectionStart    = startPos + myValue.length;
+            myField.selectionEnd    = startPos + myValue.length;
+        } else {
+            myField.value += myValue;
+            myField.focus();
+        }
+    }
+    jQuery.fn.number_keyboard.del = function (myField) 
+    {
+        //IE support
+        var myValue = "";
+        if (document.selection) 
+        {
+            myField.focus();
+            sel            = document.selection.createRange();
+            sel.text    = myValue;
+            sel.select();
+        }
+        //MOZILLA/NETSCAPE support
+        else if (myField.selectionStart || myField.selectionStart == '0') 
+        {
+            var startPos    = myField.selectionStart;
+            var endPos        = myField.selectionEnd;
+            // save scrollTop before insert
+            var restoreTop    = myField.scrollTop;
+            if (startPos == endPos){
+                myField.value    = myField.value.substring(0, startPos-1) + myValue + myField.value.substring(endPos, myField.value.length);
+            }else{
+                myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+            }
+            if (restoreTop > 0)
+            {
+                // restore previous scrollTop
+                myField.scrollTop = restoreTop;
+            }
+            //myField.focus();
+            if (startPos == endPos){
+                myField.selectionStart    = startPos-1;
+                myField.selectionEnd    = startPos -1;
+            }else{
+                myField.selectionStart    = startPos;
+                myField.selectionEnd    = startPos;
+            }
+            
+        } else {
+            myField.value += myValue;
+            myField.focus();
+        }
+    }
     jQuery.fn.number_keyboard.handle = {
         on_show: function(e) {
             $("input.number_keyboard_shown").popover("hide");
@@ -62,13 +136,14 @@
         },
         on_number_click: function(e) {
             $("input.number_keyboard_shown").each(function() {
-                this.value += $.trim(e.target.innerHTML);
+                jQuery.fn.number_keyboard.insert(this,$.trim(e.target.innerHTML));
+                //this.value += $.trim(e.target.innerHTML);
                 this.focus();
             });
         },
         on_delete_click: function(e) {
             $("input.number_keyboard_shown").each(function() {
-                this.value = this.value.slice(0, -1);
+                jQuery.fn.number_keyboard.del(this);
                 this.focus();
                 $(this).triggerHandler("backspace.number_keyboard");
             });

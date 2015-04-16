@@ -1297,192 +1297,34 @@ function submit() {
     //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
     last_code = $.trim(document.getElementById('scan_input').value)+"";
-    // var aj = $.ajax({
-    //     url: '/commit_res/',
-    //     type: 'POST',
-    //     data: resultxml,
-    //     success: function () {
-    //         return last_code+"提交成功";
-    //         clear_cache(last_code);
-    //         Messenger().post({
-    //             message: last_code+"提交成功",
-    //             hideAfter: 1,
-    //             hideOnNavigate: true
-    //         });
-    //     },
-    //     error: function (err,info) {
-    //         if (info == "timeout"){
-    //             return last_code+":网络状况不良，请重试";
-    //             Messenger().post({
-    //                 type:"error",
-    //                 message: last_code+":网络状况不良，请重试",
-    //                 hideAfter: 1000000,
-    //                 showCloseButton: true,
-    //                 actions:{
-    //                     cancel:{
-    //                         label:'重试'
-    //                     }
-
-    //                 }
-    //             });
-    //         }else{
-    //             if (err.status == '500'){
-    //                 return last_code+":服务器出错";
-    //                 Messenger().post({
-    //                     type:"error",
-    //                     message: last_code+":服务器出错",
-    //                     hideAfter: 1000000,
-    //                     showCloseButton: true
-    //                 });
-    //             }else{
-    //                 return last_code+":网络状况不良，请重试";
-    //                 Messenger().post({
-                        
-    //                     type:"error",
-    //                     message: last_code+":网络状况不良，请重试",
-    //                     hideAfter: 1000000,
-    //                     showCloseButton: true
-    //                 });
-    //             }
-    //         }
-
-    //     },
-    //     timeout: 15000,
-    //     async: true
-    // });
     var x = function(){
         var last_code = resultxml.split("&")[0].split("=")[1];
-        var msg = Messenger().run({
+        var msg = Messenger().run(
+        {
             action: $.ajax,
             successMessage: last_code+'提交成功',
-            errorMessage: last_code+'提交失败',
+            errorMessage: last_code+'网络状况不良',
             progressMessage: '提交中...',
-            showCloseButton:true,
-            
+            hideAfter:3,
+            showCloseButton:true
         },
-    {
-        url: '/commit_res/',
-        type: 'POST',
-        data: resultxml,
-        success: function () {
-            return {
-                action: $.ajax,
-                message:last_code+"提交成功",
-                hideAfter:1
-                // actions:{
-                //     retry:{
-                //         label: "重新提交",
-                //         action: function(){
-                //             return 0;
-                //         }
-                //     }
-                // }
-            };
-            //clear_cache(last_code);
-            Messenger().post({
-                message: last_code+"提交成功",
-                hideAfter: 1,
-                hideOnNavigate: true
-            });
-        },
-        error: function (err,info) {
-            //Messenger().hideAll();
-            if (info == "timeout"){
-                //return last_code+"网络状况不良，请重试";
-                return {
-                    action: $.ajax,
-                    //successMessage: '提交成功',
-                    message: last_code+'网络状况不良，请重试',
-                    //progressMessage: '提交中...',
-                    hideAfter:10000,
-                    showCloseButton:true,
-                    actions:{
-                        retry:{
-                            label: "重新提交",
-                            action: function(){
-                                x();
-                                msg.hide();
-                                //return x();
-                            }
-                        }
-                    }
-                    
-                };
-                Messenger().post({
-                    type:"error",
-                    message: last_code+":网络状况不良，请重试",
-                    hideAfter: 1000000,
-                    showCloseButton: true,
-
-                    actions:{
-                        cancel:{
-                            label:'重试'
-                        }
-
-                    }
-                });
-            }else{
-                if (err.status == '500'){
-                    //return last_code+"服务器出错，请重试";
-                    return {
-                    action: $.ajax,
-                    //successMessage: '提交成功',
-                    message: last_code+'服务器出错，请重试',
-                    //progressMessage: '提交中...',
-                    hideAfter:10000,
-                    showCloseButton:true,
-                    actions:{
-                        retry:{
-                            label: "重新提交",
-                            action: function(){
-                                x();
-                                msg.hide();
-                                //return x();
-                            }
-                        }
-                    }
-                };
-                    Messenger().post({
-                        type:"error",
-                        message: last_code+":服务器出错",
-                        hideAfter: 1000000,
-                        showCloseButton: true
-                    });
-                }else{
-                    //return last_code + "网络状况不良，请重试";
-                    return {
-                    action: $.ajax,
-                    //successMessage: '提交成功',
-                    message: last_code+'网络状况不良，请重试',
-                    //progressMessage: '提交中...',
-                    hideAfter:10000,
-                    showCloseButton:true,
-                    actions:{
-                        retry:{
-                            label: "重新提交",
-                            action: function(){
-                                x();
-                                msg.hide();
-                                //return x();
-                            }
-                        }
-                    }
-                };
-                    Messenger().post({
-                        
-                        type:"error",
-                        message: last_code+":网络状况不良，请重试",
-                        hideAfter: 1000000,
-                        showCloseButton: true
-                    });
+        {
+            url: '/commit_res/',
+            type: 'POST',
+            data: resultxml,
+            success: function (e) {
+                console.dir(e);
+                return last_code+'提交成功，此批号产量为'+e;
+            },
+            error: function (err,info) {
+                if (err.status == "500"){
+                    alert("服务器出错，请报告");
                 }
-            }
-
-        },
-        timeout: 15000,
-        async: true
-    }
-    );
+                return ;
+            },
+            timeout: 15000,
+            async: true
+        });
     }
     x();
     initiallize();
