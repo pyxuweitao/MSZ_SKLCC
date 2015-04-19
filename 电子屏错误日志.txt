@@ -56488,3 +56488,15 @@
 	第1块电子屏打开电子屏失败
 The current date/time is: Thu Apr 16 12:04:05 2015
 	第1块电子屏发送失败
+The current date/time is: Fri Apr 17 15:00:06 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Fri Apr 17 15:00:06 2015
+	第1块电子屏发送失败
+The current date/time is: Fri Apr 17 15:01:04 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Fri Apr 17 15:01:04 2015
+	第1块电子屏发送失败
+The current date/time is: Fri Apr 17 15:02:04 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Fri Apr 17 15:02:04 2015
+	第1块电子屏发送失败

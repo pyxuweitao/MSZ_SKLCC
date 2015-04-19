@@ -236,8 +236,6 @@ def make_log( log_content ):
 	file.write( log.encode('utf-8') )
 	file.close()
 
-def test( request ):
-	pass
 
 def get_styleno_by_batch( batch ):
 	"""
@@ -292,3 +290,8 @@ def get_all_barcode_by_serialno( serialno ):
 # 		while locks[i].locked(): pass
 #
 # 	print "all done!"
+
+
+
+def test(request):
+	return

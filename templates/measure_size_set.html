@@ -681,7 +681,58 @@
         }
     </script>
     
-    <div class="col-md-2">
+    <div class="col-md-1">
+        <button id="sync_size" class="btn btn-success" onclick = "return sync_size();"><span class="glyphicon glyphicon-refresh"></span> 同步</button>
+    </div>
+    <script>
+        function sync_size () {
+            $.ajax({
+                url:'/sync_size/',
+                success:function(e){
+                    for (var i = 0;i<e.length;i++){
+                        var exist = false;
+                        $("a.remove_col").each(function(){
+                            if ($.trim(this.parentNode.getElementsByTagName("input")[0].value) == e[i]){
+                                exist = true;
+                            }
+                        });
+                        console.log(exist);
+                        if (!exist){
+                            var has_empty = false;
+                            //$("#add_column").trigger("click");
+                            $("#tar").find("thead").find("input").each(function(){
+                                if (this.value == ""){
+                                    has_empty = true;
+                                    this.value = e[i];
+                                    return false;
+                                }
+                            });
+                            if (!has_empty){
+                                $("#add_column").trigger("click");
+                                $("#tar").find("thead").find("input").each(function(){
+                                    if (this.value == ""){
+                                        has_empty = true;
+                                        this.value = e[i];
+                                        return false;
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+                error:function(e){
+                    alert("错误，请重试");
+                },
+                data:{
+                    styleno:document.getElementById("style_input").value
+                },
+                async:false,
+                cache:false,
+                dataType:"json"
+            });
+        }
+    </script>
+    <div class="col-md-1">
         
     </div>
     <div class="col-md-1">

@@ -131,19 +131,22 @@ def get_inspector_measure_data( inspector_no, date, batch = None, size = None, c
 		            0 if measure_force_recheck else 1, 'contentid, ' if measure_force_recheck else "" )
 		raw_data = Raw.query_all()
 		if raw_data != False:
-			for i, data in enumerate( raw_data ):
+			i = 0
+			for data in raw_data:
 				if  { 'model':data[1], 'size':data[3], 'serialno': data[10] } not in batch_list:
 					batch_list.append( { 'model':data[1], 'size':data[3], 'serialno':data[10] } )
 					res_list.append( get_measure_info_by_styleno_and_size( data[2], data[3] ) )
-
+					i = 0
 				#因为res_list新增的尾部列表中的dict按styleno, size,partition排过序，所以此处的Partition必为第0个dict
 				partition_no = len( res_list[-1] )
 				if partition_no == 0:
+					i += 1
 					continue
 				if data[9] == 1:
 					res_list[-1][i % partition_no]['data'].append( [ data[6], data[7] ] )
 				else:
 					res_list[-1][i % partition_no ]['data'].append( [data[5]] )
+				i += 1
 
 			if batch != None:
 
@@ -228,7 +231,6 @@ def written_into_measure_record( info, is_first_check = 'True' ):
 	Raw.update()
 
 def measure_commit( request ):
-	start = time.clock()
 	try:
 		Raw             = Raw_sql()
 		T               = Current_time()
@@ -698,3 +700,30 @@ def submit_style_measure( request ):
 		return HttpResponse( '1' )
 	except Exception, e:
 		make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) )
+
+
+def sync_size( request ):
+	try:
+		reload(sys)
+		sys.setdefaultencoding("utf-8")
+		styleno = request.GET.get("styleno")
+		Raw     = Raw_sql()
+		size_list = []
+		Raw.sql = """
+						select isnull(size1, '')+'@'+isnull(size2, '')+'@'+isnull(size3, '')+'@'+isnull(size4, '')+'@'+isnull(size5, '')
+						+'@'+isnull(size6, '')+'@'+isnull(size7, '') +'@'+isnull(size8, '')+'@'+isnull(size9, '')+'@'+isnull(size9, '')
+						+'@'+isnull(size10, '') +'@'+isnull(size11, '')+'@'+isnull(size12,'')+'@'+isnull(size13, '')+'@'+isnull(size14, '')
+						+'@'+isnull(size15,'')+'@'+isnull(size16, '')+'@'+isnull(size17, '')+'@'+isnull(size18, '')+'@'+isnull(size19, '')
+						+'@'+isnull(size20, '')+'@'+isnull(size21, '')+'@'+isnull(size22, '')+'@'+isnull(size23, '')+'@'+isnull(size24, '')
+						+'@'+isnull(size25, '')+'@'+isnull(size26, '')+'@'+isnull(size27, '')+'@'+isnull(size28, '')+'@'+isnull(size29, '')
+						+'@'+isnull(size30, '')+'@'+isnull(size31, '')+'@'+isnull(size32, '')+'@'+isnull(size33, '')+'@'+isnull(size34, '')
+						+'@'+isnull(size35, '')+'@'+isnull(size36, '')+'@'+isnull(size37, '')+'@'+isnull(size38, '')+'@'+isnull(size39, '')
+						+'@'+isnull(size40, '') from dbo.StyleInfo WHERE StyleNo = '%s'"""%(styleno)
+		target = Raw.query_one('MSZ')
+
+		if target != False:
+			all_size = target[0]
+			size_list = [ size for size in all_size.split("@") if len( size ) != 0 and len( size.strip() ) != 0 ]
+		return HttpResponse(simplejson.dumps( size_list, ensure_ascii=False ))
+	except Exception,e:
+		pass
