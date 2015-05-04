@@ -37,8 +37,8 @@
       <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sklcc/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5609398" vertical-offset="25194" max-vertical-offset="95427">
-              <caret line="1112" column="17" selection-start-line="1112" selection-start-column="17" selection-end-line="1112" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.33333334" vertical-offset="25194" max-vertical-offset="95427">
+              <caret line="1108" column="0" selection-start-line="1108" selection-start-column="0" selection-end-line="1108" selection-end-column="0" />
               <folding>
                 <element signature="e#57#124#0" expanded="true" />
                 <marker date="1430706627557" expanded="true" signature="5338:5413" placeholder="select depar..sklcc_department..." />
@@ -1042,7 +1042,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39918116" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32930845" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19873817" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19873817" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34595162" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2482,8 +2482,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5609398" vertical-offset="25194" max-vertical-offset="95427">
-          <caret line="1112" column="17" selection-start-line="1112" selection-start-column="17" selection-end-line="1112" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="25194" max-vertical-offset="95427">
+          <caret line="1108" column="0" selection-start-line="1108" selection-start-column="0" selection-end-line="1108" selection-end-column="0" />
           <folding>
             <element signature="e#57#124#0" expanded="true" />
             <marker date="1430706627557" expanded="true" signature="5338:5413" placeholder="select depar..sklcc_department..." />
