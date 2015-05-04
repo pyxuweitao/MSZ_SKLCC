@@ -1297,6 +1297,50 @@ function submit() {
     //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
     last_code = $.trim(document.getElementById('scan_input').value)+"";
+    if(!window.localStorage){
+        alert("此浏览器不支持本地存储，提示功能可能无法使用")
+    }
+    function insert_into_history(){
+        var list = window.localStorage["dataentry_history"].split(";");
+        var found = false;
+        for (var i = 0;i<list.length;i++){
+            if (list[i] == last_code){
+                found = true;
+                break;
+            }
+        }
+        if (!found){
+            window.localStorage["dataentry_history"] += ';'+last_code;
+        }
+    }
+    if (window.localStorage["dataentry_history"] != undefined){
+        insert_into_history()
+    }else{
+        window.localStorage["dataentry_history"] = '';
+        insert_into_history()
+    }
+    function delete_from_history (code) {
+        var list = window.localStorage["dataentry_history"].split(";");
+        window.localStorage["dataentry_history"] = "";
+        var found = false;
+        for (var i = 0;i<list.length;i++){
+            if (list[i] != code && list[i] != ""){
+                window.localStorage["dataentry_history"] += ";"+list[i];
+            }
+        }
+        
+    }
+    function read_history() {
+        var list = window.localStorage["dataentry_history"].split(";");
+        var hint_str = "";
+        for (var i = 0;i<list.length;i++){
+            if (list[i] != last_code && list[i] != ""){
+                if(confirm("检测到"+list[i]+"未提交成功，该条码提交成功了吗？")){
+                    delete_from_history(list[i]);
+                }
+            }
+        }
+    }
     var x = function(){
         var last_code = resultxml.split("&")[0].split("=")[1];
         var msg = Messenger().run(
@@ -1313,10 +1357,12 @@ function submit() {
             type: 'POST',
             data: resultxml,
             success: function (e) {
-                console.dir(e);
-                return last_code+'提交成功，此批号产量为'+e;
+                delete_from_history(e.split(";")[1]);
+                read_history();
+                return last_code+'提交成功，此批号产量为'+e.split(";")[0];
             },
             error: function (err,info) {
+                read_history();
                 if (err.status == "500"){
                     alert("服务器出错，请报告");
                 }
@@ -1326,6 +1372,7 @@ function submit() {
             async: true
         });
     }
+
     x();
     initiallize();
     /*

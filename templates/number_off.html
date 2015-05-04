@@ -36,6 +36,7 @@
     function reset_hint() {
         document.getElementById('hint_employee').innerHTML = '';
         document.getElementById('hint_mistake').innerHTML = '';
+        $("#number").val(1);
         search_employee_input.value = '';
     }
     window.onload = function () {
@@ -284,7 +285,50 @@
             <a class="btn  btn-default "
                onclick="return OnClickSearchDel()" id="numdelete" style="width:50px">删除
             </a>
+            <a class="btn  btn-default "
+               onclick="return quality_employee()" id="numdelete" style="width:50px">质量用
+            </a>
         </div>
+        <script>
+            function quality_employee(){
+                if (number.id == 'search_employee_input') {
+            //alert('sss');
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('GET', '/get_employee/?group=&no=00', false);
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var parnode = search_employee_input.parentNode;
+                    if (xmlhttp.responseText.toString().split('@')[0] == '1') {
+
+                        parnode.innerHTML = '<a>' + xmlhttp.responseText.toString().split('@')[1] + '</a>';
+                        parnode.setAttribute('no', search_employee_input.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input);
+                            search_employee_input.focus();
+                        };
+                        search_employee_input.value = '';
+                    } else if (xmlhttp.responseText.toString() == '0') {
+                        parnode.innerHTML = '<a>' + search_employee_input.value + '</a>';
+                        parnode.setAttribute('no', search_employee_input.value);
+                        parnode.getElementsByTagName('a')[0].style.cursor = 'pointer';
+                        parnode.getElementsByTagName('a')[0].onclick = function () {
+                            var par = this.parentNode;
+                            this.parentNode.innerHTML = '';
+                            par.appendChild(search_employee_input);
+                            search_employee_input.focus();
+                        };
+                        search_employee_input.value = '';
+
+                    }
+                }
+            };
+            xmlhttp.send();
+        }
+            }
+        </script>
     </div>
 </div>
 
@@ -426,7 +470,7 @@
                             onclick="return OnClickMinus()">-
                     </button>
                     <input class="form-control" type="text"
-                           style="height:30px;width:35px ;text-align: center;display: inline"
+                           style="height:30px;width:45px ;text-align: center;display: inline"
                            value='1'
                            id="number" onfocus="number = this"/>
                     <button class="btn btn-default" style="height:30px;display: inline; width:30px;margin-right: 0px"
@@ -485,7 +529,7 @@
             flush_status();
         }
         function OnClickInsert() {
-            if (document.getElementById('hint_employee').innerText == '' || document.getElementById('hint_mistake').innerText == '') {
+            if ($.trim(document.getElementById('hint_employee').innerText) == '' || $.trim(document.getElementById('hint_mistake').innerText) == '') {
                 alert('请选择责任人和疵点之后添加');
                 return;
             }

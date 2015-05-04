@@ -93,23 +93,23 @@ class temp_info:
 
 class type_count_three:
 	weak = 0
-	bad = 0
+	bad    = 0
 	strong = 0
 
 
 class Record_info:
-	serialno = ''
-	createtime = ''
-	inspector = ''
+	serialno     = ''
+	createtime   = ''
+	inspector    = ''
 	inspector_no = ''
-	state = 2
-	assessor = ''
-	assessor_no = ''
-	assesstime = ''
-	batch = ''
+	state        = 2
+	assessor     = ''
+	assessor_no  = ''
+	assesstime   = ''
+	batch        = ''
 	departmentno = ''
-	totalnumber = 0
-	totalreturn = 0
+	totalnumber  = 0
+	totalreturn  = 0
 	#add 3 elements
 	weak = 0
 	bad = 0
@@ -914,9 +914,7 @@ def update_info( request ):
 		inspector_no = request.session['employeeno']
 		barcode      = request.GET['code']
 		info_ini     = get_info( barcode, inspector_no )
-		# for i in range(5):
-		# 	print 2
-		# 	time.sleep(5)
+
 		xml          = """"""
 		if info_ini['state'] == 0:
 			xml += """<state value = "0"></state></info></xml>"""
@@ -955,7 +953,6 @@ def update_info( request ):
 		xml += """<scan_styleno>%s</scan_styleno>"""%info_ini['styleno']
 		xml += """<scan_measure_count>0</scan_measure_count>"""
 		xml += """</info>"""
-
 
 
 		###find question
@@ -1008,7 +1005,6 @@ def update_info( request ):
 
 		xml += "</PR>"
 		#if find in info table, add info in xml
-
 		if info_ini['state'] == 2:
 			xml += "<RC>"
 			Raw.sql = "select a.serialno, a.employeeno, a.workname, a.workno, a.questionname, a.questionno, a.returnno," \
@@ -1018,7 +1014,6 @@ def update_info( request ):
 			returnno_sum = 0
 			number_pack  = info_ini['number_pack']
 			serialno     = res_list[0][0]
-
 			for info_one in res_list:
 				if info_one[6] == 0:
 					xml += """</RC>"""
@@ -1037,13 +1032,12 @@ def update_info( request ):
 					#if returnno = 0,then delete it,else update it
 				if returnno == 0:
 					Raw.sql = "delete from sklcc_table where serialno = '%s' and employeeno = '%s' and" \
-					          " questionno = %d" % ( info_one[0], info_one[1], info_one[5] )
+					          " questionno = %d and workno = %d" % ( info_one[0], info_one[1], info_one[5], info_one[3] )
 					Raw.update( )
 				else:
-					Raw.sql = "update sklcc_table set returnno = %d where serialno = '%s' and employeeno = '%s' and questionno = %d" % (
-					returnno, info_one[0], info_one[1], info_one[5] )
+					Raw.sql = "update sklcc_table set returnno = %d where serialno = '%s' and employeeno = '%s' and questionno = %d and workno = %d" % (
+					returnno, info_one[0], info_one[1], info_one[5], info_one[3] )
 					Raw.update( )
-
 
 				#update record table
 
@@ -1059,7 +1053,6 @@ def update_info( request ):
 				Raw.sql = "update sklcc_record set totalreturn = %d, totalnumber = %d where serialno = '%s'" % (
 				totalreturn, totalnumber, serialno )
 			Raw.update( )
-
 				#delete in info table
 			Raw.sql = "delete from sklcc_info where barcode = '%s'" % ( barcode )
 			Raw.update( )
@@ -1067,6 +1060,7 @@ def update_info( request ):
 		xml += """</xml>"""
 		return HttpResponse( xml )
 	except Exception, e:
+		#print e
 		make_log( sys._getframe( ).f_code.co_name + ">>>" +  e  )
 
 def update_info_new_but_slow( request ):
@@ -1464,11 +1458,12 @@ def commit_res( request ):
 			       insert_info['serialno'], insert_info['serialno'], insert_info['serialno'] )
 		Raw.sql = SQL
 		Raw.update( )
-		#返回检验员当前批号总产量 防止出现漏刷情况
-		Raw.sql = "SELECT totalnumber FROM sklcc_record WHERE serialno = '%s'"%insert_info['serialno']
+		#返回检验员当前批号总产量和条码号 防止出现漏刷情况
+		Raw.sql     = "SELECT totalnumber FROM sklcc_record WHERE serialno = '%s'"%insert_info['serialno']
 		totalnumber = Raw.query_one()
 		totalnumber = 0 if totalnumber == False else totalnumber[0]
-		return HttpResponse( totalnumber )
+
+		return HttpResponse( unicode( totalnumber ) + ';' + unicode( insert_info['barcode'] ) )
 
 	except Exception, e:
 		make_log("commit_res" + unicode(e) + unicode(SQL) )
