@@ -162,16 +162,7 @@ def get_bald_price( ):
 		return 0
 
 
-def get_bald_slowtime( ):
-	Raw = Raw_sql( )
 
-	Raw.sql = "SELECT bald_slowtime FROM sklcc_config"
-	target = Raw.query_one( )
-
-	if target != False:
-		return target[0]
-	else:
-		return 0
 
 
 ALL_STRONG_QUESTION = Total_strong()
@@ -1006,7 +997,6 @@ def recheck_quality_check( request ):
     from sklcc_recheck_bald
     where left(createtime,10)>='%s' and left(createtime,10)<='%s') a
     group by recheckor_no,recheckor
-
     ''' % (start, end)
 	if Raw.query_all( ) != False:
 		#bald_price = get_bald_price( )

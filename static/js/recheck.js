@@ -427,10 +427,7 @@ function bind_size_cells() {
                 width: '40px',
                 "background-color": 'transparent'
                     //height:'45px'
-            }).appendTo(tempN).number_keyboard({
-                placement: 'auto',
-                type: "type_with_number_and_point"
-            }).on('blur',function(){
+            }).appendTo(tempN).on('blur',function(){
                 //console.log(patterm_float.test(this.value));
                 if (!patterm_float.test(this.value)){
                     $(this).css({

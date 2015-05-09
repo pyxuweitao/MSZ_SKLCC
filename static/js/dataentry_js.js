@@ -291,7 +291,7 @@ function change_user(account) {
     xml.open('GET', '/logout/?username=' + account + '&no_redirect=True', false);
     xml.onreadystatechange = function () {
         if (xml.readyState == 4 && xml.status == 200) {
-            xml2 = new XMLHttpRequest();
+            xml2 = new XMHttpRequest();
             xml2.onreadystatechange = function () {
                 if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "") {
                     window.location.reload(0);
@@ -1083,17 +1083,47 @@ function OnClickMinus() {
     num.value = number;
 }
 var number;
-
+function change_num_2(myField,myValue){
+    if (document.selection) 
+    {
+        myField.focus();
+        sel            = document.selection.createRange();
+        sel.text    = myValue;
+        sel.select();
+    }
+    //MOZILLA/NETSCAPE support
+    else if (myField.selectionStart || myField.selectionStart == '0') 
+    {
+        var startPos      = myField.selectionStart;
+        var endPos        = myField.selectionEnd;
+        // save scrollTop before insert
+        var restoreTop    = myField.scrollTop;
+        myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+        if (restoreTop > 0)
+        {
+            // restore previous scrollTop
+            myField.scrollTop = restoreTop;
+        }
+        myField.focus();
+        myField.selectionStart    = startPos + myValue.toString().length;
+        myField.selectionEnd    = startPos + myValue.toString().length;
+        console.log(myValue.length);
+    } else {
+        myField.value += myValue;
+        myField.focus();
+        myField.selectionStart    = startPos + myValue.toString().length;
+        myField.selectionEnd    = startPos + myValue.toString().length;
+    }
+}
 function OnClickNum(input) {
-    var num = number.value.toString();
-    num = num + parseInt(input.innerHTML);
-    number.value = num;
+    change_num_2(number,parseInt(input.innerHTML));
+    //number.value = num;
     if (number.id == 'search_label') {
         var base = document.getElementById("mistake_4");
         base.innerHTML = '';
         flush_search_area(xmlfile);
     }
-    number.focus();
+    //number.focus();
 }
 
 function onclicknumclear() {
@@ -1335,7 +1365,7 @@ function submit() {
         var hint_str = "";
         for (var i = 0;i<list.length;i++){
             if (list[i] != last_code && list[i] != ""){
-                if(confirm("检测到"+list[i]+"未提交成功，该条码提交成功了吗？")){
+                if(confirm("检测到"+list[i]+"未提交成功，需要取消这张条码的提示吗？")){
                     delete_from_history(list[i]);
                 }
             }

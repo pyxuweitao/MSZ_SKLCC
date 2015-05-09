@@ -267,11 +267,11 @@ def get_all_department( ):
 
 
 def written_into_sklcc_effciency( ):
-	Raw = Raw_sql( )
-	Raw.sql = "select Top 1 form7_real_work_time from sklcc_config"
-	target = Raw.query_one( )
+	Raw            = Raw_sql( )
+	Raw.sql        = "select Top 1 form7_real_work_time from sklcc_config"
+	target         = Raw.query_one( )
 	real_work_time = target[0] if target != False and target != None else 0
-	T = Current_time( )
+	T              = Current_time( )
 	date = T.set_date_yesterday( ).split( " " )[0]
 	Raw.sql = "select distinct username from sklcc_employee_authority where authorityid = 1 and username not in " \
 	          "( select distinct username from sklcc_employee_authority where authorityid = 7 )"
@@ -302,6 +302,10 @@ def written_into_sklcc_effciency( ):
 				worktime_taodengmo = 0
 			recheckor = res[1]
 			work_time = res[2] + worktime_taodengmo
+
+			bald_total_slowtime = get_bald_totalnumber(recheckor_no,date) * get_bald_slowtime()
+			work_time += bald_total_slowtime
+
 			Raw.sql = "insert into sklcc_effciency( employeeno, employee, date, work_time, real_work_time, effciency )" \
 			          "values( '%s', '%s', '%s', %f, %f, %f )" % (
 			          recheckor_no, recheckor, date, work_time, real_work_time,
@@ -314,18 +318,24 @@ def written_into_sklcc_effciency( ):
 				recheckor_no = one['employeeno']
 				recheckor = one['employee']
 				work_time = 0.0
+				bald_total_slowtime = get_bald_totalnumber(recheckor_no,date) * get_bald_slowtime()
+				work_time += bald_total_slowtime
 				Raw.sql = "insert into sklcc_effciency( employeeno, employee, date, work_time, real_work_time, effciency )" \
 				          "values( '%s', '%s', '%s', %f, %f, %f )" % (
-				          recheckor_no, recheckor, date, work_time, real_work_time, 0 )
+				          recheckor_no, recheckor, date, work_time, real_work_time,
+				          round( float( work_time ) / float( real_work_time ) if real_work_time != 0 else 0, 4 ) )
 				Raw.update( )
 	else:
 		for one in recheckor_list:
 			recheckor_no = one['employeeno']
-			recheckor = one['employee']
+			recheckor    = one['employee']
 			work_time = 0.0
+			bald_total_slowtime = get_bald_totalnumber(recheckor_no,date) * get_bald_slowtime()
+			work_time += bald_total_slowtime
 			Raw.sql = "insert into sklcc_effciency( employeeno, employee, date, work_time, real_work_time, effciency )" \
 			          "values( '%s', '%s', '%s', %f, %f, %f )" % (
-			          recheckor_no, recheckor, date, work_time, real_work_time, 0 )
+			          recheckor_no, recheckor, date, work_time, real_work_time,
+			          round( float( work_time ) / float( real_work_time ) if real_work_time != 0 else 0, 4 ) )
 			Raw.update( )
 	return 'ok'
 
@@ -384,7 +394,6 @@ class timer( threading.Thread ):
 		department_list = get_all_department( )
 		while True:
 			timenow = time.strftime( '%H:%M', time.localtime( time.time( ) ) )
-			#print timenow
 			if timenow in self.timepoint_for_EQ:
 				try:
 					for department in department_list:
@@ -394,7 +403,7 @@ class timer( threading.Thread ):
 						timesend( departmentno, '300', content, '1', '0' )
 				except Exception, e:
 					make_log( sys._getframe( ).f_code.co_name + ">>>" + str( e ) + '(EQ)' )
-			if timenow == "21:00":
+			if timenow == '21:00':
 				try:
 					written_into_sklcc_effciency( )
 				except Exception, e:
@@ -1590,7 +1599,7 @@ def find_record_state_is( state, employeeno, authority_in_use, control ):
 					( SELECT COUNT(*) FROM sklcc_info WHERE type = 1 AND serialno = record.serialno ) AS bad,
 					( SELECT COUNT(*) FROM sklcc_info WHERE type = 2 AND serialno = record.serialno ) AS strong
 					FROM sklcc_record record
-					WHERE inspector_no = '%s' AND state = %d AND createtime > ( SELECT dbo.get_date_before_config_days() )
+					WHERE inspector_no = '%s' AND state = %d AND LEFT(createtime,10) > ( SELECT dbo.get_date_before_config_days() )
 					ORDER BY id DESC ''' % ( employeeno, state )
 	#choose_check
 	elif authority_in_use == 4:
@@ -1601,7 +1610,7 @@ def find_record_state_is( state, employeeno, authority_in_use, control ):
 					( SELECT COUNT(*) FROM sklcc_info WHERE type = 2 AND serialno = record.serialno ) AS strong
 					FROM sklcc_record record
 					WHERE state = %d
-					AND createtime > ( SELECT dbo.get_date_before_config_days() )
+					AND LEFT(createtime,10) > ( SELECT dbo.get_date_before_config_days() )
 					AND departmentno IN
           			( SELECT departmentno FROM sklcc_employee_authority
             			WHERE authorityid = 4 AND username = '%s' )
@@ -1833,7 +1842,7 @@ def choose( request ):
 		date = Current_time.get_now_date( )
 		url = '/return_check/?start=%s&end=%s' % ( date, date )
 
-		record_not_commit_list = find_record_state_is( 2, username, 2, 1 )
+		record_not_commit_list     = find_record_state_is( 2, username, 2, 1 )
 		record_have_committed_list = find_record_state_is( 1, username, 2, 0 )
 		record_have_committed_list = find_record_state_is( 0, username, 2, 0 ) + record_have_committed_list
 		return TemplateResponse( request, html,
@@ -1914,7 +1923,9 @@ def tables_check( request ):
 
 
 def choose_check( request ):
-	start = datetime.datetime.now( )
+	reload(sys)
+	sys.setdefaultencoding("utf-8")
+	start  = datetime.datetime.now()
 	status = request.session['status']
 	if 4 in status:
 		username = request.session['username']
@@ -1923,7 +1934,7 @@ def choose_check( request ):
 		html = get_template( 'choose_check.html' )
 		date = Current_time.get_now_date( )
 		url = "/return_check_check/?start=%s&end=%s" % ( date, date )
-		record_not_check_list = find_record_state_is( 0, username, 4, 1 )
+		record_not_check_list    = find_record_state_is( 0, username, 4, 1 )
 		record_have_checked_list = find_record_state_is( 1, username, 4, 0 )
 		return TemplateResponse( request, html,
 		                         { 'username': username, 'em_number': em_number, 'employeename': employeename,
@@ -2627,15 +2638,15 @@ def find_recheck_info_help_function( Raw_Sql, authorityid_in_use ):
 	if target_list != False:
 		for target in target_list:
 			record.check_type = ""
-			state = target[0]
-			serialno = target[2]
-			departmentno = target[3]
-			department = target[4]
-			inspector = target[5]
-			inspector_no = target[6]
-			recheckor = target[7]
-			batch = target[9]
-			createtime = target[1]
+			state             = target[0]
+			serialno          = target[2]
+			departmentno      = target[3]
+			department        = target[4]
+			inspector         = target[5]
+			inspector_no      = target[6]
+			recheckor         = target[7]
+			batch             = target[9]
+			createtime        = target[1]
 
 			string = str( createtime ).split( ' ' )[0].split( '-' )
 			year = int( string[0] )
@@ -2648,23 +2659,23 @@ def find_recheck_info_help_function( Raw_Sql, authorityid_in_use ):
 			if (datetime.datetime.today( ) - createtime_form).days > target[0]:
 				continue
 
-			record.state = state
-			record.batch = batch
-			record.createtime = createtime.split( '.' )[0][5:-3]
+			record.state        = state
+			record.batch        = batch
+			record.createtime   = createtime.split( '.' )[0][5:-3]
 			record.departmentno = departmentno
-			record.department = department
-			record.serialno = serialno
-			record.inspector = inspector
-			record.totalnumber = 0
-			record.totalreturn = 0
-			record.bad = 0
-			record.strong = 0
-			record.weak = 0
-			record.batchnumber = 0
-			record.recheckor = recheckor
+			record.department   = department
+			record.serialno     = serialno
+			record.inspector    = inspector
+			record.totalnumber  = 0
+			record.totalreturn  = 0
+			record.bad          = 0
+			record.strong       = 0
+			record.weak         = 0
+			record.batchnumber  = 0
+			record.recheckor    = recheckor
 			#normal_check 0 partition_measure 1
-			record.check_id = 0
-			Raw = Raw_sql( )
+			record.check_id     = 0
+			Raw                 = Raw_sql( )
 			Raw.sql = "select samplenumber, returnno, questionno from sklcc_recheck_content where serialno = '%s'" % serialno
 			is_serialno_list = Raw.query_all( )
 

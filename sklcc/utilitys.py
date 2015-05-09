@@ -261,6 +261,42 @@ def get_all_barcode_by_serialno( serialno ):
 		return [ barcode[0] for barcode in target_list ]
 	else:
 		return []
+
+
+def get_bald_slowtime( ):
+	'''
+	返回捋肩带的工时
+	:return:返回浮点数,找不到该字段则返回0
+	'''
+	Raw = Raw_sql( )
+
+	Raw.sql = "SELECT bald_slowtime FROM sklcc_config"
+	target = Raw.query_one( )
+
+	if target != False:
+		return target[0]
+	else:
+		return 0.0
+
+def get_bald_totalnumber( recheckor_no, date ):
+	'''
+	获取抽验员某天的所有捋肩带件数
+	:param recheckor_no:抽验员工号
+	:param date:时间日期，e.p:2015-05-10
+	:return:返回非负整数是捋肩带件数
+	'''
+	Raw = Raw_sql()
+	Raw.sql = '''select TOP 1 totalnumber
+    						from sklcc_recheck_bald where left(createtime,10)='%s' and recheckor_no = '%s'
+    				'''%(date, recheckor_no)
+
+	bald_sum = Raw.query_one()
+	if bald_sum != False:
+		bald_sum = bald_sum[0]
+	else:
+		bald_sum = 0
+	return bald_sum
+
 #
 # def get_lock():
 # 	lock = thread.allocate_lock()
