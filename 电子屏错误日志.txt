@@ -56580,3 +56580,23 @@
 	第1块电子屏打开电子屏失败
 The current date/time is: Sat May 09 10:04:19 2015
 	第1块电子屏发送失败
+The current date/time is: Mon May 11 15:00:46 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Mon May 11 15:00:46 2015
+	第1块电子屏发送失败
+The current date/time is: Mon May 11 15:01:45 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Mon May 11 15:01:45 2015
+	第1块电子屏发送失败
+The current date/time is: Mon May 11 15:02:45 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Mon May 11 15:02:45 2015
+	第1块电子屏发送失败
+The current date/time is: Mon May 11 15:03:45 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Mon May 11 15:03:45 2015
+	第1块电子屏发送失败
+The current date/time is: Mon May 11 15:04:45 2015
+	第1块电子屏打开电子屏失败
+The current date/time is: Mon May 11 15:04:45 2015
+	第1块电子屏发送失败

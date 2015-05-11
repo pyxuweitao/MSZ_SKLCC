@@ -17,6 +17,24 @@
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
 </tr>
 <tr>
+<td>2015-05-11</br><h2>v2.3.6</h2>
+</td>
+<td> 
+<ul>
+<li>一检、二检报表审批界面增加时间过滤条件</li>
+<li>搜索框响应实体键盘的事件添加</li>
+</td>
+<td>
+<ul>
+<li>views.py</li>
+<li>choose_check.html</li>
+<li>choose_recheck_check.html</li>
+<li>dataentry.js</li>
+</ul>
+</td>
+</tr>
+<tr>
+<tr>
 <td>2015-05-09</br><h2>v2.3.5</h2>
 </td>
 <td> 

@@ -1584,7 +1584,7 @@ def find_measure_record_state_is_help_function( raw_SQL, state, is_first_check =
 	return record_list
 
 
-#control = 0, have reject,pass; control = 1, not have...
+#control = 0, have reject button,pass button; control = 1, not have...
 def find_record_state_is( state, employeeno, authority_in_use, control ):
 	Raw = Raw_sql( )
 	record_list = []
@@ -1629,6 +1629,67 @@ def find_record_state_is( state, employeeno, authority_in_use, control ):
 					record['url'] = "/read_only_table?%d#%s/" % ( target[2], target[6] )
 			else:
 				if control == 1:
+					record['url'] = "/check?%d#%s/" % ( target[2], target[6] )
+				else:
+					record['url'] = "/read_only_table?%d#%s/" % ( target[2], target[6] )
+			record_list.append( copy.deepcopy( record ) )
+
+	return record_list
+
+def find_record_by_date( start, end, employeeno, authority_in_use ):
+	'''
+	一检记录审批根据时间范围过滤所有报表记录
+	TODO: 有待完善一检、二检查看汇总
+	:param start:时间日期起始 e.p:2015-05-11
+	:param end:时间日期结束 e.p:2015-05-11
+	:param employeeno:检验员工号
+	:param authority_in_use:该函数查询中使用的权限
+	:param control:control=0,指向的URL里有不通过和通过的按钮，control=1则没有
+	:return:返回包含记录信息的列表
+	'''
+	Raw = Raw_sql( )
+	record_list = []
+	#choose: 2
+	if authority_in_use == 2:
+		#off the authority control
+		#departmentno_list = find_department_authority_user( username, 2 )
+		#for departmentno in departmentno_list:
+		Raw.sql = '''SELECT check_type, SUBSTRING(createtime,6,11) time, state, batch,
+ 							totalnumber, totalreturn, serialno, departmentno, inspector, inspector_no,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 0 AND serialno = record.serialno ) AS weak,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 1 AND serialno = record.serialno ) AS bad,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 2 AND serialno = record.serialno ) AS strong
+					FROM sklcc_record record
+					WHERE inspector_no = '%s' AND LEFT(createtime,10) >= '%s' AND LEFT(createtime,10) <= '%s' AND state = 2
+					ORDER BY id DESC ''' % ( employeeno, start, end )
+	#choose_check
+	elif authority_in_use == 4:
+		Raw.sql = '''SELECT check_type, SUBSTRING(createtime,6,11) time, state, batch,
+ 							totalnumber, totalreturn, serialno, departmentno, inspector, inspector_no,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 0 AND serialno = record.serialno ) AS weak,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 1 AND serialno = record.serialno ) AS bad,
+					( SELECT COUNT(*) FROM sklcc_info WHERE type = 2 AND serialno = record.serialno ) AS strong
+					FROM sklcc_record record
+					WHERE LEFT(createtime,10) >= '%s' AND LEFT(createtime,10) <= '%s' AND state < 2
+					AND departmentno IN
+          			( SELECT departmentno FROM sklcc_employee_authority
+            			WHERE authorityid = 4 AND username = '%s' )
+					ORDER BY id DESC ''' % ( start, end, employeeno )
+	target_list = Raw.query_all( )
+
+	if target_list != False:
+		for target in target_list:
+			record = { 'check_type': target[0], 'createtime': target[1], 'state': target[2], 'batch': target[3],
+			           'totalnumber': target[4], 'totalreturn': target[5], 'serialno': target[6],
+			           'departmentno': target[7], 'inspector': target[8], 'inspector_no': target[9] }
+			if target[2] == 2 or target[2] == 3:
+				continue
+				# if control == 1:
+				# 	record['url'] = "/table?%d#%s/" % ( target[2], target[6] )
+				# else:
+				# 	record['url'] = "/read_only_table?%d#%s/" % ( target[2], target[6] )
+			else:
+				if target[2] == 0:
 					record['url'] = "/check?%d#%s/" % ( target[2], target[6] )
 				else:
 					record['url'] = "/read_only_table?%d#%s/" % ( target[2], target[6] )
@@ -1928,14 +1989,19 @@ def choose_check( request ):
 	start  = datetime.datetime.now()
 	status = request.session['status']
 	if 4 in status:
-		username = request.session['username']
+		username  = request.session['username']
 		em_number = request.session['employeeno']
 		employeename = request.session['employee']
-		html = get_template( 'choose_check.html' )
-		date = Current_time.get_now_date( )
+		html      = get_template( 'choose_check.html' )
+		date      = Current_time.get_now_date( )
 		url = "/return_check_check/?start=%s&end=%s" % ( date, date )
-		record_not_check_list    = find_record_state_is( 0, username, 4, 1 )
-		record_have_checked_list = find_record_state_is( 1, username, 4, 0 )
+		if 'start' not in request.GET:
+			record_not_check_list    = find_record_state_is( 0, username, 4, 1 )
+			record_have_checked_list = find_record_state_is( 1, username, 4, 0 )
+		else:
+			temp_list                = find_record_by_date( request.GET['start'], request.GET['end'], username, 4 )
+			record_not_check_list    = filter( lambda x: x["state"] == 0, temp_list )
+			record_have_checked_list = filter( lambda x: x["state"] == 1, temp_list )
 		return TemplateResponse( request, html,
 		                         { 'username': username, 'em_number': em_number, 'employeename': employeename,
 		                           'date': date, 'url': url, 'record_not_check_list': record_not_check_list,
@@ -2722,7 +2788,6 @@ def find_recheck_info_help_function( Raw_Sql, authorityid_in_use ):
 
 
 def find_recheck_info( state, username, authorityid_in_use ):
-	Raw = Raw_sql( )
 	employeeno = find_employeeno( username )
 	departmentno_list = find_department_authority_user( username, authorityid_in_use )
 	if authorityid_in_use == 3:
@@ -2742,6 +2807,37 @@ def find_recheck_info( state, username, authorityid_in_use ):
 
 		return record_list
 
+def find_recheck_info_by_date( start, end, username, authorityid_in_use ):
+	'''
+	二检审批根据时间过滤记录单
+	:param start:起始日期，e.p:2015-05-11
+	:param end:结束日期，e.p:2015-05-11
+	:param username:员工号
+	:param authorityid_in_use:使用该函数的权限
+	:return:
+	'''
+	employeeno = find_employeeno( username )
+	departmentno_list = find_department_authority_user( username, authorityid_in_use )
+	if authorityid_in_use == 3:
+		record_list = []
+		for departmentno in departmentno_list:
+			SQL = "select state,createtime,serialno,departmentno,department,inspector,inspector_no,recheckor,recheckor_no," \
+			      " batch from sklcc_recheck_info where state = 2 and recheckor_no = '%s' and departmentno = '%s'" \
+			      " and left( createtime,10 ) >= '%s' and left( createtime, 10 ) <= '%s'" % (
+			employeeno, departmentno, start, end )
+			record_list += find_recheck_info_help_function( SQL, authorityid_in_use )
+
+		return record_list
+	else:
+		record_list = []
+		for departmentno in departmentno_list:
+			SQL = "select state,createtime,serialno,departmentno,department,inspector,inspector_no,recheckor, " \
+			      "recheckor_no, batch from sklcc_recheck_info where state < 2 and departmentno = '%s'" \
+			      " and left( createtime,10 ) >= '%s' and left( createtime, 10 ) <= '%s'" % (
+			departmentno, start, end )
+			record_list += find_recheck_info_help_function( SQL, authorityid_in_use )
+
+		return record_list
 
 def delete_recheck_table( request ):
 	serialno = request.GET['serialno']
@@ -2993,19 +3089,23 @@ def update_recheck_state( request ):
 def choose_check_recheck( request ):
 	status = request.session['status']
 	if 5 in status:
-		html = get_template( 'choose_recheck_check.html' )
+		html      = get_template( 'choose_recheck_check.html' )
 		em_number = request.session['employeeno']
-		username = request.session['username']
+		username  = request.session['username']
 		employeename = request.session['employee']
-		Raw = Raw_sql( )
-		T = Current_time( )
-		date = T.get_date( )
+		Raw       = Raw_sql( )
+		T         = Current_time( )
+		date      = T.get_date( )
 		record_not_commit_list = list( )
 		record_have_committed_list = list( )
 		url = "/recheck_return_check_check/?start=%s&end=%s" % ( date, date )
-		record_not_commit_list += find_recheck_info( 0, username, 5 )
-		record_have_committed_list += find_recheck_info( 1, username, 5 )
-
+		if 'start' not in request.GET.keys():
+			record_not_commit_list     += find_recheck_info( 0, username, 5 )
+			record_have_committed_list += find_recheck_info( 1, username, 5 )
+		else:
+			temp_list = find_recheck_info_by_date( request.GET['start'], request.GET['end'], username, 5 )
+			record_not_commit_list     += filter( lambda x: x.state==0, temp_list )
+			record_have_committed_list += filter( lambda x: x.state==1, temp_list )
 		return TemplateResponse( request, html, locals( ) )
 	else:
 		return HttpResponseRedirect( '/warning/' )

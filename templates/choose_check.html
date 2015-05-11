@@ -48,6 +48,9 @@
         xmlhttp.send(res);
     }
     window.onload = function () {
+        try{
+            compare_date();
+        }catch(e){}
         var table = $('#tar').DataTable({
             "oLanguage": {
                 "sLengthMenu": "每页显示 _MENU_ 条记录", "sZeroRecords": "对不起，查询不到任何相关数据",
@@ -122,12 +125,41 @@
         });
         window.location.reload(1);
     }
+    function compare_date() {
+        var start = window.location.search.toString().split('&')[0].split('=')[1];
+        var end = window.location.search.toString().split('&')[1].split('=')[1];
+        var day_start = new Date(start);
+        var day_end = new Date(end);
+        days_length = Math.floor((day_end.getTime() - day_start.getTime()) / (3600 * 24 * 1000));
+        document.getElementById("start").value = start;
+        document.getElementById("end").value = end;
+        // document.getElementById("table_title").innerHTML = '阶段返修记录 时间：' + start + '--' + end;
+        // document.getElementById("table_title").setAttribute('colspan', days_length + 4);
+    }
 </script>
 {% endblock %}
 
 {% block other %}
 <div class="row clearfix">
     <div class="col-md-12 column">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <form class="form form-inline" action="/choose_check/">
+                    <div class="form-group">
+                        <label for="start">开始日期(含)：</label>
+                        <input required='required' class="form-control" id="start" name="start" style="width:200px;" type="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end">结束日期(含)：</label>
+                        <input required='required' class="form-control" id="end" name="end" style="width:200px;" type="date">
+                    </div>
+
+                    <button class="btn btn-primary pull-right" type="submit">
+                        查询
+                    </button>
+                </form>
+            </div>
+        </div>
         <a href="#" onclick="return onsubmitall()">通过全部</a>/
         <a href="#" onclick="return onsubmitchosen()">通过已选</a>/
         <a href="{{ url }}">返修活检验</a>

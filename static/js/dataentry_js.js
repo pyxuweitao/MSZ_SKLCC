@@ -209,6 +209,11 @@ function initiallize() {
     $("button.messenger-close").each(function(){
         this.disabled = false;
     });
+    $("#search_label").on("input",function(){
+        var base = document.getElementById("mistake_4");
+        base.innerHTML = '';
+        flush_search_area(xmlfile);
+    });
 }
 
 function bind_to_size() {
@@ -1130,9 +1135,49 @@ function onclicknumclear() {
     number.value = '';
     number.focus();
 }
+function del_2(myField){
+     var myValue = "";
+    if (document.selection) 
+    {
+        myField.focus();
+        sel            = document.selection.createRange();
+        sel.text    = myValue;
+        sel.select();
+    }
+    //MOZILLA/NETSCAPE support
+    else if (myField.selectionStart || myField.selectionStart == '0') 
+    {
+        var startPos    = myField.selectionStart;
+        var endPos        = myField.selectionEnd;
+        // save scrollTop before insert
+        var restoreTop    = myField.scrollTop;
+        if (startPos == endPos){
+            myField.value    = myField.value.substring(0, startPos-1) + myValue + myField.value.substring(endPos, myField.value.length);
+        }else{
+            myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+        }
+        if (restoreTop > 0)
+        {
+            // restore previous scrollTop
+            myField.scrollTop = restoreTop;
+        }
+        //myField.focus();
+        if (startPos == endPos){
+            myField.selectionStart    = startPos-1;
+            myField.selectionEnd    = startPos -1;
+        }else{
+            myField.selectionStart    = startPos;
+            myField.selectionEnd    = startPos;
+        }
+        
+    } else {
+        myField.value += myValue;
+        myField.focus();
+    }
+}
 
 function OnClickSearchDel() {
-    number.value = number.value.slice(0, -1);
+    del_2(number);
     if (number.id == 'search_label') {
         var base = document.getElementById("mistake_4");
         base.innerHTML = '';
@@ -1493,6 +1538,7 @@ function OnClickChange() {
 }
 
 function OnClickNumConfirm() {
+
     if (number.id == 'scan_input' && number.disabled == false) {
         var ele = document.getElementById("scan_input"); //禁用输入框，防止二次输入
         if (ele.value.length != code_length) {
