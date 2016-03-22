@@ -6,19 +6,12 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
       <jdbc-url>jdbc:sqlserver://192.168.2.189:1433;databaseName=SKLCC</jdbc-url>
-      <user-name>sa</user-name>
-      <user-password>df9cdf98df9cdf9bdf9adf9d</user-password>
-      <libraries />
     </data-source>
     <data-source source="LOCAL" name="SQL Server - SKLCC@192.168.135.45" uuid="69ccca41-a6aa-4524-af1d-18136d92ade1">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
       <jdbc-url>jdbc:sqlserver://192.168.135.45:1433;databaseName=SKLCC</jdbc-url>
-      <user-name>sa</user-name>
-      <user-password>dfd9dfc1dfc6dfc9dfc9</user-password>
-      <libraries />
     </data-source>
   </component>
 </project>
-
