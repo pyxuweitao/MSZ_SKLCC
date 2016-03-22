@@ -59,28 +59,58 @@ function onclickfin(n){
          document.getElementById('change_num').focus();
     }
 }
+var barcode_list_by_time = [];
+var barcode_list_by_code = [];
 function flush_barcode(n){
-     var domparser = new DOMParser();
+    var domparser = new DOMParser();
     var xmlDoc = domparser.parseFromString(n, 'text/xml');
-    var list = xmlDoc.getElementsByTagName("barcode");
-    var table = document.createElement("table");
-    $(table).addClass("table table-bordered");
-    var temp = document.createElement("tr");
-    for (var i = 0;i<list.length;i++){
-        var x = document.createElement("td");
-        x.innerHTML = list[i].getAttribute("code");
-        temp.appendChild(x);
-        if ((i+1)%7 == 0){
-            table.appendChild(temp);
-            temp = document.createElement("tr");
+    var barcode_list = xmlDoc.getElementsByTagName("barcode");
+    for (var i = 0;i<barcode_list.length;i++){
+        barcode_list_by_time.push(barcode_list[i].getAttribute("code"));
+        barcode_list_by_code.push(barcode_list[i].getAttribute("code"));
+    }
+    barcode_list_by_code.sort();
+    build_barcode(barcode_list_by_time);
+    var div = document.getElementById("barcode").parentNode;
+    var btn = document.createElement("button");
+    btn.innerHTML = "点击切换到按条码号排序";
+    btn.setAttribute("key","time");
+    $(btn).addClass("btn btn-primary");
+    btn.onclick = function(){
+        var flag = this.getAttribute("key");
+        if (flag == "time"){
+            build_barcode(barcode_list_by_code);
+            this.setAttribute("key","barcode");
+            this.innerHTML = "点击切换到按时间排序";
+        }else{
+            build_barcode(barcode_list_by_time);
+            this.setAttribute("key","time");
+            this.innerHTML = "点击切换到按条码号排序";
+        }
+    };
+    div.insertBefore(btn,document.getElementById("barcode"));
+}
+function build_barcode(temp){
+    document.getElementById("barcode").innerHTML = "本单包含的条码：<br/>";
+    var tb = document.createElement("table");
+    $(tb).addClass("table table-bordered");
+    var temp_tr = document.createElement("tr");
+    for (var i = 0;i<temp.length;i++){
+        if (temp_tr == null){
+            temp_tr = document.createElement("tr");
+        }
+        var td = document.createElement("td");
+        td.innerHTML = temp[i];
+        temp_tr.appendChild(td);
+        if ((i+1) % 10 == 0){
+            tb.appendChild(temp_tr);
+            temp_tr = null;
         }
     }
-    if (temp.innerHTML != ""){
-        table.appendChild(temp);
+    if (temp_tr != null){
+        tb.appendChild(temp_tr);
     }
-    document.getElementById("barcode").innerHTML = "本单包含的条码：<br>"
-    document.getElementById("barcode").appendChild(table);
-    //document.getElementById("barcode").innerHTML = temp;
+    document.getElementById("barcode").appendChild(tb);
 }
 window.onload = function () {
     document.getElementsByTagName('body')[0].appendChild(change_num);

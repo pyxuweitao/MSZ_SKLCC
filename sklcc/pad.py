@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import sys
 from forms import  *
 from views import Raw_sql, find_em_name, get_time_distance_list, change_distance_date_to_str_not_have_year,\

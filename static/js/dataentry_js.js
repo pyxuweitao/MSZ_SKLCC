@@ -246,6 +246,11 @@ function flush_info() {
     $.ajax({
         url: '/update_info/' + '?code=' + document.getElementById("scan_input").value,
         success: function (e) {
+            $("div.message-success").each(function(){
+               $(this).find("button.messenger-close").each(function(){
+                   $(this).trigger("click");
+               });
+            });
             xmlfile = e.toString().replace(new RegExp('unknown', 'gm'), '未知');
             build_page(xmlfile);
             $("a[href='#mistake_2'").parent().hide();
@@ -548,6 +553,10 @@ function build_page(info) {
         console.log(xmlDoc.getElementsByTagName('measure'));
     } else if (state[0].getAttribute("value") == '3') {
         alert('已提交，暂时无法编辑');
+        initiallize();
+        return;
+    }else if (state[0].getAttribute("value") == '7') {
+        alert('存在不可信数据，如需修改数据请到查看汇总记录单明细界面修改。');
         initiallize();
         return;
     } else if (state[0].getAttribute("value") == '6') {
@@ -1424,7 +1433,7 @@ function submit() {
             successMessage: last_code+'提交成功',
             errorMessage: last_code+'网络状况不良',
             progressMessage: '提交中...',
-            hideAfter:3,
+            hideAfter:10000,
             showCloseButton:true
         },
         {

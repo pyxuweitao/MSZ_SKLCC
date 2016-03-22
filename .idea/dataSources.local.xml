@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="SQL Server - SKLCC@192.168.2.189" uuid="2296b1dd-469c-49a4-93c9-64036ebff984" />
+    <data-source name="SQL Server - SKLCC@192.168.135.45" uuid="69ccca41-a6aa-4524-af1d-18136d92ade1" />
+    <data-source name="SQL Server - MYDMS_MSZ@192.168.135.45\MSSQL2008" uuid="ef196478-fbfa-459b-bb48-3f42f08e7c82" />
+  </component>
+</project>

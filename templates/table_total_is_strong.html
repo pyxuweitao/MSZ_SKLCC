@@ -28,7 +28,11 @@
 
     }
     window.onload = function () {
-        compare_date();
+        try{
+            compare_date();
+        }catch(e){
+            
+        }
         document.getElementsByTagName('body')[0].style.overflow = 'auto';
         var qclist = document.getElementById('qc_list').getElementsByTagName('qc');
         var rows = document.getElementById("tar").getElementsByTagName('tbody')[0].getElementsByTagName('tr');
@@ -134,15 +138,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for temp in info %}
-                    {% for tempc in temp.count_list %}
+                    {% for employeeno, employee_data in info.items %}
+                    {% for questionno, returnno in employee_data.count_list.items %}
                     <tr>
-                        <td>{{temp.employeeno}}</td>
-                        <td>{{temp.employee}}</td>
+                        <td>{{employeeno}}</td>
+                        <td>{{employee_data.employee}}</td>
                         <td></td>
                         <td></td>
-                        {% for tempd in tempc %}
-                        <td>{{tempd}}</td>
+                        {% for returnno_oneday in returnno %}
+                        <td>{{returnno_oneday}}</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}

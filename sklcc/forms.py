@@ -1,14 +1,11 @@
-__author__ = 'Administrator'
 # -*- coding: utf-8 -*-
+__author__ = 'Administrator'
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.template.loader import get_template
 from django.db import connection, transaction
-from sklcc.views import Bald_info, change_distance_date_to_str_have_year, change_distance_date_to_str_not_have_year, \
-	Current_time, find_department_name, find_table_with_serialno, Record_info, get_question_type, time_form, \
-	get_time_distance_list, find_em_name, get_all_employee, find_pre_table, find_sec_table, History_form, \
-	find_department_authority_user, Return_check_info, find_employeeno
+from sklcc.views import *
 import datetime
 import time
 import sys, os
@@ -16,6 +13,7 @@ from django.utils import simplejson
 import urllib
 import urllib2
 from utilitys import *
+import copy
 
 class Inspector_quality:
 	employeeno = ""
@@ -34,12 +32,12 @@ class Quality_check:
 class Total_strong:
 	def __init__( self ):
 		self.questionname = []
+		#questionno:int
 		self.questionno   = []
 		self.count        = 0
 		Raw               = Raw_sql( )
-		Raw.sql           = "SELECT distinct QuestionNO, QuestionCode FROM QCQuestion WHERE isStrong = 'True' ORDER BY QuestionNO, QuestionCode"
+		Raw.sql           = "SELECT distinct QuestionNO, QuestionCode FROM QCQuestion WHERE isStrong = 1 ORDER BY QuestionNO ASC, QuestionCode"
 		target_list       = Raw.query_all( 'MSZ' )
-
 		if target_list != False:
 			for target in target_list:
 				self.questionname.append( target[1].decode( 'gbk' ) )
@@ -61,24 +59,37 @@ class Employee_stage_repair:
 		self.employee = ""
 		self.totalnumber = ""
 
-
-class Percentage_row:
-	def __init__( self, no, name, batch ):
-		self.no = no
-		self.name = name
-		self.batch = batch
-		self.slowtime = 0
-		self.totalnumber = 0
-		self.time = 0.0
-		self.avg_percentage = 0.0
-		self.data = []
-
-
-	def append( self, data, time, count ):
-		self.data.append( { 'data': data, 'time': time } )
-		self.totalnumber += count
-
-
+#
+# class table_form6_row( ):
+# 	def __init__( self, inspector_no, name ):
+# 		self.no = inspector_no
+# 		self.name = name
+# 		self.check = []
+# 		self.check_miss = []
+# 		self.check_count = 0
+# 		self.check_miss_count = 0
+# 		self.recheck_miss_percentage = 0
+# 		self.type = ''
+#
+# 	def append_to_check( self, no, name, count ):
+# 		exist = False
+# 		for temp in self.check:
+# 			if temp['no'] == no:
+# 				exist = True
+# 				temp['count'] += count
+# 		if not exist:
+# 			self.check.append( { 'no': no, 'name': name, 'count': count } )
+# 		self.check_count += count
+#
+# 	def append_to_check_miss( self, no, name, count ):
+# 		exist = False
+# 		for temp in self.check_miss:
+# 			if temp['no'] == no:
+# 				exist = True
+# 				temp['count'] += count
+# 		if not exist:
+# 			self.check_miss.append( { 'no': no, 'name': name, 'count': count } )
+# 		self.check_miss_count += count
 class table_form6_row( ):
 	def __init__( self, inspector_no, name ):
 		self.no = inspector_no
@@ -89,6 +100,7 @@ class table_form6_row( ):
 		self.check_miss_count = 0
 		self.recheck_miss_percentage = 0
 		self.type = ''
+		self.check_miss_real_count = 0
 
 	def append_to_check( self, no, name, count ):
 		exist = False
@@ -110,7 +122,6 @@ class table_form6_row( ):
 			self.check_miss.append( { 'no': no, 'name': name, 'count': count } )
 		self.check_miss_count += count
 
-
 def get_employee_type( employeeno ):
 	Raw = Raw_sql( )
 	Raw.sql = "select typeno from sklcc_employeeno_type where employeeno = '%s'" % employeeno
@@ -121,20 +132,7 @@ def get_employee_type( employeeno ):
 		return False
 
 
-def insert_into_res( no, name, batch, data, time, count, res ):
-	exist = False
-	for temp in res:
-		if temp.no == no and temp.batch == batch:
-			exist = True
-			temp.append( data, time, count )
-			break
-	if not exist:
-		row = Percentage_row( no, name, batch )
-		row.append( data, time, count )
-		res.append( row )
-
-
-def get_check_slowtime( batch ):
+def get_check_slowtime( batch, checkType=u'检验' ):
 	Raw = Raw_sql( )
 	Raw.sql = "select ProduceMasterID from ProduceMaster where Batch = '%s'" % batch
 	target = Raw.query_one( 'MSZ' )
@@ -143,13 +141,15 @@ def get_check_slowtime( batch ):
 		return 0.0
 	else:
 		ProduceMasterID = target[0]
-		Raw.sql = "select SlowTime from ProduceStyle where produceMasterID = '%s' and qcbz = 1" % ProduceMasterID
+		if checkType == u'检验':
+			Raw.sql = "select SlowTime from ProduceStyle where produceMasterID = '%s' and qcbz = 1" % ProduceMasterID
+		else:
+			Raw.sql = "select SlowTime from ProduceStyle where produceMasterID = '%s' and workname = '%s'" %(ProduceMasterID, checkType)
 		SlowTime = Raw.query_one( 'MSZ' )
 		if SlowTime == False:
 			return 0.0
 		else:
-			return SlowTime[0]
-
+			return SlowTime[0] if SlowTime[0] != None else 0.0
 
 def get_bald_price( ):
 	Raw = Raw_sql( )
@@ -418,6 +418,34 @@ def quality_check( request ):
 
 
 # form2
+class Percentage_row:
+	def __init__( self, no, name, batch, checkType ):
+		self.no = no
+		self.name = name
+		self.batch = batch
+		self.slowtime = 0
+		self.totalnumber = 0
+		self.time = 0.0
+		self.avg_percentage = 0.0
+		self.data = []
+		self.checkType = checkType
+
+	def append( self, data, time, count ):
+		self.data.append( { 'data': data, 'time': time } )
+		self.totalnumber += count
+
+def insert_into_res( no, name, batch, data, time, count, checkType, res ):
+	exist = False
+	for temp in res:
+		if temp.no == no and temp.batch == batch and temp.checkType == checkType:
+			exist = True
+			temp.append( data, time, count )
+			break
+	if not exist:
+		row = Percentage_row( no, name, batch, checkType )
+		row.append( data, time, count )
+		res.append( row )
+
 def return_check_percentage( request ):
 	if 11 not in request.session['status']:
 		return HttpResponseRedirect( '/warning/' )
@@ -446,18 +474,19 @@ def return_check_percentage( request ):
 	Raw = Raw_sql( )
 	res = []
 	Raw.sql = '''
-        select left(createtime,10) timex,inspector_no,inspector,sum(totalnumber),sum(totalreturn),batch
+        select left(createtime,10) timex,inspector_no,inspector,sum(totalnumber),sum(totalreturn),batch, check_type
         from sklcc_record
         where left(createtime,10)>='%s' and left(createtime,10)<='%s'
-        group by left(createtime,10),inspector_no,inspector,batch
+        group by left(createtime,10),inspector_no,inspector,batch, check_type
     ''' % (start, end)
-	if Raw.query_all(  ) != False:
+	if Raw.query_all( ) != False:
 		for temp_record in Raw.query_all( ):
 			insert_into_res( temp_record[1], temp_record[2], temp_record[5],
 			                 round( float( temp_record[4] ) * 100 / float( temp_record[3] ), 2 ) if float( temp_record[3] ) != 0 else 0, temp_record[0],
-			                 int( temp_record[3] ), res )
+			                 int( temp_record[3] ), temp_record[6],res )
 	for temp in res:
-		temp.slowtime = get_check_slowtime( temp.batch )
+		temp.slowtime = get_check_slowtime( temp.batch, temp.checkType )
+		temp.batch = temp.batch + '(' + temp.checkType + ')'
 		for temp_date in time_list:
 			exist = False
 			for temp_time in temp.data:
@@ -601,41 +630,27 @@ def form2_change_config( request ):
 		pass
 
 # form3
-def get_employee_total_strong_question_count_day( employeeno, date ):
-	Raw = Raw_sql( )
-	Raw.sql = "select serialno from sklcc_record where left( createtime, 10 )= '%s' and inspector_no = '%s'" % (
-	date, employeeno )
-	target_list = Raw.query_all( )
-
-	res = Total_strong()
-	count_list = []
-	for i in range( 0, res.count ):
-		count_list.append( 0 )
-	if target_list != False:
-		for target in target_list:
-			serialno = target[0]
-			for i, questionno in enumerate( res.questionno ):
-				Raw.sql = "select sum( returnno ) from sklcc_info where serialno = '%s' and questionno = %d" % (
-				serialno, questionno )
-				returnno = Raw.query_one( )
-				count_list[i] += returnno[0] if returnno[0] != None else 0
-
-	return count_list
-
-
-def change_to_row( count_list ):
-	res = []
-	rows = len( count_list[0] )
-	for i in range( 0, rows ):
-		res.append( [] )
-
-	for count in count_list:
-		for i, no in enumerate( count ):
-			res[i].append( no )
-	return res
-
-
 def total_strong_question( request ):
+	'''
+	阶段致命不良汇总，其中前后台数据交换格式较复杂但便于组织，效率较高
+	:param request: 开始时间start 和结束时间 end
+	:return:返回格式如下约定
+	假设选择的时间为2015-05-15到2015-05-19
+	e.p: { "00310":{    "employee":陈美华，
+						"count_list":{  "20":[1,2,0,0,0],
+										"40":[0,0,0,1,4],
+										....
+									}
+					}
+		   "00320":{   "employee":马士兵，
+						"count_list":{  "20":[1,2,0,0,0],
+										"40":[0,0,0,1,4],
+										....
+									}
+					}
+	    }
+	    其中count_list中的键为致命不良疵点的疵点编号，对应的值为列表，每个元素与时间对应，即五个元素分别对应15,16,17,18,19号每天对应的辞典个数
+	'''
 	if 12 not in request.session['status']:
 		return HttpResponseRedirect( '/warning/' )
 
@@ -644,36 +659,41 @@ def total_strong_question( request ):
 	employeename = request.session['employee']
 	if 'start' not in request.GET:
 		distance_not_have_year = []
-		info = []
+		info = {}
 		question = []
 		return TemplateResponse( request, html, locals( ) )
 
 	start = request.GET['start']
 	end   = request.GET['end']
-	# #TODO:
-	# string          = request.GET['employeeno']
-	# employeeno_list = string.split( '>' )
-
-	employee_list = get_all_inspector()
-	employeeno_list = []
-	for t in employee_list:
-		employeeno_list.append( t.employeeno )
-
-	distance = get_time_distance_list( start, end )
-	distance_have_year = change_distance_date_to_str_have_year( distance )
-	distance_not_have_year = change_distance_date_to_str_not_have_year( distance )
-
-	info = []
-	for employeeno in employeeno_list:
-		temp = Total_strong_one_person( )
-		temp.employeeno = employeeno
-		temp.employee = find_em_name( employeeno )
-		for date in distance_have_year:
-			temp.count_list.append( get_employee_total_strong_question_count_day( employeeno, date ) )
-		temp.count_list = change_to_row( temp.count_list )
-		info.append( temp )
-
 	question = Total_strong( )
+	info = {}
+	distance               = get_time_distance_list( start, end )
+	distance_have_year     = change_distance_date_to_str_have_year( distance )
+	distance_not_have_year = change_distance_date_to_str_not_have_year( distance )
+	#建立致命不良疵点个数的总列表，全部初始化为0，提供给每个检验员的字典拷贝
+	question_count_everyday = [0 for i in range(0, len(distance_not_have_year))]
+	#获取所有检验员
+	employee_list           = get_all_inspector()
+	question_dict           = dict( )
+	for question_temp in question.questionno:
+		question_dict[unicode(question_temp)]= deepcopy( question_count_everyday )
+
+	for employee in employee_list:
+		info[unicode(employee.employeeno)]=dict(employee=employee.employee,count_list=deepcopy(question_dict))
+
+
+
+	Raw     = Raw_sql()
+	Raw.sql = '''SELECT LEFT(CREATETIME,10) date, SUM( returnno ) total, questionname, questionno, inspector_no, inspector
+  				FROM SKLCC_INFO A JOIN SKLCC_RECORD B ON A.SERIALNO = B.SERIALNO
+				WHERE LEFT( CREATETIME,10 )>='%s' AND LEFT(CREATETIME, 10) <= '%s' AND A.TYPE = 2
+				GROUP BY LEFT(CREATETIME,10), questionname, questionno, inspector_no, inspector
+				ORDER BY inspector_no, date  desc'''%(start,end)
+	target_list = Raw.query_all()
+
+	if target_list != False:
+		for target in target_list:
+			info[unicode(target[4])]['count_list'][unicode(target[3])][distance_have_year.index( target[0] )] += target[1]
 
 	return TemplateResponse( request, html, locals( ) )
 
@@ -795,6 +815,161 @@ def baldric_information( request ):
 
 
 # form6
+# def append_to_form6_res( inspectorno, inpector, qcname, qcno, qccount, res, type ):
+# 	exist = False
+#
+# 	for temp in res:
+# 		if temp.no == inspectorno:
+# 			exist = True
+# 			tar = temp
+# 			if type == '1':
+# 				temp.append_to_check( qcno, qcname, qccount )
+# 			else:
+# 				temp.append_to_check_miss( qcno, qcname, qccount )
+# 	if not exist:
+# 		temp_row = table_form6_row( inspectorno, inpector )
+# 		if type == '1':
+# 			temp_row.append_to_check( qcno, qcname, qccount )
+# 		else:
+# 			temp_row.append_to_check_miss( qcno, qcname, qccount )
+# 		res.append( temp_row )
+#
+# def prize_punish( request ):
+# 	if 13 not in request.session['status']:
+# 		return HttpResponseRedirect( '/warning/' )
+# 	html = get_template( 'table_check_miss.html' )
+# 	em_number = request.session['employeeno']
+# 	employeename = request.session['employee']
+# 	Raw = Raw_sql( )
+# 	Raw.sql = "SELECT TOP 1 form6_money_standard FROM sklcc_config"
+# 	target = Raw.query_one( )
+# 	standard = target[0]
+# 	if 'start' not in request.GET:
+# 		total_length = 0
+# 		check_length = 0
+# 		check_miss_length = 0
+# 		check_qc = []
+# 		res = []
+# 		return TemplateResponse( request, html, locals( ) )
+#
+# 	start = request.GET['start'].replace( '/', '-' )
+# 	end = request.GET['end'].replace( '/', '-' )
+# 	time_list = get_time_distance_list( start, end )
+# 	Raw.sql = '''
+#     select inspector_no,inspector, questionname,questionno,sum(returnno) from sklcc_info join sklcc_record on sklcc_info.serialno = sklcc_record.serialno
+#     where questionno !=0 and left(createtime,10) <= '%s' and left(createtime,10) >= '%s'
+#     group by inspector_no,inspector,questionno,questionname ''' % (end, start)
+# 	res = []
+# 	check_qc = [{'no':20,'name':u'反肩带,\n反商标,\n反钩袢'},{'no':99,'name':u'其他'},{'no':28,'name':u'混号'},{'no':27,'name':u'漏序'},{'no':33,'name':u'破洞'},{'no':32,'name':u'缺勾'},{'no':21,'name':u'上错商标'},{'no':29,'name':u'包'},{'no':55,'name':u'套灯模破洞'}]
+# 	check_miss_qc = [{'no':20,'name':u'反肩带,\n反商标,\n反钩袢'},{'no':99,'name':u'其他'},{'no':28,'name':u'混号'},{'no':27,'name':u'漏序'},{'no':33,'name':u'破洞'},{'no':32,'name':u'缺勾'},{'no':21,'name':u'上错商标'},{'no':29,'name':u'包'},{'no':55,'name':u'套灯模破洞'}]
+# 	h = ['']
+# 	Rawres = Raw.query_all( )
+# 	if not Rawres == False:
+# 		for temp in Rawres:
+# 			if temp[3] == 20 or temp[3] == 30 or temp[3] == 34:
+# 				append_to_form6_res( temp[0], temp[1], u'反肩带,\n反商标,\n反钩袢', 20, temp[4], res, '1' )
+# 				exist = False
+# 				#for temp_qc in check_qc:
+# 				#	if temp_qc['no'] == 20:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_qc.append( { 'no': 20, 'name': u'反肩带,\n反商标,\n反钩袢' } )
+#
+# 			if temp[3] in [28, 27, 33, 32, 21, 29, 55]:
+# 				append_to_form6_res( temp[0], temp[1], temp[2], temp[3], temp[4], res, '1' )
+# 				exist = False
+# 				#for temp_qc in check_qc:
+# 				#	if temp_qc['no'] == temp[3]:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_qc.append( { 'no': temp[3], 'name': temp[2] } )
+#
+# 			if temp[3] not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( temp[3] ) == 2:
+# 				append_to_form6_res( temp[0], temp[1], u'其他', 99, temp[4], res, '1' )
+# 				exist = False
+# 				#for temp_qc in check_qc:
+# 				#	if temp_qc['no'] == 99:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_qc.append( { 'no': 99, 'name': u'其他' } )
+#
+# 	Raw.sql = '''select inspector_no,inspector, questionname,questionno,sum(returnno)
+#     from sklcc_recheck_content join sklcc_recheck_info
+#     on  sklcc_recheck_content.serialno = sklcc_recheck_info.serialno
+#     where questionno != 0 and left(sklcc_recheck_info.createtime,10) <= '%s' and left(sklcc_recheck_info.createtime,10) >= '%s'
+#     group by inspector_no,inspector,questionno,questionname''' % (end, start)
+# 	Rawres = Raw.query_all( )
+# 	if Rawres != False:
+# 		for temp in Rawres:
+# 			if temp[3] == 20 or temp[3] == 30 or temp[3] == 34:
+# 				append_to_form6_res( temp[0], temp[1], u'反肩带,\n反商标,\n反钩袢', 20, temp[4], res, '2' )
+# 				exist = False
+# 				#for temp_qc in check_miss_qc:
+# 				#	if temp_qc['no'] == 20:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_miss_qc.append( { 'no': 20, 'name': u'反肩带,\n反商标,\n反钩袢' } )
+#
+# 			if temp[3] in [28, 27, 33, 32, 21, 29, 55]:
+# 				append_to_form6_res( temp[0], temp[1], temp[2], temp[3], temp[4], res, '2' )
+# 				exist = False
+# 				#for temp_qc in check_miss_qc:
+# 				#	if temp_qc['no'] == temp[3]:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_miss_qc.append( { 'no': temp[3], 'name': temp[2] } )
+#
+# 			if temp[3] not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( temp[3] ) == 2:
+# 				append_to_form6_res( temp[0], temp[1], u'其他', 99, temp[4], res, '2' )
+# 				exist = False
+# 				#for temp_qc in check_miss_qc:
+# 				#	if temp_qc['no'] == 99:
+# 				#		exist = True
+# 				#if not exist:
+# 				#	check_miss_qc.append( { 'no': 99, 'name': u'其他' } )
+#
+# 	for record in res:  # 疵点对齐
+# 		for check_qc_temp in check_qc:
+# 			exist = False
+# 			for record_temp in record.check:
+# 				if record_temp['no'] == check_qc_temp['no']:
+# 					exist = True
+# 			if not exist:
+# 				append_to_form6_res( record.no, record.name, check_qc_temp['name'], check_qc_temp['no'], 0, res, '1' )
+# 		for check_qc_temp in check_miss_qc:
+# 			exist = False
+# 			for record_temp in record.check_miss:
+# 				if record_temp['no'] == check_qc_temp['no']:
+# 					exist = True
+# 			if not exist:
+# 				append_to_form6_res( record.no, record.name, check_qc_temp['name'], check_qc_temp['no'], 0, res, '2' )
+# 	check_qc.sort( key = lambda x: x['no'] )
+# 	check_miss_qc.sort( key = lambda x: x['no'] )
+# 	for temp in res:
+# 		temp.check.sort( key = lambda x: x['no'] )
+# 		temp.check_miss.sort( key = lambda x: x['no'] )
+# 	check_length = len( check_qc )
+# 	check_miss_length = len( check_miss_qc )
+# 	total_length = check_length + check_miss_length + 10
+# 	# #计算漏验率##
+# 	Raw.sql = '''select sum(samplenumber),inspector_no from
+#                  (select distinct(contentid),inspector_no,samplenumber from sklcc_recheck_info join sklcc_recheck_content
+#                   on sklcc_recheck_info.serialno = sklcc_recheck_content.serialno
+#                   where left(sklcc_recheck_info.createtime,10) >= '%s' and left(sklcc_recheck_info.createtime,10)<='%s'
+#                   ) a
+#                   group by (inspector_no)''' % (start, end)
+# 	if Raw.query_all( ) != False:
+# 		for temp in Raw.query_all( ):
+# 			for i in res:
+# 				if i.no == temp[1]:
+# 					if temp[0] != 0:
+# 						i.recheck_miss_percentage = round( float( i.check_miss_count ) * 100 / float( temp[0] ), 2 )
+# 					else:
+# 						i.recheck_miss_percentage = 0
+# 	for temp in res:
+# 		temp.type = get_employee_type( temp.no )
+#
+# 	return TemplateResponse( request, html, locals( ) )
 def append_to_form6_res( inspectorno, inpector, qcname, qcno, qccount, res, type ):
 	exist = False
 
@@ -815,6 +990,8 @@ def append_to_form6_res( inspectorno, inpector, qcname, qcno, qccount, res, type
 		res.append( temp_row )
 
 def prize_punish( request ):
+	reload(sys)
+	sys.setdefaultencoding("utf-8")
 	if 13 not in request.session['status']:
 		return HttpResponseRedirect( '/warning/' )
 	html = get_template( 'table_check_miss.html' )
@@ -837,8 +1014,9 @@ def prize_punish( request ):
 	time_list = get_time_distance_list( start, end )
 	Raw.sql = '''
     select inspector_no,inspector, questionname,questionno,sum(returnno) from sklcc_info join sklcc_record on sklcc_info.serialno = sklcc_record.serialno
-    where questionno !=0 and left(createtime,10) <= '%s' and left(createtime,10) >= '%s'
+    where questionno != 0 and left(createtime,10) <= '%s' and left(createtime,10) >= '%s'
     group by inspector_no,inspector,questionno,questionname ''' % (end, start)
+	#print Raw.sql
 	res = []
 	check_qc = [{'no':20,'name':u'反肩带,\n反商标,\n反钩袢'},{'no':99,'name':u'其他'},{'no':28,'name':u'混号'},{'no':27,'name':u'漏序'},{'no':33,'name':u'破洞'},{'no':32,'name':u'缺勾'},{'no':21,'name':u'上错商标'},{'no':29,'name':u'包'},{'no':55,'name':u'套灯模破洞'}]
 	check_miss_qc = [{'no':20,'name':u'反肩带,\n反商标,\n反钩袢'},{'no':99,'name':u'其他'},{'no':28,'name':u'混号'},{'no':27,'name':u'漏序'},{'no':33,'name':u'破洞'},{'no':32,'name':u'缺勾'},{'no':21,'name':u'上错商标'},{'no':29,'name':u'包'},{'no':55,'name':u'套灯模破洞'}]
@@ -864,7 +1042,7 @@ def prize_punish( request ):
 				#if not exist:
 				#	check_qc.append( { 'no': temp[3], 'name': temp[2] } )
 
-			if temp[3] not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( temp[3] ) == 2:
+			if int(temp[3]) not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( int(temp[3]) ) == 2:
 				append_to_form6_res( temp[0], temp[1], u'其他', 99, temp[4], res, '1' )
 				exist = False
 				#for temp_qc in check_qc:
@@ -873,10 +1051,11 @@ def prize_punish( request ):
 				#if not exist:
 				#	check_qc.append( { 'no': 99, 'name': u'其他' } )
 
+
 	Raw.sql = '''select inspector_no,inspector, questionname,questionno,sum(returnno)
     from sklcc_recheck_content join sklcc_recheck_info
     on  sklcc_recheck_content.serialno = sklcc_recheck_info.serialno
-    where questionno != 0 and left(sklcc_recheck_info.createtime,10) <= '%s' and left(sklcc_recheck_info.createtime,10) >= '%s'
+    where left(sklcc_recheck_info.createtime,10) <= '%s' and left(sklcc_recheck_info.createtime,10) >= '%s'
     group by inspector_no,inspector,questionno,questionname''' % (end, start)
 	# print Raw.sql
 	Rawres = Raw.query_all( )
@@ -899,8 +1078,7 @@ def prize_punish( request ):
 				#		exist = True
 				#if not exist:
 				#	check_miss_qc.append( { 'no': temp[3], 'name': temp[2] } )
-
-			if temp[3] not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( temp[3] ) == 2:
+			if int(temp[3]) not in (20, 30, 34, 28, 27, 33, 32, 21, 29, 55) and get_question_type( int(temp[3]) ) == 2:
 				append_to_form6_res( temp[0], temp[1], u'其他', 99, temp[4], res, '2' )
 				exist = False
 				#for temp_qc in check_miss_qc:
@@ -908,6 +1086,9 @@ def prize_punish( request ):
 				#		exist = True
 				#if not exist:
 				#	check_miss_qc.append( { 'no': 99, 'name': u'其他' } )
+			for ins in res:
+				if ins.no == temp[0]:
+					ins.check_miss_real_count += temp[4]
 
 	for record in res:  # 疵点对齐
 		for check_qc_temp in check_qc:
@@ -944,7 +1125,7 @@ def prize_punish( request ):
 			for i in res:
 				if i.no == temp[1]:
 					if temp[0] != 0:
-						i.recheck_miss_percentage = round( float( i.check_miss_count ) * 100 / float( temp[0] ), 2 )
+						i.recheck_miss_percentage = round( float( i.check_miss_real_count ) * 100 / float( temp[0] ), 2 )
 					else:
 						i.recheck_miss_percentage = 0
 	for temp in res:
@@ -1019,7 +1200,12 @@ def update_recheck_efficent( request ):
 	effciency  = float( request.GET['efficent'] )
 	date       = request.GET['date']
 	Raw        = Raw_sql()
-	Raw.sql    = "update sklcc_effciency set real_work_time = %f, effciency = %f where employeeno = '%s' and date = '%s'" %( real_time, effciency / 100, employeeno, date )
+	Raw.sql    = "SELECT * FROM sklcc_effciency where employeeno = '%s' and date = '%s'"%(employeeno, date)
+	if Raw.query_one():
+		Raw.sql = "update sklcc_effciency set real_work_time = %f, effciency = %f where employeeno = '%s' and date = '%s'" %( real_time, effciency / 100, employeeno, date )
+	else:
+		Raw.sql = "insert into sklcc_effciency( employee, work_time, real_work_time, effciency, employeeno, date )" \
+		          "values( '%s', %f, %f, %f, '%s', '%s' )"%( employee, real_time * ( effciency / 100 ),  real_time, effciency / 100, employeeno, date )
 	Raw.update()
 	return HttpResponse()
 
@@ -1037,7 +1223,7 @@ class form_7_row( ):
 
 	def append( self, batch, count, price, time ):
 		Raw = Raw_sql()
-		Raw.sql = u"SELECT dbo.get_worktime_of_taodengmo( '%s', '套灯模' )"%batch
+		Raw.sql = u"SELECT dbo.get_worktime_by_batch_and_checktype( '%s', '套灯模' )"%batch
 		worktime = Raw.query_one()[0]
 		self.res.append(
 			{ 'batch': batch, 'count': count, 'price': price, 'time': time, 'tincome': round( price * count, 2 ),
@@ -1290,50 +1476,45 @@ def recheckor_total_strong_problem( request ):
 		html = get_template( 'table_recheck_res.html' )
 		em_number    = request.session['employeeno']
 		employeename = request.session['employee']
+		mistakes_list = dict()
 		Raw = Raw_sql()
 		if 'start' not in request.GET:
 			return TemplateResponse( request, html, locals() )
 		start = request.GET['start']
 		end   = request.GET['end']
-		Raw.sql = "select distinct recheckor_no, recheckor from sklcc_recheck_info where left( createtime, 10 ) <= '%s' and " \
-		          "left( createtime, 10 ) >= '%s'"%( end, start )
 
 		distance  = get_time_distance_list( start, end )
 		date_list = change_distance_date_to_str_have_year( distance )
 		not_have_year_date_list = change_distance_date_to_str_not_have_year( distance )
-		init_count_list = [0 for i in range( 0, len( date_list ) )]
-		mistakes_list   = [ { 'name': question, 'res': deepcopy( init_count_list ) } for question in ALL_STRONG_QUESTION.questionname ]
 
-		data = []
+		init_count_list = [0 for i in range( 0, len( date_list ) )]
+		for i,question in enumerate(ALL_STRONG_QUESTION.questionname):
+			mistakes_list[ALL_STRONG_QUESTION.questionno[i]]= {'name':question, 'res': deepcopy( init_count_list ) }
+		data = {}
+		Raw.sql = '''SELECT QUESTIONNO, QUESTIONNAME, RETURNNO,INSPECTOR, inspector_no, recheckor_no, recheckor,LEFT(A.CREATETIME,10) FROM
+					SKLCC_RECHECK_INFO A JOIN SKLCC_RECHECK_CONTENT B
+					ON A.SERIALNO = B.SERIALNO
+					WHERE A.CREATETIME > '%s' AND A.CREATETIME < '%s' AND RETURNNO != 0 AND [BDDMS_MSZ].DBO.get_questiontype_by_no(QUESTIONNO) = 2
+					ORDER BY RECHECKOR_NO'''%( start, end )
 		target_list = Raw.query_all()
 		if target_list != False:
 			for target in target_list:
-				temp = dict()
-				temp['recheckor']    = target[1]
-				temp['recheckor_no'] = target[0]
-				temp['res']          = []
-				Raw.sql = "select distinct inspector_no, inspector from sklcc_recheck_info where recheckor_no = '%s' and" \
-				          " left( createtime, 10 ) <= '%s' and left( createtime, 10 ) >= '%s'"%( target[0], end, start )
-				inspector_list = Raw.query_all()
+				if target[5] not in data.keys():
+					data[target[5]]={'recheckor':target[6], 'rows':ALL_STRONG_QUESTION.count,
+					                 'res':{target[4]:{'mistakes':deepcopy(mistakes_list), 'rows':ALL_STRONG_QUESTION.count,
+					                                                        'inspector':target[3]}
+																}
+									}
+				elif target[4] not in data[target[5]]['res'].keys():
+					data[target[5]]['res'][target[4]]={'mistakes':deepcopy(mistakes_list), 'rows':ALL_STRONG_QUESTION.count,
+					                                   'inspector':target[3]}
+					data[target[5]]['rows']+=ALL_STRONG_QUESTION.count
 
-				if inspector_list != False:
-					for inspector in inspector_list:
-						real_mistakes_list = deepcopy( mistakes_list )
-						#temp['res'].append( { 'inspector': inspector[1], 'inspector_no': inspector[0], 'mistakes': deepcopy( mistakes_list ) } )
-						for mistake in real_mistakes_list:
-
-							Raw.sql = "select sum( returnno ), left( b.createtime, 10 ) from sklcc_recheck_info a join sklcc_recheck_content b" \
-						          " on a.serialno = b.serialno where left( b.createtime, 10 ) <= '%s' and " \
-						          "left( b.createtime, 10 ) >= '%s' and recheckor_no = '%s' and inspector_no = '%s'" \
-						          " and b.questionname = '%s'" \
-						          " group by left( b.createtime, 10 )"%( end, start, target[0],inspector[0], mistake['name'] )
-							count_list = Raw.query_all()
-							if count_list != False:
-								for count in count_list:
-									mistake['res'][( time_form( count[1] ) - time_form( start ) ).days] += count[0]
-						temp['res'].append( {'inspector':inspector[1], 'mistakes': deepcopy( real_mistakes_list ), 'rows':ALL_STRONG_QUESTION.count} )
-				temp['rows'] = len( temp['res'] ) * ALL_STRONG_QUESTION.count
-				data.append(deepcopy( temp ))
+				data[target[5]]['res'][target[4]]['mistakes'][target[0]]['res'][
+						(datetime.datetime(int(target[7].split('-')[0]), int(target[7].split('-')[1]), int(target[7].split('-')[2])) -
+						 datetime.datetime(int(start.split('-')[0]), int(start.split('-')[1]), int(start.split('-')[2]))
+						).days
+					] += target[2]
 
 			return TemplateResponse( request, html, locals() )
 		else:
@@ -1432,3 +1613,96 @@ def table_measure_size_in( request ):
 					res.append( deepcopy( temp ) )
 
 		return TemplateResponse( request, html, locals() )
+
+
+
+def find_recheck_info_help_function( Raw_Sql, authorityid_in_use ):
+	Raw         = Raw_sql()
+	Raw.sql     = Raw_Sql
+	target_list = Raw.query_all()
+	record_list = list()
+	record = Record_info()
+	if target_list != False:
+		for target in target_list:
+			record.check_type = ""
+			state             = target[0]
+			serialno          = target[2]
+			departmentno      = target[3]
+			department        = target[4]
+			inspector         = target[5]
+			inspector_no      = target[6]
+			recheckor         = target[7]
+			batch             = target[9]
+			createtime        = target[1]
+
+			string = str( createtime ).split( ' ' )[0].split( '-' )
+			year = int( string[0] )
+			month = int( string[1] )
+			day = int( string[2] )
+			createtime_form = datetime.datetime( year, month, day )
+			Raw.sql = "select days from sklcc_config"
+			target = Raw.query_one( )
+
+			if (datetime.datetime.today( ) - createtime_form).days > target[0]:
+				continue
+
+			record.state        = state
+			record.batch        = batch
+			record.createtime   = createtime.split( '.' )[0][5:-3]
+			record.departmentno = departmentno
+			record.department   = department
+			record.serialno     = serialno
+			record.inspector    = inspector
+			record.totalnumber  = 0
+			record.totalreturn  = 0
+			record.bad          = 0
+			record.strong       = 0
+			record.weak         = 0
+			record.batchnumber  = 0
+			record.recheckor    = recheckor
+			#normal_check 0 partition_measure 1
+			record.check_id     = 0
+			Raw                 = Raw_sql( )
+			Raw.sql = "select samplenumber, returnno, questionno from sklcc_recheck_content where serialno = '%s'" % serialno
+			is_serialno_list = Raw.query_all( )
+
+			if is_serialno_list == False:
+				if state == 2:
+					record.url = '/recheck_table?%d#%s' % (state, serialno)
+				elif state == 0 and authorityid_in_use == 5:
+					record.url = '/recheck_check_table?%d#%s' % (state, serialno)
+				else:
+					record.url = '/recheck_read_only_table?%d#%s' % (state, serialno)
+				record_list.append( copy.deepcopy( record ) )
+				continue
+
+			for one in is_serialno_list:
+				record.totalreturn += one[1]
+				if get_question_type( one[2] ) == 2:
+					record.strong += 1
+				elif get_question_type( one[2] ) == 1:
+					record.bad += 1
+				elif get_question_type( one[2] ) == None:
+					pass
+				else:
+					record.weak += 1
+			Raw.sql = "select distinct contentid, samplenumber, totalnumber, is_recheck from sklcc_recheck_content where serialno = '%s'" % serialno
+			target_list = Raw.query_all( )
+
+			if target_list != False:
+				for target in target_list:
+					record.totalnumber += target[1]
+					if target[3] == 1:
+						#normal_check 0 partition_measure 1
+						record.check_type = "(含复检)"
+						continue
+					record.batchnumber += target[2]
+			if state == 2:
+				record.url = '/recheck_table?%d#%s' % (state, serialno)
+			elif state == 0 and authorityid_in_use == 5:
+				record.url = '/recheck_check_table?%d#%s' % (state, serialno)
+			else:
+				record.url = '/recheck_read_only_table?%d#%s' % (state, serialno)
+			record_list.append( copy.deepcopy( record ) )
+
+	return record_list

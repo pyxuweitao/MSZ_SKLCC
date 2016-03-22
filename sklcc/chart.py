@@ -6,12 +6,13 @@ from sklcc.views import get_all_question, get_all_department, Current_time, find
 	Raw_sql, get_measure_res, get_symmetry, get_common_difference
 import sys
 import random
-import os
+import json
 import copy
+import time
+import datetime
 
 def bar_question_chart_data( questionno, departmentno_list, start, end ):
-	res          = {}
-	value_list   = []
+	res          = dict()
 	res['name']  = find_questionname(questionno).decode('gbk') if questionno != 0 else '疵点总数'
 	res['value'] = []
 	for departmentno in departmentno_list:
@@ -31,6 +32,7 @@ def get_question_department_no( questionno, departmentno, start, end ):
 	target      = Raw.query_one()
 	totalnumber = target[0] if target != False or target[0] != None else 0
 	return totalnumber
+
 
 def bar_question_chart( request ):
 	if 18 not in request.session['status']:
@@ -95,6 +97,132 @@ def get_question_return_date( questionno, start, end, departmentno ):
 	target  = Raw.query_one()
 	return target[0] if target[0] != False and target[0] != None else 0
 
+def bar_measure_get_data(requests):
+	dataList = list()
+	res = list()
+	for i in range(0,1000):
+		dataList.append(int(time.mktime((datetime.datetime(year=random.randint(2013,2015),month=random.randint(1,12),day=random.randint(1,28),hour=random.randint(0,23),minute=random.randint(0,59))+datetime.timedelta(hours=8)).timetuple()))*1000)
+	dataList = list(set(dataList))
+	for one in dataList:
+		res.append( [one,float("%.1f"%(float(24 + random.randint(-1,1))+random.random())) ])
+		#dataList.append([int(time.mktime(datetime.datetime(year=2014,month=9,day=7).utctimetuple()))*1000,float("%.1f"%(float(24 + random.randint(-1,1))+random.random()))])
+	res.sort(key=lambda x:x[0])
+
+	return HttpResponse(json.dumps( res, ensure_ascii=False ))
+
+def bar_measure_get_batch_by_departmentno(request):
+	departmentno = request.GET["department_no"]
+	start        = request.GET["start"]
+	end          = request.GET["end"]
+	batch        = request.GET["batch"] if "batch" in request.GET else ""
+	Raw          = Raw_sql()
+	if departmentno != "":
+		Raw.sql      = "SELECT DISTINCT(batch) FROM sklcc_measure_record WITH(NOLOCK) WHERE" \
+	               " departmentno='%s' AND createtime <= '%s' AND createtime >= '%s' AND batch LIKE '%s%%%%'"%(departmentno, end, start, batch)
+	else:
+		Raw.sql      = "SELECT DISTINCT(batch) FROM sklcc_measure_record WITH(NOLOCK) WHERE" \
+	               " createtime <= '%s' AND createtime >= '%s' AND batch LIKE '%s%%%%'"%(end, start, batch)
+	batch_List   = Raw.query_all()
+	if not batch_List:
+		batch_List = []
+	return HttpResponse( json.dumps([batch[0] for batch in batch_List], ensure_ascii=False) )
+
+def get_styleno_blur(request):
+	styleno = request.GET["styleno"]
+	Raw     = Raw_sql()
+	Raw.sql = "SELECT DISTINCT styleno FROM sklcc_measure_record WHERE styleno LIKE '%s%%%%'"%styleno
+	stylenoList = Raw.query_all()
+
+	if not stylenoList:
+		stylenoList = []
+	return HttpResponse( json.dumps([styleno[0] for styleno in stylenoList], ensure_ascii=False) )
+
+
+def get_size_partition_by_styleno_or_batch(request):
+	Raw = Raw_sql()
+	if request.GET.has_key("batch"):
+		batch = request.GET["batch"]
+		Raw.sql = "SELECT DISTINCT size FROM sklcc_measure_record WHERE batch = '%s'"%batch
+		sizeList = Raw.query_all()
+		Raw.sql = "SELECT DISTINCT a.partition FROM sklcc_measure_info a JOIN sklcc_measure_record b" \
+		          " ON a.serialno = b.serialno WHERE batch = '%s'"%batch
+		partitionList = Raw.query_all()
+	else:
+		styleno = request.GET["styleno"]
+		Raw.sql = "SELECT DISTINCT size FROM sklcc_measure_record WHERE styleno = '%s'" %styleno
+		sizeList = Raw.query_all()
+		Raw.sql = "SELECT DISTINCT a.partition FROM sklcc_measure_info a JOIN sklcc_measure_record b" \
+		          " ON a.serialno = b.serialno WHERE b.styleno = '%s'" %styleno
+		partitionList = Raw.query_all()
+
+	if not sizeList:
+		sizeList = []
+	else:
+		sizeList = [sizeitem[0] for sizeitem in sizeList]
+
+	if not partitionList:
+		partitionList = []
+	else:
+		partitionList = [partition[0] for partition in partitionList]
+
+	return HttpResponse(json.dumps({"size_list":sizeList,"partition_list":partitionList},ensure_ascii=False))
+
+def transformTimeToTimeStamp(string):
+	string = string.split(".")[0]
+	return int(time.mktime((datetime.datetime.strptime( string, '%Y-%m-%d %H:%M:%S' )+datetime.timedelta(hours=8)).timetuple()))*1000
+
+def get_partition_list_by_styleno_or_batch(request):
+	start = request.GET["start"]
+	end   = request.GET["end"]
+	size  = request.GET["size"]
+	partition = request.GET["partition"]
+	res = {"low":0.0,"med":0.0,"hig":0.0,"has2":0,"data":[]}
+	Raw   = Raw_sql()
+	styleno = ""
+	if request.GET.has_key("batch"):
+		batch = request.GET["batch"]
+		Raw.sql = "SELECT partition, measure_res, measure_type, symmetry1, symmetry2, b.createtime, a.styleno FROM SKLCC_MEASURE_RECORD " \
+		          "a JOIN SKLCC_MEASURE_INFO b" \
+		          " ON a.serialno = b.serialno" \
+		          " WHERE a.batch = '%s' AND a.size = '%s' AND b.partition = '%s' AND a.createtime <= '%s' AND a.createtime >= '%s'" \
+		          " ORDER BY createtime" %(batch, size, partition, end, start)
+	else:
+		styleno = request.GET["styleno"]
+		Raw.sql = "SELECT partition, measure_res, measure_type, symmetry1, symmetry2, b.createtime, a.styleno  FROM SKLCC_MEASURE_RECORD a" \
+		          " JOIN SKLCC_MEASURE_INFO b ON a.serialno = b.serialno" \
+		          " WHERE a.styleno = '%s' AND a.size = '%s' AND b.partition = '%s' AND a.createtime <= '%s' AND a.createtime >= '%s'" \
+		          " ORDER BY createtime" %(styleno, size, partition, end, start)
+	partitionData = Raw.query_all()
+	if not partitionData:
+		partitionData = []
+	for itemData in partitionData:
+		styleno = itemData[6]
+		res["has2"]=itemData[2]
+		res["data"].append([transformTimeToTimeStamp(itemData[5]),itemData[1]] if itemData[2] == 0 else [transformTimeToTimeStamp(itemData[5]),itemData[3],itemData[4]] )
+
+	addNo = 1
+	spot = 0
+	for i in range(1,len(res["data"])):
+		if res["data"][i][0] == res["data"][spot][0]:
+			res["data"][i][0] += addNo
+			addNo += 1
+		else:
+			spot  = i
+			addNo = 1
+
+
+	Raw.sql     = "SELECT common_difference, measure_res FROM sklcc_style_measure" \
+	              "  WHERE styleno = '%s' AND size = '%s' AND partition = '%s'"%( styleno, size,partition)
+	target = Raw.query_one()
+	if target is not False:
+		res["low"]=float(target[1]-float(target[0].split('@')[1]))
+		res["hig"]=float(target[1]+float(target[0].split('@')[0]))
+		res["med"]=float(target[1])
+
+	return HttpResponse(json.dumps(res,ensure_ascii=False))
+
+
+
 def bar_measure_chart( request ):
 	reload(sys)
 	sys.setdefaultencoding('utf-8')
@@ -103,64 +231,7 @@ def bar_measure_chart( request ):
 	em_number    = request.session['employeeno']
 	employeename = request.session['employee']
 	html = get_template('bar_measure_chart.html')
-	Raw  = Raw_sql()
-	#TODO:time_distance,页面显示中文乱码
-	Raw.sql = "select distinct batch from sklcc_measure_record"
-	target_list = Raw.query_all()
-	batch_list = [ target[0] for target in target_list ] if target_list != False else []
-	if 'batch' not in request.GET:
-		return TemplateResponse( request, html, locals() )
-
-	batch = request.GET['batch']
-
-	Raw.sql     = "select partition, symmetry1, symmetry2, measure_res, a.styleno, a.size from " \
-	              "sklcc_measure_record a join sklcc_measure_info b on a.serialno = b.serialno" \
-	              " where batch = '%s' order by partition"%batch
-	target_list = Raw.query_all()
-	res = []
-	#data_left position:
-	#data_right position:
-	#1:over negative tolerance
-	#2:negative tolerance
-	#3:right equal
-	#4:positive tolerance
-	#5:over positive tolerance
-	partition_list = []
-	if target_list != False:
-		for target in target_list:
-			partition  = target[0]
-			if partition not in partition_list:
-				partition_list.append( partition )
-				res.append( { 'partition': partition, 'data_left':[0,0], 'data_right':[0,0,0,0,0] } )
-			else:
-				index = partition_list.index( partition )
-
-
-
-			for one in target[1:4]:
-				if one != None:
-					sub = one - get_measure_res( target[4], target[0] )
-					if sub < 0 and abs( sub ) > get_common_difference( target[4], target[0] ):
-						temp['data_right'][0] += 1
-					elif sub < 0 and abs( sub ) <= get_common_difference( target[4], target[0] ):
-						temp['data_right'][1] += 1
-					elif sub == 0:
-						temp['data_right'][2] += 1
-					elif sub > 0 and abs( sub ) <= get_common_difference( target[4], target[1] ):
-						temp['data_right'][3] += 1
-					elif sub > 0 and abs( sub ) > get_common_difference( target[4], target[1] ):
-						temp['data_right'][4] += 1
-			if target[0] != None and target[1] != None:
-				if abs( target[1] - target[2] ) <= get_symmetry( target[4], target[0] ):
-					temp['data_left'][0] += 1
-				else:
-					temp['data_left'][1] += 1
-			if partition not in [ t['partition'] for t in res ]:
-				res.append( copy.deepcopy( temp ) )
-	for one in res:
-		if one['data_left'][0] == 0 and one['data_left'][1] == 0:
-			one['data_left'] = None
-	#return HttpResponse(res)
+	department_list = get_all_department()
 	return TemplateResponse( request, html, locals() )
 
 
@@ -174,6 +245,8 @@ def pie_chart( request ):
 	weak_list       = []
 	bad_list        = []
 	strong_list     = []
+	start = request.GET['start'] if 'start' in request.GET else ""
+	end   = request.GET['end'] if 'end' in request.GET else ""
 	if 'departmentno' in request.GET:
 		departmentno = request.GET['departmentno']
 		for department in department_list:
@@ -192,6 +265,17 @@ def pie_chart( request ):
 			elif question.questiontype == 2:
 				if get_question_return_date( question.questionno, start, end, departmentno ) != 0:
 					strong_list.append( {'name': question.questionname, 'no': get_question_return_date( question.questionno, start, end, departmentno ) } )
+
+
+	Raw     = Raw_sql()
+	Raw.sql = "SELECT DISTINCT BATCH, MAX(SUBSTRING(createtime,0,11)) FROM SKLCC_RECORD GROUP BY batch"
+	TargetList = Raw.query_all()
+	batch   = list()
+	batchChosen = request.GET['batch'] if 'batch' in request.GET else "ALL"
+	batch.append({'batchname':'所有批号', 'batchno':'ALL', 'createtime':'', 'ischosen': 1 if batchChosen == "ALL" else 0 })
+	catchBatch = False
+	if TargetList:
+		batch.extend([{'batchname':row[0], 'batchno':row[0], 'createtime':row[1], 'ischosen': 1 if batchChosen == row[0] else 0 } for row in TargetList] )
 	html = get_template( 'pie_chart.html' )
 	return TemplateResponse( request, html, locals() )
 

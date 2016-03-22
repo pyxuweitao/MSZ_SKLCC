@@ -22,6 +22,7 @@ window.onload = function () {
         //alert('s');
         //refresh();
     });
+    
     //chart();
     $("#end_time").datetimepicker({
         format: 'yyyy-mm-dd',

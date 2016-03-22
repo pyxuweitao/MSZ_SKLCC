@@ -15,9 +15,9 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
-        'HOST': '192.168.135.45',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '1344',
+        'PASSWORD': '626107',                  # Not used with sqlite3.
+        #'HOST':'127.0.0.1,1433',
+        'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
         'OPTIONS':{
 	        'host_is_server':True
         }},
@@ -25,9 +25,9 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
-        'HOST': '192.168.135.45',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '1344',
+        'PASSWORD': '626107',                  # Not used with sqlite3.
+        #'HOST':'127.0.0.1,1433',
+        'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
         'OPTIONS':{
 	        'host_is_server':True
         }
@@ -89,7 +89,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
 	#os.path.join(os.path.dirname(__file__), '..', 'static').replace('\\','/'),
-	'E:/xuweitao/MSZ_SKLCC/static/',
+	'E:/program/xuweitao/MSZ_SKLCC/static/',
 	#'E:/2 - course/sklcc/webserver/msz/WJ_test_1_4/static/',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
@@ -138,7 +138,7 @@ WSGI_APPLICATION = 'MSZ_SKLCC.wsgi.application'
 
 TEMPLATE_DIRS = (
 	#os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),
-	'E:/xuweitao/MSZ_SKLCC/templates',
+	'E:/program/xuweitao/MSZ_SKLCC/templates',
 	)
 
 INSTALLED_APPS = (

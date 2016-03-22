@@ -15,7 +15,7 @@
     <orderEntry type="jdk" jdkName="Python 2.7.10 (D:\study\Python27\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="WebSpider" />
-    <orderEntry type="module" module-name="ui" />
+    <orderEntry type="module" module-name="python2.7" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
