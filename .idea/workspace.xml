@@ -2,50 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd9d2ab9-1e0c-406a-9403-aa07f7720655" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/Thumbs.db" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/select2x2.png" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/error.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sklcc/RawSQL.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sklcc/backup_changes.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/exporting.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/highstock-all.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/highstock.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/highstock.src.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/select2.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/query_backup_record.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/源码（所有）.doc" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/images/Thumbs.db" afterPath="$PROJECT_DIR$/static/images/Thumbs.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/Thumbs.db" afterPath="$PROJECT_DIR$/static/img/Thumbs.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/Thumbs.db" afterPath="$PROJECT_DIR$/templates/Thumbs.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" afterPath="$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSZ_SKLCC/settings.py" afterPath="$PROJECT_DIR$/MSZ_SKLCC/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MSZ_SKLCC/urls.py" afterPath="$PROJECT_DIR$/MSZ_SKLCC/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/chart.py" afterPath="$PROJECT_DIR$/sklcc/chart.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/forms.py" afterPath="$PROJECT_DIR$/sklcc/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/measure.py" afterPath="$PROJECT_DIR$/sklcc/measure.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/pad.py" afterPath="$PROJECT_DIR$/sklcc/pad.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/utilitys.py" afterPath="$PROJECT_DIR$/sklcc/utilitys.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/views.py" afterPath="$PROJECT_DIR$/sklcc/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/CSS/select2.css" afterPath="$PROJECT_DIR$/static/CSS/select2.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/dataentry_js.js" afterPath="$PROJECT_DIR$/static/js/dataentry_js.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/function.js" afterPath="$PROJECT_DIR$/static/js/function.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/pie_chart.js" afterPath="$PROJECT_DIR$/static/js/pie_chart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/select2.min.js" afterPath="$PROJECT_DIR$/static/js/select2.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/select2_locale_zh-CN.js" afterPath="$PROJECT_DIR$/static/js/select2_locale_zh-CN.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/LogIn.html" afterPath="$PROJECT_DIR$/templates/LogIn.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/bar_measure_chart.html" afterPath="$PROJECT_DIR$/templates/bar_measure_chart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/personal.html" afterPath="$PROJECT_DIR$/templates/personal.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/pie_chart.html" afterPath="$PROJECT_DIR$/templates/pie_chart.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/table_recheck_res.html" afterPath="$PROJECT_DIR$/templates/table_recheck_res.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/table_total_is_strong.html" afterPath="$PROJECT_DIR$/templates/table_total_is_strong.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/电子屏错误日志.txt" afterPath="$PROJECT_DIR$/电子屏错误日志.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="MSZ_SKLCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -121,12 +80,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor vertical-scroll-proportion="0.0">
-                <caret line="883" column="27" selection-start-line="883" selection-start-column="27" selection-end-line="883" selection-end-column="27" />
+              <first_editor vertical-scroll-proportion="0.74334604">
+                <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -147,10 +106,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="chart.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="chart.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/chart.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5092749">
+            <state vertical-scroll-proportion="0.0">
               <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
               <folding>
                 <marker date="1458659012069" expanded="true" signature="936:1092" placeholder="select sum( sklcc_record" />
@@ -220,6 +179,11 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="XuWeitao &lt;xuweitao.py@hotmail.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -244,6 +208,7 @@
         <option value="$PROJECT_DIR$/MSZ_SKLCC/urls.py" />
         <option value="$PROJECT_DIR$/sklcc/views.py" />
         <option value="$PROJECT_DIR$/sklcc/chart.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -743,6 +708,13 @@
       <option name="number" value="Default" />
       <updated>1426502082453</updated>
     </task>
+    <task id="LOCAL-00001" summary="疵点构成分析图增加批次过滤条件&#10;提交超时疵点翻倍的BUG修复">
+      <created>1458659226321</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1458659226321</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -771,6 +743,7 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16834451" sideWeight="0.49840933" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32837406" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32912722" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -804,6 +777,11 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="疵点构成分析图增加批次过滤条件&#10;提交超时疵点翻倍的BUG修复" />
+    <MESSAGE value="更新工作记录" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新工作记录" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1160,20 +1138,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor vertical-scroll-proportion="0.0">
-            <caret line="883" column="27" selection-start-line="883" selection-start-column="27" selection-end-line="883" selection-end-column="27" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MSZ_SKLCC/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1184,7 +1148,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/chart.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5092749">
+        <state vertical-scroll-proportion="0.0">
           <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
           <folding>
             <marker date="1458659012069" expanded="true" signature="936:1092" placeholder="select sum( sklcc_record" />
@@ -1203,6 +1167,20 @@
             <marker date="1458659012069" expanded="true" signature="11338:11425" placeholder="SELECT DISTI... SKLCC_RECORD" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor vertical-scroll-proportion="0.74334604">
+            <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+        <state />
       </provider>
     </entry>
   </component>

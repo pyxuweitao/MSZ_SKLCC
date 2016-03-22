@@ -15,6 +15,26 @@
 <table>
 <tr>
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
+
+</tr>
+<tr>
+<td>2016-03-22</br><h2>v2.4.0</h2>
+</td>
+<td> 
+<ul>
+<li>提交超时疵点翻倍的BUG修复</li>
+<li>疵点构成增加批次过滤条件</li>
+</td>
+<td>
+<ul>
+<li>views.py</li>
+<li>pie_chart.html</li>
+<li>chart.py</li>
+<li>dataentry.js</li>
+</ul>
+</td>
+</tr>
+
 </tr>
 <tr>
 <td>2015-05-11</br><h2>v2.3.6</h2>
@@ -914,5 +934,7 @@
 </ul>
 </td>
 </tr>
+
+
 
 </table>
