@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from sklcc import views, tests, forms, pad, chart, measure, utilitys
+from sklcc import views, tests, forms, pad, chart, measure, utilitys, backup_changes
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -43,6 +43,11 @@ urlpatterns = patterns('',
 	url( r'^bar_question_chart/', chart.bar_question_chart ),
 	url( r'^pie_chart/$', chart.pie_chart ),
     url( r'^bar_measure_chart/$', chart.bar_measure_chart ),
+	url( r'^bar_measure_get_batch_by_departmentno/$', chart.bar_measure_get_batch_by_departmentno),
+	url( r'^bar_measure_get_data/$', chart.bar_measure_get_data),
+	url( r'^get_partition_list_by_styleno_or_batch/$', chart.get_partition_list_by_styleno_or_batch),
+	url( r'^get_styleno_blur/$',chart.get_styleno_blur),
+	url( r"^get_size_partition_by_styleno_or_batch/$",chart.get_size_partition_by_styleno_or_batch ),
 
 	url( r'^recheck/$', views.recheck ),
 	url( r'^flush_buttons_recheck', views.flush_buttons_recheck ),
@@ -75,6 +80,7 @@ urlpatterns = patterns('',
     url( r'^change_config', views.change_config ),
     url( r'^change_check_type/', views.change_check_type ),
     url( r'^admin/', include(admin.site.urls)),
+    url( r'^fix_efficiency/', views.fix_efficiency ),
 
     url( r'^form0/$', forms.form_have_submitted ),
 	url( r'^update_table_history/', forms.update_table_history ),
@@ -156,4 +162,5 @@ urlpatterns = patterns('',
     url( r'^(404)/$', views.fail ),
     url( r'^test/$', utilitys.test ),
 
+	url( r'^query_backup_check/$',backup_changes.query_backup_record),
 )

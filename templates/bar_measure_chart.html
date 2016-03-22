@@ -6,7 +6,6 @@
 <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
 <link href='{% static "css/style.css" %}' rel="stylesheet">
 <link rel="stylesheet" type="text/css" href='{% static "css/select2.css" %}'/>
-<link rel="stylesheet" type="text/css" href='{% static "css/select2-bootstrap.css" %}'/>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="js/html5shiv.js"></script>
@@ -15,156 +14,430 @@
 <script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
 <script type="text/javascript" src='{% static "js/select2.min.js" %}'></script>
 <script type="text/javascript" src='{% static "js/select2_locale_zh-CN.js" %}'></script>
-<script type="text/javascript" src='{% static "js/highcharts.js" %}'></script>
+
+<script type="text/javascript" src='{% static "js/highstock.js" %}'></script>
+<script type="text/javascript" src='{% static "js/exporting.js" %}'></script>
 <script>
-    window.onload = function () {
-       $('#batch').select2();
-        var measure_error = [];
-        var balanced_error = [
-            [],
-            []
-        ];
-        for (var i = 0; i < 5; i++) {
-            measure_error.push([]);
-        }
-        var partitions = [];
-        var counter = 0;
-        $('#tar_data data').each(function () {
-            partitions.push(this.getAttribute('partition'));
-            var datas_left = this.getElementsByTagName('data_left')[0].getElementsByTagName('sor');
-            for (var i = 0; i < datas_left.length; i++) {
-                balanced_error[i].push(parseInt(datas_left[i].innerHTML));
-            }
-            if (datas_left.length == 0) {
-                //var datas_left = this.getElementsByTagName('data_left')[0].getElementsByTagName('sor');
-                for (var i = 0; i < 2; i++) {
-                    balanced_error[i].push(0);
+    function paint(data,low,med,high,name,has2){
+            
+            if (has2){
+                set1 = [];
+
+                set2 = [];
+                for (var i = 0;i<data.length;i++){
+                    set1.push([data[i][0],data[i][1]]);
+                    set2.push([data[i][0],data[i][2]]);
                 }
+                series = [{
+                    name: '测量值1',
+                    data: set1,
+                    type: 'spline',
+                    tooltip: {
+                        valueDecimals: 1
+                    },
+                    states:{
+                        hover:{
+                            enabled:false,
+                            lineWidthPlus:0
+                        }
+                    }
+                },{
+                    name: '测量值2',
+                    data: set2,
+                    type: 'spline',
+                    tooltip: {
+                        valueDecimals: 1
+                    },
+                    states:{
+                        hover:{
+                            enabled:false,
+                            lineWidthPlus:0
+                        }
+                    }
+                }];
+                console.log(set1);
+                console.log(set2);
+            }else{
+                series = [{
+                    name: '测量值',
+                    data: data,
+                    type: 'spline',
+                    tooltip: {
+                        valueDecimals: 1
+                    },
+                    states:{
+                        hover:{
+                            enabled:false,
+                            lineWidthPlus:0
+                        }
+                    }
+                }]
             }
-            var datas_right = this.getElementsByTagName('data_right')[0].getElementsByTagName('sor');
-            for (var i = 0; i < datas_right.length; i++) {
-                measure_error[i].push(parseInt(datas_right[i].innerHTML));
+            Highcharts.setOptions({
+                lang: {
+                    months: ['一月', '二月', '三月', '四月', '五月', '六月','七月','八月','九月','十月', '十一月', '十二月'],
+                    weekdays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    rangeSelectorFrom:"从",
+                    rangeSelectorTo:"到",
+                    shortMonths:['一月', '二月', '三月', '四月', '五月', '六月','七月','八月','九月','十月', '十一月', '十二月'],
+                    rangeSelectorZoom:"缩放"
+                }
+            });
+            $('#canvasDiv').highcharts('StockChart', {
+                chart:{
+                    zoomType: 'x'
+                },
+                rangeSelector:{
+                    inputDateFormat:"%y-%m-%d",
+                    inputEditDateFormat:"%y-%m-%d"
+                },
+                exporting: {
+                    buttons: {
+                        contextButton: {
+                            menuItems: null,
+                            onclick: function () {
+                                var svgXml = $('.highcharts-container').html();
+                                var image = new Image();
+                                image.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXml))); //                                给图片对象写入base64编码的svg流
+                                console.log(image.src);
+                                var canvas = document.createElement('canvas');  //准备空画布
+                                canvas.width = $('.highcharts-container svg').width();
+                                canvas.height = $('.highcharts-container svg').height();
+                                
+                                var context = canvas.getContext('2d');  //取得画布的2d绘图上下文
+                                context.drawImage(image, 0, 0);
+                                
+                                var a = document.createElement('a');
+                                a.href = canvas.toDataURL('image/png');  //将画布内的信息导出为png图片数据
+                                a.download = "MapByMathArtSys";  //设定下载名称
+                                a.click(); //点击触发下载
+                            }
+                        }
+                    }
+                },
+                legend:{
+                    enabled:false
+                },
+                credits: {
+                    enabled: false
+                },
+                rangeSelector: {
+
+                    buttons: [{
+                        type: 'day',
+                        count: 3,
+                        text: '一天'
+                    }, {
+                        type: 'week',
+                        count: 1,
+                        text: '1周'
+                    }, {
+                        type: 'month',
+                        count: 1,
+                        text: '1月'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6月'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1年'
+                    }, {
+                        type: 'all',
+                        text: '所有'
+                    }],
+                    selected: 'all'
+                },
+                title: {
+                    text: name+'部位测量值'
+                },
+                tooltip: {
+                    formatter:function(){
+                        var s = '<b>' + Highcharts.dateFormat('%y-%m-%d', this.x) + '</b>';
+                        $.each(this.points, function (e,i) {
+                            s += '<br/>测量值'+(e+1).toString()+ '=' + this.y + '';
+                        });
+                        if (this.points.length > 1){
+                            s += '<br/>对称差值:'+Math.abs(this.points[0].y-this.points[1].y).toFixed(2);
+                        }
+                        return s;
+                    },
+                    valueDecimals: 1
+                },
+                yAxis: {
+                    title: {
+                        text: '测量值'
+                    },
+                    minRange:high-low+2,
+                    plotLines: [{
+                        value: med,
+                        color: 'green',
+                        dashStyle: 'Solid',
+                        width: 2,
+                        label: {
+                            text: '标准'
+                        },
+                        zIndex:999
+                    }, {
+                        value: low,
+                        color: 'red',
+                        dashStyle: 'Solid',
+                        width: 2,
+                        label: {
+                            text: '负差'
+                        },
+                        zIndex:999
+                    }, {
+                        value: high,
+                        color: '#0000FF',
+                        dashStyle: 'Solid',
+                        width: 2,
+                        label: {
+                            text: '正差'
+                        },
+                        zIndex:999
+                    }]
+                },
+                xAxis: { 
+                    labels: { 
+                        formatter: function() { 
+                            return  Highcharts.dateFormat('%y-%m-%d', this.value); 
+                        } 
+                    } 
+                },
+                series: series
+            });
+            
+        }
+    window.onload = function () {
+        $('#batch').select2();
+        var colors = Highcharts.getOptions().colors;
+        
+        $("#batch").select2({
+            language:{
+                errorLoading: function() {
+                return "无法载入结果。"
+                },
+                inputTooLong: function(e) {
+                    var t = e.input.length - e.maximum,
+                        n = "请删除" + t + "个字符";
+                    return n
+                },
+                inputTooShort: function(e) {
+                    var t = e.minimum - e.input.length,
+                        n = "请再输入至少" + t + "个字符";
+                    return n
+                },
+                loadingMore: function() {
+                    return "载入更多结果…"
+                },
+                maximumSelected: function(e) {
+                    var t = "最多只能选择" + e.maximum + "个项目";
+                    return t
+                },
+                noResults: function() {
+                    return "未找到结果"
+                },
+                searching: function() {
+                    return "搜索中…"
+                }
+            },
+            ajax: {
+              url: "/bar_measure_get_batch_by_departmentno/",
+              dataType: 'json',
+              delay: 250,
+              data: function (params) {
+                return {
+                  start: document.getElementById("start").value, // search term
+                  batch:params.term,
+                  end:document.getElementById("end").value,
+                  department_no:document.getElementById("dept").value
+                };
+              },
+              processResults: function (data, page) {
+                temp = [];
+                for (var i = 0;i<data.length;i++){
+                    temp.push({text:data[i],id:data[i]});
+                }
+                console.log(temp);
+                return {
+                  results: temp
+                };
+              },
+              cache: true
             }
         });
-        console.log(measure_error);
-        var colors = Highcharts.getOptions().colors;
-        $('#canvasDiv').highcharts({
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: window.location.search.split('?')[1].split('=')[1] + '批次部位测量统计'
-            },
-            xAxis: {
-                categories:partitions
-            },
-
-            yAxis: {
-                allowDecimals: false,
-                min: 0,
-                title: {
-                    text: '统计情况（百分比）'
+        $("#styleno").select2({
+            language:{
+                errorLoading: function() {
+                return "无法载入结果。"
+                },
+                inputTooLong: function(e) {
+                    var t = e.input.length - e.maximum,
+                        n = "请删除" + t + "个字符";
+                    return n
+                },
+                inputTooShort: function(e) {
+                    var t = e.minimum - e.input.length,
+                        n = "请再输入至少" + t + "个字符";
+                    return n
+                },
+                loadingMore: function() {
+                    return "载入更多结果…"
+                },
+                maximumSelected: function(e) {
+                    var t = "最多只能选择" + e.maximum + "个项目";
+                    return t
+                },
+                noResults: function() {
+                    return "未找到结果"
+                },
+                searching: function() {
+                    return "搜索中…"
                 }
             },
-
-            tooltip: {
-                formatter: function (e) {
-                    return '<b>' + this.x + '</b><br/>' +
-                            this.series.name + ': ' + this.y + '<br/>' +
-                            '总计: ' + this.point.stackTotal;
-
+            ajax: {
+              url: "/get_styleno_blur/",
+              dataType: 'json',
+              delay: 250,
+              data: function (params) {
+                return {
+                  styleno:params.term
+                };
+              },
+              processResults: function (data, page) {
+                temp = [];
+                for (var i = 0;i<data.length;i++){
+                    temp.push({text:data[i],id:data[i]});
                 }
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'percent'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            series: [
-                {
-                    name: '超出对称误差',
-                    data: balanced_error[1],
-                    stack: 'male'
-                    //color:colors[6]
-                },
-                {
-                    name: '未超出对称误差',
-                    data: balanced_error[0],
-                    stack: 'male'
-                    //color:colors[4]
-                },
-                {
-                    name: '超正差',
-                    data: measure_error[4],
-                    stack: 'female'
-                    //color:colors[3]
-                },
-                {
-                    name: '正差',
-                    data: measure_error[3],
-                    stack: 'female'
-                    //color:colors[2]
-                },
-                {
-                    name: '标准',
-                    data: measure_error[2],
-                    stack: 'female'
-                    //color:colors[7]
-                },
-                {
-                    name: '负差',
-                    data: measure_error[1],
-                    stack: 'female'
-                    //color:colors[0]
-                },
-                {
-                    name: '超负差',
-                    data: measure_error[0],
-                    stack: 'female'
-                    //color:colors[1]
-                }
-            ]
+                console.log(temp);
+                return {
+                  results: temp
+                };
+              },
+              cache: true
+            }
         });
     };
 </script>
 {% endblock %}
 {% block other %}
 <div class="row clearfix">
-    <datalist id="tar_data">
-        {% for temp in res %}
-        <data partition="{{temp.partition}}">
-            <data_left>
-                {% for t in temp.data_left %}
-                <sor>{{t}}</sor>
-                {% endfor %}
-            </data_left>
-            <data_right>
-                {% for t in temp.data_right %}
-                <sor>{{t}}</sor>
-                {% endfor %}
-            </data_right>
-        </data>
-        {% endfor %}
-    </datalist>
+    
     <div class="col-md-2">
-        <form action="/bar_measure_chart/">
-            批号选择：
-            <select name="batch" id="batch" style="width: 99%">
-                {% for temp in batch_list %}
-                <option>{{temp}}</option>
+        <form >
+            <input type="radio" name="key" id="batch_dependent" checked onclick="lock(this);"/>按批号查询：
+            <select name="batch" id="batch" style="width: 99%" onchange="return update_parts_size()"></select>
+            <input type="radio" name="key" onclick="lock(this);"/>按款号查询：
+            <script>
+                function lock(a){
+                    if (a.id == "batch_dependent"){
+                        document.getElementById("batch").disabled = false;
+                        document.getElementById("styleno").disabled = true;
+
+                    }else{
+                        document.getElementById("batch").disabled = true;
+                        document.getElementById("styleno").disabled = false;
+                    }
+                }
+            </script>
+            <select name="styleno" id="styleno" style="width: 99%" disabled onchange="return update_parts_size();">
+                
+            </select>
+            <hr>
+            开始：<input type="date" style="margin-top:10px" class="form-control" id="start"/>
+            结束：<input type="date" style="margin-top:10px" class="form-control" id="end"/>
+            组别：
+            <select class="form-control" name="dept" id="dept" >
+                <option value="" selected>所有组别</option>
+                {% for temp in department_list %}
+                    <option value="{{temp.departmentno}}">{{temp.departmentname}}</option>
                 {% endfor %}
-                <option selected></option>
             </select>
             <br/>
-            <button class="btn btn-success" style="margin-top: 20px;width: 99%">查询</button>
+            
+            部位：
+            <select name="" id="part" class="form-control" >
+                
+            </select>
+            尺码：
+            <select name="" id="size" class="form-control" >
+                
+            </select>
+            <button class="btn btn-success" type="button" style="margin-top: 20px;width: 99%" onclick="return query();">查询</button>
+            <br>
+            
+
+            <script>
+                function make(){
+
+                }
+            </script>
+            <script>
+                var parts;
+                function update_parts_size(){
+                    var key = 'styleno';
+                    var para = document.getElementById("styleno").value;
+                    if (document.getElementById("batch_dependent").checked){
+                        key = 'batch';
+                        para = document.getElementById("batch").value;
+                    }
+                    if (para == ""){
+                        return ;
+                    }
+                    $.ajax({
+                        url:'/get_size_partition_by_styleno_or_batch/?'+key+'='+para,
+                        success:function(data){
+                            document.getElementById("part").innerHTML = "";
+                            document.getElementById("size").innerHTML = "";
+                            for (var i = 0;i<data.partition_list.length;i++){
+                                $("<option>"+data.partition_list[i]+"</option>").appendTo("#part");
+                            }
+                            for (var i = 0;i<data.size_list.length;i++){
+                                $("<option>"+data.size_list[i]+"</option>").appendTo("#size");
+                            }
+                        },
+                        dataType:'json',
+                        error:function(){
+                            
+                        }
+                    });
+                }
+                function query(){
+                    var key = 'styleno';
+                    var para = document.getElementById("styleno").value;
+                    if (document.getElementById("batch_dependent").checked){
+                        key = 'batch';
+                        para = document.getElementById("batch").value;
+                    }
+                    if (para == ""){
+                        alert("请选择批号或者款号");
+                        return ;
+                    }
+                    $.ajax({
+                        url:'/get_partition_list_by_styleno_or_batch/?'+key+'='+para+'&start='+document.getElementById('start').value+'&end='+document.getElementById('end').value+'&size='+document.getElementById("size").value+"&partition="+document.getElementById("part").value,
+                        success:function(data){
+                            return paint(data.data,data.low,data.med,data.hig,"",data.has2);
+                        },
+                        dataType:'json',
+                        error:function(){
+                            alert("出错了");
+                        }
+                    });
+                }
+            </script>
+            <script>
+
+            </script>
         </form>
     </div>
-    <div class="col-md-10" style="min-height: 600px" id="canvasDiv">
+    <div class="col-md-10" style="min-height: 800px" id="canvasDiv">
 
     </div>
+    <script>
+        
+    </script>
 </div>
 <!--加入筛选功能-->
 </body>

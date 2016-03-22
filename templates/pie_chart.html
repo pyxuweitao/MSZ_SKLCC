@@ -168,7 +168,56 @@
         credits:''
     });
     //console.log(data);
+    $("#batch").select2({
+            language:{
+                errorLoading: function() {
+                return "无法载入结果。"
+                },
+                inputTooLong: function(e) {
+                    var t = e.input.length - e.maximum,
+                        n = "请删除" + t + "个字符";
+                    return n
+                },
+                inputTooShort: function(e) {
+                    var t = e.minimum - e.input.length,
+                        n = "请再输入至少" + t + "个字符";
+                    return n
+                },
+                loadingMore: function() {
+                    return "载入更多结果…"
+                },
+                maximumSelected: function(e) {
+                    var t = "最多只能选择" + e.maximum + "个项目";
+                    return t
+                },
+                noResults: function() {
+                    return "未找到结果"
+                },
+                searching: function() {
+                    return "搜索中…"
+                }
+            },
+            matcher: matchStart
+        });
     };
+
+    function matchStart (term, text) {
+        //console.log("term:"+JSON.stringify(term));
+        //console.log(text);
+        if (text.id == 'ALL'){
+            alert();
+            return true;
+        }
+        var start = document.getElementById("start").value || "1980-01-01";
+        var end = document.getElementById("end").value || "2099-01-01";
+        if (text.element.getAttribute("date") >= start && text.element.getAttribute("date") <= end){
+            if (text.id.indexOf(term.term) >= 0){
+                return true;
+            }
+        }
+
+        return false;
+    }
 </script>
 {% endblock %}
 {% block other %}
@@ -200,9 +249,9 @@
     <div class="col-md-2">
         <form id="form">
             统计时间从：<br/>
-            <input required='required' type="date" class="form-control" value="{{ start }}" id="start" name="start"/><br/>
+            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ start }}" id="start" name="start"/><br/>
             到：<br/>
-            <input required='required' type="date" class="form-control" value="{{ end }}" id="end" name="end"/><br/>
+            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ end }}" id="end" name="end"/><br/>
 
             <div style="max-height: 200px;overflow-y: auto">
                 <select id="question_list" style="width: 99%;" name="departmentno">
@@ -215,6 +264,16 @@
                     {% endfor %}
                 </select>
             </div>
+            批号：
+            <select id="batch" class="form-control" name="batch">
+                {% for temp in batch %}
+                    {% ifequal temp.ischosen 1 %}
+                    <option selected date="{{temp.createtime}}" value="{{temp.batchno}}" >{{ temp.batchname }}</option>
+                    {% else %}
+                    <option value="{{temp.batchno}}" date="{{temp.createtime}}">{{ temp.batchname }}</option>
+                    {% endifequal %}
+                {% endfor %}
+            </select>
             
             <button class="btn btn-success" style="width:99%;margin-top:10px" type="submit" id="search">查询</button>
         </form>

@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" filepath="$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" />
       <module fileurl="file://$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" filepath="$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" />
-      <module fileurl="file://E:/3 - 娱乐/QQ/630629123/FileRecv/ui/.idea/ui.iml" filepath="E:/3 - 娱乐/QQ/630629123/FileRecv/ui/.idea/ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../python2.7/.idea/python2.7.iml" filepath="$PROJECT_DIR$/../python2.7/.idea/python2.7.iml" />
     </modules>
   </component>
 </project>

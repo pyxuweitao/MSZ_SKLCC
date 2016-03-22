@@ -147,15 +147,15 @@
                         <th>汇总</th>
                     </tr>
                     <tbody>
-                    {% for recheckor in data %}
-                    {% for inspector in recheckor.res %}
-                    {% for mistake in inspector.mistakes %}
+                    {% for recheckor_no, value in data.items %}
+                    {% for inspector_no, inspector_value in value.res.items %}
+                    {% for mistake_no, mistake_value in inspector_value.mistakes.items %}
                     <tr>
                         {% ifequal forloop.counter 1 %}
-                        <td rowspan="{{ inspector.rows }}">{{inspector.inspector}}</td>
+                        <td rowspan="{{ inspector_value.rows }}">{{inspector_value.inspector}}</td>
                         {% endifequal %}
-                        <td>{{mistake.name}}</td>
-                        {% for temp in mistake.res %}
+                        <td>{{mistake_value.name}}</td>
+                        {% for temp in mistake_value.res %}
                         <td>{{temp}}</td>
                         {% endfor %}
                         <td></td>
@@ -171,8 +171,8 @@
                     下载报表
                 </a>
                 <datalist id="recheckor_list">
-                    {% for recheckor in data %}
-                    <data name="{{recheckor.recheckor}}" rowspan="{{recheckor.rows}}"></data>
+                    {% for recheckor_no, recheckor_value in data.items %}
+                    <data name="{{recheckor_value.recheckor}}" rowspan="{{recheckor_value.rows}}"></data>
                     {% endfor %}
                 </datalist>
             </div>
