@@ -88,12 +88,16 @@ def bar_question_chart( request ):
 
 	return TemplateResponse(request, html, locals())
 
-def get_question_return_date( questionno, start, end, departmentno ):
+def get_question_return_date( questionno, start, end, departmentno, batch ):
 	Raw     = Raw_sql()
 	questionno = int( questionno )
-	Raw.sql = "select sum( returnno ) from sklcc_table where questionno = %d and serialno in ( select serialno from " \
-	          "sklcc_record where left( createtime, 10 ) >= '%s' and left( createtime, 10 ) <= '%s' " \
-	          "and departmentno = '%s' )" %( questionno, start, end, departmentno )
+	Raw.sql = "select sum( returnno ) from sklcc_table WITH(NOLOCK) where questionno = %d and serialno in ( select serialno from " \
+	          "sklcc_record WITH(NOLOCK) where left( createtime, 10 ) >= '%s' and left( createtime, 10 ) <= '%s' " \
+	          "and departmentno = '%s' " %( questionno, start, end, departmentno )
+	if batch != "":
+		Raw.sql += " AND BATCH = '%s' )"%batch
+	else:
+		Raw.sql += ")"
 	target  = Raw.query_one()
 	return target[0] if target[0] != False and target[0] != None else 0
 
@@ -115,13 +119,14 @@ def bar_measure_get_batch_by_departmentno(request):
 	start        = request.GET["start"]
 	end          = request.GET["end"]
 	batch        = request.GET["batch"] if "batch" in request.GET else ""
+	table        = "SKLCC_RECORD" if "isPieChart" in request.GET else "SKLCC_MEASURE_RECORD"
 	Raw          = Raw_sql()
 	if departmentno != "":
-		Raw.sql      = "SELECT DISTINCT(batch) FROM sklcc_measure_record WITH(NOLOCK) WHERE" \
-	               " departmentno='%s' AND createtime <= '%s' AND createtime >= '%s' AND batch LIKE '%s%%%%'"%(departmentno, end, start, batch)
+		Raw.sql      = "SELECT DISTINCT(batch) FROM %s WITH(NOLOCK) WHERE" \
+	               " departmentno='%s' AND left(createtime,10) <= '%s' AND left(createtime,10) >= '%s' AND batch LIKE '%s%%%%'"%(table, departmentno, end, start, batch)
 	else:
-		Raw.sql      = "SELECT DISTINCT(batch) FROM sklcc_measure_record WITH(NOLOCK) WHERE" \
-	               " createtime <= '%s' AND createtime >= '%s' AND batch LIKE '%s%%%%'"%(end, start, batch)
+		Raw.sql      = "SELECT DISTINCT(batch) FROM %s WITH(NOLOCK) WHERE" \
+	               " left(createtime,10) <= '%s' AND left(createtime,10) >= '%s' AND batch LIKE '%s%%%%'"%(table, end, start, batch)
 	batch_List   = Raw.query_all()
 	if not batch_List:
 		batch_List = []
@@ -132,7 +137,6 @@ def get_styleno_blur(request):
 	Raw     = Raw_sql()
 	Raw.sql = "SELECT DISTINCT styleno FROM sklcc_measure_record WHERE styleno LIKE '%s%%%%'"%styleno
 	stylenoList = Raw.query_all()
-
 	if not stylenoList:
 		stylenoList = []
 	return HttpResponse( json.dumps([styleno[0] for styleno in stylenoList], ensure_ascii=False) )
@@ -242,6 +246,7 @@ def pie_chart( request ):
 	question_list   = get_all_question()
 	em_number       = request.session['employeeno']
 	employeename    = request.session['employee']
+	batch           = request.GET['batch'] if 'batch' in request.GET else ""
 	weak_list       = []
 	bad_list        = []
 	strong_list     = []
@@ -256,26 +261,20 @@ def pie_chart( request ):
 		start = request.GET['start']
 		end   = request.GET['end']
 		for question in question_list:
+			numberTemp = get_question_return_date( question.questionno, start, end, departmentno, batch )
 			if question.questiontype == 0:
-				if get_question_return_date( question.questionno, start, end, departmentno ) != 0:
-					weak_list.append( {'name': question.questionname, 'no': get_question_return_date( question.questionno, start, end, departmentno ) } )
+				if numberTemp != 0:
+					weak_list.append( {'name': question.questionname, 'no': numberTemp } )
 			elif question.questiontype == 1:
-				if get_question_return_date( question.questionno, start, end, departmentno ) != 0:
-					bad_list.append( {'name': question.questionname, 'no': get_question_return_date( question.questionno, start, end, departmentno ) } )
+				if numberTemp != 0:
+					bad_list.append( {'name': question.questionname, 'no': numberTemp } )
 			elif question.questiontype == 2:
-				if get_question_return_date( question.questionno, start, end, departmentno ) != 0:
-					strong_list.append( {'name': question.questionname, 'no': get_question_return_date( question.questionno, start, end, departmentno ) } )
-
-
-	Raw     = Raw_sql()
-	Raw.sql = "SELECT DISTINCT BATCH, MAX(SUBSTRING(createtime,0,11)) FROM SKLCC_RECORD GROUP BY batch"
-	TargetList = Raw.query_all()
-	batch   = list()
-	batchChosen = request.GET['batch'] if 'batch' in request.GET else "ALL"
-	batch.append({'batchname':'所有批号', 'batchno':'ALL', 'createtime':'', 'ischosen': 1 if batchChosen == "ALL" else 0 })
-	catchBatch = False
-	if TargetList:
-		batch.extend([{'batchname':row[0], 'batchno':row[0], 'createtime':row[1], 'ischosen': 1 if batchChosen == row[0] else 0 } for row in TargetList] )
+				if numberTemp != 0:
+					strong_list.append( {'name': question.questionname, 'no': numberTemp } )
+	if batch == "" or batch == "ALL":
+		selectedBatch = {'name':u'所有批次', 'value':'ALL'}
+	else:
+		selectedBatch = {'name':batch, 'value':batch}
 	html = get_template( 'pie_chart.html' )
 	return TemplateResponse( request, html, locals() )
 

@@ -38,185 +38,248 @@
         return max;
     }
     window.onload = function () {
-    var weak_list_name = [];
-    var weak_list_count = [];
-    var weak_list_total = 0;
-    var temp = document.getElementById('weak_list').getElementsByTagName('data');
 
-    //console.log(temp);
-    for (var i=0;i<temp.length;i++){
-        weak_list_name.push(temp[i].getAttribute('name'));
-        weak_list_count.push(parseInt(temp[i].getAttribute('count')));
-        weak_list_total += parseInt(temp[i].getAttribute('count'));
-    }
-    //alert(weak_list_total);
-    var bad_list_name = [];
-    var bad_list_count = [];
-    var bad_list_total = 0;
-    var temp = document.getElementById('bad_list').getElementsByTagName('data');
-    for (var i=0;i<temp.length;i++){
-        bad_list_name.push(temp[i].getAttribute('name'));
-        bad_list_count.push(parseInt(temp[i].getAttribute('count')));
-        bad_list_total += parseInt(temp[i].getAttribute('count'));
-    }
+        var ops = document.getElementById("batch").getElementsByTagName("option");
+        for (var i = 0;i<ops.length;i++){
+            batch_list.push({
+                label:ops[i].innerHTML,
+                value:ops[i].value,
+                date:ops[i].getAttribute("date"),
+                dept:ops[i].getAttribute("dept")
+            });
+        }
 
-    var strong_list_name = [];
-    var strong_list_count = [];
-    var strong_list_total = 0;
-    var temp = document.getElementById('strong_list').getElementsByTagName('data');
-    for (var i=0;i<temp.length;i++){
-        strong_list_name.push(temp[i].getAttribute('name'));
-        strong_list_count.push(parseInt(temp[i].getAttribute('count')));
-        strong_list_total += parseInt(temp[i].getAttribute('count'));
-    }
-    //console.log(weak_list_name);  
-    var colors = Highcharts.getOptions().colors;
+        var weak_list_name = [];
+        var weak_list_count = [];
+        var weak_list_total = 0;
+        var temp = document.getElementById('weak_list').getElementsByTagName('data');
+
+        //console.log(temp);
+        for (var i = 0; i < temp.length; i++) {
+            weak_list_name.push(temp[i].getAttribute('name'));
+            weak_list_count.push(parseInt(temp[i].getAttribute('count')));
+            weak_list_total += parseInt(temp[i].getAttribute('count'));
+        }
+        //alert(weak_list_total);
+        var bad_list_name = [];
+        var bad_list_count = [];
+        var bad_list_total = 0;
+        var temp = document.getElementById('bad_list').getElementsByTagName('data');
+        for (var i = 0; i < temp.length; i++) {
+            bad_list_name.push(temp[i].getAttribute('name'));
+            bad_list_count.push(parseInt(temp[i].getAttribute('count')));
+            bad_list_total += parseInt(temp[i].getAttribute('count'));
+        }
+
+        var strong_list_name = [];
+        var strong_list_count = [];
+        var strong_list_total = 0;
+        var temp = document.getElementById('strong_list').getElementsByTagName('data');
+        for (var i = 0; i < temp.length; i++) {
+            strong_list_name.push(temp[i].getAttribute('name'));
+            strong_list_count.push(parseInt(temp[i].getAttribute('count')));
+            strong_list_total += parseInt(temp[i].getAttribute('count'));
+        }
+        //console.log(weak_list_name);
+        var colors = Highcharts.getOptions().colors;
         categories = ['轻微不良', '严重不良', '致命不良'];
         name = 'Browser brands';
         data = [{
-                y: weak_list_total,
-                color: colors[0],
-                drilldown: {
-                    name: '轻微不良 明细',
-                    categories: weak_list_name,
-                    data: weak_list_count,
-                    color: colors[0]
-                }
-            }, {
-                y: bad_list_total,
-                color: colors[3],
-                drilldown: {
-                    name: '严重不良 明细',
-                    categories: bad_list_name,
-                    data: bad_list_count,
-                    color: colors[5]
-                }
-            }, {
-                y: strong_list_total,
-                color: colors[1],
-                drilldown: {
-                    name: '致命不良 明细',
-                    categories: strong_list_name,
-                    data: strong_list_count,
-                    color: colors[1]
-                }
-            }];
-    var browserData = [];
-    var versionsData = [];
-    for (var i = 0; i < data.length; i++) {
-
-        // add browser data
-        browserData.push({
-            name: categories[i],
-            y: data[i].y,
-            color: data[i].color
-        });
-
-        // add version data
-        for (var j = 0; j < data[i].drilldown.data.length; j++) {
-            var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
-            versionsData.push({
-                name: data[i].drilldown.categories[j],
-                y: data[i].drilldown.data[j],
-                color: Highcharts.Color(data[i].color).brighten(brightness).get()
-            });
-        }
-    }
-
-    // Create the chart
-    $('#canvasDiv').highcharts({
-        chart: {
-            type: 'pie'
-        },
-        title: {
-            text: '{{departmentname}}生产组疵点构成'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            }
-        },
-        plotOptions: {
-            pie: {
-                shadow: false,
-                center: ['50%', '50%']
-            }
-        },
-        tooltip: {
-            formatter:function(){
-                return this.point.name+'(实际数量):'+this.point.y
-            }
-        },
-        series: [{
-            name: 'Browsers',
-            data: browserData,
-            size: '60%',
-            dataLabels: {
-                format: '  ',
-                color: 'white',
-                distance: -30
+            y: weak_list_total,
+            color: colors[0],
+            drilldown: {
+                name: '轻微不良 明细',
+                categories: weak_list_name,
+                data: weak_list_count,
+                color: colors[0]
             }
         }, {
-            name: 'Versions',
-            data: versionsData,
-            size: '80%',
-            innerSize: '60%',
-            dataLabels: {
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            y: bad_list_total,
+            color: colors[3],
+            drilldown: {
+                name: '严重不良 明细',
+                categories: bad_list_name,
+                data: bad_list_count,
+                color: colors[5]
             }
-        }],
-        credits:''
-    });
-    //console.log(data);
-    $("#batch").select2({
-            language:{
-                errorLoading: function() {
-                return "无法载入结果。"
+        }, {
+            y: strong_list_total,
+            color: colors[1],
+            drilldown: {
+                name: '致命不良 明细',
+                categories: strong_list_name,
+                data: strong_list_count,
+                color: colors[1]
+            }
+        }];
+        var browserData = [];
+        var versionsData = [];
+        for (var i = 0; i < data.length; i++) {
+
+            // add browser data
+            browserData.push({
+                name: categories[i],
+                y: data[i].y,
+                color: data[i].color
+            });
+
+            // add version data
+            for (var j = 0; j < data[i].drilldown.data.length; j++) {
+                var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
+                versionsData.push({
+                    name: data[i].drilldown.categories[j],
+                    y: data[i].drilldown.data[j],
+                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
+                });
+            }
+        }
+
+        // Create the chart
+        $('#canvasDiv').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: '{{departmentname}}生产组疵点构成'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+            plotOptions: {
+                pie: {
+                    shadow: false,
+                    center: ['50%', '50%']
+                }
+            },
+            tooltip: {
+                formatter: function () {
+                    return this.point.name + '(实际数量):' + this.point.y
+                }
+            },
+            series: [{
+                name: 'Browsers',
+                data: browserData,
+                size: '60%',
+                dataLabels: {
+                    format: '  ',
+                    color: 'white',
+                    distance: -30
+                }
+            }, {
+                name: 'Versions',
+                data: versionsData,
+                size: '80%',
+                innerSize: '60%',
+                dataLabels: {
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }],
+            credits: ''
+        });
+        //console.log(data);
+        $("#batch").select2({
+            language: {
+                errorLoading: function () {
+                    return "无法载入结果。"
                 },
-                inputTooLong: function(e) {
+                inputTooLong: function (e) {
                     var t = e.input.length - e.maximum,
-                        n = "请删除" + t + "个字符";
+                            n = "请删除" + t + "个字符";
                     return n
                 },
-                inputTooShort: function(e) {
+                inputTooShort: function (e) {
                     var t = e.minimum - e.input.length,
-                        n = "请再输入至少" + t + "个字符";
+                            n = "请再输入至少" + t + "个字符";
                     return n
                 },
-                loadingMore: function() {
+                loadingMore: function () {
                     return "载入更多结果…"
                 },
-                maximumSelected: function(e) {
+                maximumSelected: function (e) {
                     var t = "最多只能选择" + e.maximum + "个项目";
                     return t
                 },
-                noResults: function() {
+                noResults: function () {
                     return "未找到结果"
                 },
-                searching: function() {
+                searching: function () {
                     return "搜索中…"
                 }
             },
-            matcher: matchStart
+            ajax: {
+                url: "/bar_measure_get_batch_by_departmentno/",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        start: document.getElementById("start").value, // search term
+                        batch:params.term,
+                        end:document.getElementById("end").value,
+                        department_no:document.getElementById("question_list").value,
+                        isPieChart:true
+                    };
+                },
+                processResults: function (data, page) {
+                    temp = [];
+                    for (var i = 0;i<data.length;i++){
+                        temp.push({text:data[i],id:data[i]});
+                    }
+                    console.log(temp);
+                    return {
+                        results: temp
+                    };
+                },
+                cache: true
+            }
         });
     };
 
-    function matchStart (term, text) {
-        //console.log("term:"+JSON.stringify(term));
-        //console.log(text);
-        if (text.id == 'ALL'){
-            alert();
-            return true;
-        }
+    var batch_list = [];
+    function flush_batch() {
+        return ;
         var start = document.getElementById("start").value || "1980-01-01";
         var end = document.getElementById("end").value || "2099-01-01";
-        if (text.element.getAttribute("date") >= start && text.element.getAttribute("date") <= end){
-            if (text.id.indexOf(term.term) >= 0){
-                return true;
+        //alert();
+        $("#batch").select2("destroy");
+        document.getElementById("batch").innerHTML = "";
+        for (var i = 0;i<batch_list.length;i++){
+            if ((batch_list[i].date >= start && batch_list[i].date <= end && batch_list[i].dept == document.getElementById("question_list").value) || batch_list[i].value == "ALL"){
+                $("<option value='"+batch_list[i].value+"' >"+batch_list[i].label+"</option>").appendTo("#batch");
             }
         }
+        $("#batch").select2({
+            language: {
+                errorLoading: function () {
+                    return "无法载入结果。"
+                },
+                inputTooLong: function (e) {
+                    var t = e.input.length - e.maximum,
+                            n = "请删除" + t + "个字符";
+                    return n
+                },
+                inputTooShort: function (e) {
+                    var t = e.minimum - e.input.length,
+                            n = "请再输入至少" + t + "个字符";
+                    return n
+                },
+                loadingMore: function () {
+                    return "载入更多结果…"
+                },
+                maximumSelected: function (e) {
+                    var t = "最多只能选择" + e.maximum + "个项目";
+                    return t
+                },
+                noResults: function () {
+                    return "未找到结果"
+                },
+                searching: function () {
+                    return "搜索中…"
+                }
+            }
+        });
 
-        return false;
     }
 </script>
 {% endblock %}
@@ -249,39 +312,36 @@
     <div class="col-md-2">
         <form id="form">
             统计时间从：<br/>
-            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ start }}" id="start" name="start"/><br/>
+            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ start }}"
+                   id="start" name="start"/><br/>
             到：<br/>
-            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ end }}" id="end" name="end"/><br/>
+            <input onchange="flush_batch()" required='required' type="date" class="form-control" value="{{ end }}"
+                   id="end" name="end"/><br/>
 
             <div style="max-height: 200px;overflow-y: auto">
-                <select id="question_list" style="width: 99%;" name="departmentno">
+                <select id="question_list" style="width: 99%;" name="departmentno" onchange="flush_batch()">
                     {% for temp in department_list %}
-                        {% ifequal temp.ischosen 1 %}
-                        <option selected value="{{temp.departmentno}}" >{{ temp.departmentname }}</option>
-                        {% else %}
-                        <option value="{{temp.departmentno}}" >{{ temp.departmentname }}</option>
-                        {% endifequal %}
+                    {% ifequal temp.ischosen 1 %}
+                    <option selected value="{{temp.departmentno}}">{{ temp.departmentname }}</option>
+                    {% else %}
+                    <option value="{{temp.departmentno}}">{{ temp.departmentname }}</option>
+                    {% endifequal %}
                     {% endfor %}
                 </select>
             </div>
             批号：
-            <select id="batch" class="form-control" name="batch">
-                {% for temp in batch %}
-                    {% ifequal temp.ischosen 1 %}
-                    <option selected date="{{temp.createtime}}" value="{{temp.batchno}}" >{{ temp.batchname }}</option>
-                    {% else %}
-                    <option value="{{temp.batchno}}" date="{{temp.createtime}}">{{ temp.batchname }}</option>
-                    {% endifequal %}
-                {% endfor %}
+            <select id="batch" class="form-control" name="batch" >
+                <option value="{{selectedBatch.value}}" selected>{{selectedBatch.name}}</option>
+
             </select>
-            
+
             <button class="btn btn-success" style="width:99%;margin-top:10px" type="submit" id="search">查询</button>
         </form>
     </div>
     <div class="col-md-10" id="canvasDiv" style="min-height:600px"></div>
 </div>
 <script>
-    
+
 </script>
 <!--加入筛选功能-->
 </body>
