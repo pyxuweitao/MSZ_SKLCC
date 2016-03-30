@@ -1516,9 +1516,31 @@ def recheckor_total_strong_problem( request ):
 						).days
 					] += target[2]
 
-			return TemplateResponse( request, html, locals() )
-		else:
-			return TemplateResponse( request, html, locals() )
+		Raw.sql = '''SELECT QUESTIONNO, QUESTIONNAME, RETURNNO,employee, employeeno, recheckor_no, recheckor,LEFT(CREATETIME,10) FROM
+					SKLCC_RECHECK_BALD WITH(NOLOCK)
+					WHERE CREATETIME > '%s' AND CREATETIME < '%s' AND RETURNNO != 0 AND [BDDMS_MSZ].DBO.get_questiontype_by_no(QUESTIONNO) = 2
+					ORDER BY RECHECKOR_NO'''%( start, end )
+		target_list = Raw.query_all()
+		if target_list != False:
+			for target in target_list:
+				if target[5] not in data.keys():
+					data[target[5]]={'recheckor':target[6], 'rows':ALL_STRONG_QUESTION.count,
+					                 'res':{target[4]:{'mistakes':deepcopy(mistakes_list), 'rows':ALL_STRONG_QUESTION.count,
+					                                                        'inspector':target[3]}
+																}
+									}
+				elif target[4] not in data[target[5]]['res'].keys():
+					data[target[5]]['res'][target[4]]={'mistakes':deepcopy(mistakes_list), 'rows':ALL_STRONG_QUESTION.count,
+					                                   'inspector':target[3]}
+					data[target[5]]['rows']+=ALL_STRONG_QUESTION.count
+
+				data[target[5]]['res'][target[4]]['mistakes'][target[0]]['res'][
+						(datetime.datetime(int(target[7].split('-')[0]), int(target[7].split('-')[1]), int(target[7].split('-')[2])) -
+						 datetime.datetime(int(start.split('-')[0]), int(start.split('-')[1]), int(start.split('-')[2]))
+						).days
+					] += target[2]
+		return TemplateResponse( request, html, locals() )
+
 	except Exception,e:
 		pass
 
