@@ -943,7 +943,7 @@ def get_partition_table(request):
     target_list = Raw.query_all()
     if target_list != False:
         if size in [target[0].strip() for target in target_list]:
-            ##TODO: if bug note
+            ##TODO: if bug note为了解决用户前后多打空格的情况，此处用了 ltrim(rtrim(SIZE))
             Raw.sql = "select partition, common_difference, symmetry, measure_res, note from sklcc_style_measure WITH(NOLOCK)" \
                       " where measure_or_not = 1 and ltrim(rtrim(SIZE)) = '%s' and styleno = '%s' and state = 1" \
                       " order by serial" % (size, styleno)
