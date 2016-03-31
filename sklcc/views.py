@@ -940,13 +940,12 @@ def get_partition_table(request):
     contentid = request.GET['contentid'] if 'contentid' in request.GET else False
     styleno = get_styleno_by_batch(batch)
     Raw.sql = "select distinct size from sklcc_style_measure WITH(NOLOCK) where styleno = '%s' and state = 1" % styleno
-
     target_list = Raw.query_all()
     if target_list != False:
-        if size in [target[0] for target in target_list]:
+        if size in [target[0].strip() for target in target_list]:
             ##TODO: if bug note
             Raw.sql = "select partition, common_difference, symmetry, measure_res, note from sklcc_style_measure WITH(NOLOCK)" \
-                      " where measure_or_not = 1 and size = '%s' and styleno = '%s' and state = 1" \
+                      " where measure_or_not = 1 and size LIKE '_%s' and styleno = '%s' and state = 1" \
                       " order by serial" % (size, styleno)
             partition_list = Raw.query_all()
             if partition_list != False:
