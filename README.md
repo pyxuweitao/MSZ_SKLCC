@@ -17,6 +17,21 @@
 <td style="width:150px">日期</td><td style="width:1000px"> 更新内容</td><td style = "width:80px">涉及文件</td>
 
 </tr>
+
+<tr>
+<td>2016-03-31</br><h2>v2.4.1</h2>
+</td>
+<td> 
+<ul>
+<li>工艺员出现尺码多输空格情况，为了防止匹配不上二捡处对尺码采取LIKE模糊匹配</li>
+</td>
+<td>
+<ul>
+<li>views.py</li>
+</ul>
+</td>
+</tr>
+
 <tr>
 <td>2016-03-22</br><h2>v2.4.0</h2>
 </td>

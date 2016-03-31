@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bd9d2ab9-1e0c-406a-9403-aa07f7720655" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sklcc/views.py" afterPath="$PROJECT_DIR$/sklcc/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="MSZ_SKLCC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -166,11 +166,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sklcc/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4753521">
-              <caret line="946" column="106" selection-start-line="946" selection-start-column="106" selection-end-line="946" selection-end-column="106" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="948" column="37" selection-start-line="948" selection-start-column="37" selection-end-line="948" selection-end-column="37" />
               <folding>
                 <marker date="1459395540686" expanded="true" signature="5928:6003" placeholder="select depar... sklcc_department" />
                 <marker date="1459395540686" expanded="true" signature="6804:6855" placeholder="select Top 1... sklcc_config" />
@@ -476,6 +476,22 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
+            <state split_layout="FIRST">
+              <first_editor vertical-scroll-proportion="0.352">
+                <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="recheck.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/recheck.html">
           <provider selected="true" editor-type-id="text-editor">
@@ -540,11 +556,11 @@
         <option value="$PROJECT_DIR$/MSZ_SKLCC/settings.py" />
         <option value="$PROJECT_DIR$/MSZ_SKLCC/urls.py" />
         <option value="$PROJECT_DIR$/sklcc/chart.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/templates/pie_chart.html" />
         <option value="$PROJECT_DIR$/sklcc/forms.py" />
         <option value="$PROJECT_DIR$/sklcc/measure.py" />
         <option value="$PROJECT_DIR$/sklcc/views.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -1105,7 +1121,13 @@
       <option name="project" value="LOCAL" />
       <updated>1459338473257</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="为了解决字符串左右多空格情况，对二捡对应尺码刷新尺码相关数据时采用了LIKE模糊匹配">
+      <created>1459395688933</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1459395688933</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1130,22 +1152,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1060" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19024652" sideWeight="0.49840933" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32837406" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32912722" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15337764" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32962137" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24930748" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32299465" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.025316456" sideWeight="0.50053024" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32912722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -1174,7 +1196,8 @@
     <MESSAGE value="更新工作记录" />
     <MESSAGE value="更新疵点构成分析图" />
     <MESSAGE value="二捡重大不良添加捋肩带重大不良" />
-    <option name="LAST_COMMIT_MESSAGE" value="二捡重大不良添加捋肩带重大不良" />
+    <MESSAGE value="为了解决字符串左右多空格情况，对二捡对应尺码刷新尺码相关数据时采用了LIKE模糊匹配" />
+    <option name="LAST_COMMIT_MESSAGE" value="为了解决字符串左右多空格情况，对二捡对应尺码刷新尺码相关数据时采用了LIKE模糊匹配" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1418,8 +1441,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sklcc/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4753521">
-          <caret line="946" column="106" selection-start-line="946" selection-start-column="106" selection-end-line="946" selection-end-column="106" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="948" column="37" selection-start-line="948" selection-start-column="37" selection-end-line="948" selection-end-column="37" />
           <folding>
             <marker date="1459395540686" expanded="true" signature="5928:6003" placeholder="select depar... sklcc_department" />
             <marker date="1459395540686" expanded="true" signature="6804:6855" placeholder="select Top 1... sklcc_config" />
@@ -1721,6 +1744,20 @@
             <marker date="1459395540686" expanded="true" signature="183493:183586" placeholder="SELECT seria... " />
             <marker date="1459395540686" expanded="true" signature="184688:184781" placeholder="select quest... sklcc_return_check" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor vertical-scroll-proportion="0.352">
+            <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
