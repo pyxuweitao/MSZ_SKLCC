@@ -945,7 +945,7 @@ def get_partition_table(request):
         if size in [target[0].strip() for target in target_list]:
             ##TODO: if bug note
             Raw.sql = "select partition, common_difference, symmetry, measure_res, note from sklcc_style_measure WITH(NOLOCK)" \
-                      " where measure_or_not = 1 and size LIKE '_%s' and styleno = '%s' and state = 1" \
+                      " where measure_or_not = 1 and size LIKE '%%%%%s' and styleno = '%s' and state = 1" \
                       " order by serial" % (size, styleno)
             partition_list = Raw.query_all()
             if partition_list != False:
