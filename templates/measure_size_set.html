@@ -36,7 +36,7 @@
             animation: true,
             title: '点击添加一行'
         });
-        document.getElementById('style_input').value = window.location.search.length != 0 ? window.location.search.split('?')[1].split('=')[1] : '';
+        document.getElementById('style_input').value = decodeURI(window.location.search.length != 0 ? window.location.search.split('?')[1].split('=')[1] : '');
         if ($.trim(document.getElementById('style_input').value) == '') {
             document.getElementById("btn-sub").disabled = true;
         }
@@ -514,7 +514,7 @@
         }
         data = {
             'new_style': document.getElementById('style_input').value,
-            'old_style': window.location.search.split('?')[1].split('=')[1] ? window.location.search.split('?')[1].split('=')[1] : null,
+            'old_style': decodeURI(window.location.search.split('?')[1].split('=')[1] ? window.location.search.split('?')[1].split('=')[1].toString() : null),
             'type_id': null,
             'data': partions
         };
