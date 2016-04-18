@@ -982,6 +982,8 @@ def update_info(request):
         inspector_no = request.session['employeeno']
         barcode = request.GET['code']
         info_ini = get_info(barcode, inspector_no)
+
+
         xml = """"""
         if info_ini['state'] == 0:
             xml += """<state value = "0"></state></info></xml>"""

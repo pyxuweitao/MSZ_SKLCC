@@ -163,7 +163,9 @@
                                 {% ifequal temp.state 1 %}
                                 <a href="{{temp.url}}#check">查看</a>
                                 {% endifequal %}
-                                
+                                {% ifequal temp.state 2 %}
+                                <a href="{{temp.url}}">修改</a>
+                                {% endifequal %}
                                 
                             </td>
                         </tr>

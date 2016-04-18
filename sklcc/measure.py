@@ -180,20 +180,20 @@ def get_inspector_measure_data(inspector_no, date, batch=None, size=None, conten
 def measure_in(request):
     try:
         inspector_no = request.session['employeeno']
-        batch = request.GET['batch']
-        size = request.GET['size']
-        styleno = transStringEncodedByURL(request.GET['styleno'])
-        Raw = Raw_sql()
-        T = Current_time()
-        today = T.get_date()
+        batch        = request.GET['batch']
+        size         = request.GET['size']
+        styleno      = transStringEncodedByURL(request.GET['styleno'])
+        Raw          = Raw_sql()
+        T            = Current_time()
+        today        = T.get_date()
         measure_data = get_inspector_measure_data(inspector_no, today, batch, size, styleno=styleno)
-        res_list = measure_data[0]
-        ok = []
+        res_list     = measure_data[0]
+        ok           = []
 
         for one in res_list:
             ok.append(toTypehorizon(one))
         info_list = measure_data[1]
-        html = get_template("measure_in.html")
+        html      = get_template("measure_in.html")
         return TemplateResponse(request, html, locals())
     except Exception, e:
         pass
@@ -762,7 +762,6 @@ def sync_size(request):
 						+'@'+isnull(size35, '')+'@'+isnull(size36, '')+'@'+isnull(size37, '')+'@'+isnull(size38, '')+'@'+isnull(size39, '')
 						+'@'+isnull(size40, '') from dbo.StyleInfo WITH(NOLOCK) WHERE StyleNo = '%s'""" % (styleno)
         target = Raw.query_one('MSZ')
-
         if target != False:
             all_size = target[0]
             size_list = [size for size in all_size.split("@") if len(size) != 0 and len(size.strip()) != 0]
