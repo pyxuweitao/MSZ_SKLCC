@@ -1,5 +1,4 @@
-
-window.onload = function() {
+window.onload = function () {
     Messenger.options = {
         extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
         theme: 'flat'
@@ -35,7 +34,7 @@ window.onload = function() {
         html: true,
         placement: 'bottom'
     });
-    $('#total_num').on('change focus blur input', function() {
+    $('#total_num').on('change focus blur input', function () {
         sample = get_sample_count_by_total_count();
         //alert(sample);
         document.getElementById('check_num').value = sample;
@@ -75,7 +74,25 @@ function flush_page_by_content_id() {
     console.log(document.getElementById('department').innerHTML);
     document.getElementById('batch').innerHTML = '';
     document.getElementById('batch').innerHTML = '<option>' + batch + '</option>';
-    document.getElementById('inspector').innerHTML = '<option value="' + inspectorno + '">' + inspectorname + '</option>';
+    //实现抽验修改检验员begin
+    var jsonhttp = new XMLHttpRequest();
+    jsonhttp.onreadystatechange = function () {
+        if (jsonhttp.readyState == 4 && jsonhttp.status == 200) {
+            var jsonfile = jsonhttp.responseText.toString();
+            document.getElementById("inspector").innerHTML = '';
+            var json = eval('(' + jsonfile + ')');
+            for (var key in json) {
+                var temp = document.createElement("option");
+                temp.innerHTML = json[key];
+                temp.value = key;
+                document.getElementById("inspector").appendChild(temp);
+            }
+        }
+    }
+    jsonhttp.open("GET", '/recheck_update_inspector_by_batch/?' + 'batch=' + batch, false);
+    jsonhttp.send();
+    //修改检验员功能实现end
+    //document.getElementById('inspector').innerHTML = '<option value="' + inspectorno + '">' + inspectorname + '</option>';
     document.getElementById('total_num').value = con_total_num;
     document.getElementById('check_num').value = con_sample_num;
     document.getElementById('is_clear').disabled = true;
@@ -139,7 +156,7 @@ function initiallize() {
         //console.log($.trim(cookies[i].split('=')[0]));
         if (cookies[i].split('=')[0] == 'month_chosen') {
             console.log(cookies[i].split('=')[1]);
-            $('#serial_month option').each(function() {
+            $('#serial_month option').each(function () {
                 this.selected = false;
                 if (this.value == cookies[i].split('=')[1]) {
                     this.selected = true;
@@ -147,7 +164,7 @@ function initiallize() {
             });
         }
         if (cookies[i].split('=')[0] == 'batch_of_last') {
-            $("#batch option").each(function() {
+            $("#batch option").each(function () {
                 this.selected = false;
                 if (this.innerHTML == cookies[i].split('=')[1]) {
                     this.selected = true;
@@ -164,7 +181,7 @@ function initiallize() {
     for (var i = 0; i < hs.length; i++) {
         hs[i].value = '';
     }
-    $('#baldric button').each(function() {
+    $('#baldric button').each(function () {
         this.disabled = false;
     });
     document.getElementById('is_recheck').checked = false;
@@ -179,7 +196,7 @@ function onchangeslelction() {
     var department = $("#department").find("option:selected").text();
     var batch = $("#batch").find("option:selected").text();
     var jsonhttp = new XMLHttpRequest();
-    jsonhttp.onreadystatechange = function() {
+    jsonhttp.onreadystatechange = function () {
         if (jsonhttp.readyState == 4 && jsonhttp.status == 200) {
             var jsonfile = jsonhttp.responseText.toString();
             build_page(jsonfile);
@@ -189,6 +206,26 @@ function onchangeslelction() {
     }
     var hs = document.getElementById("scan_input");
     jsonhttp.open("GET", '/recheck_update_batch_and_inspector/?' + 'department=' + department + '&is_clear=' + document.getElementById('is_clear').checked.toString() + '&month=' + document.getElementById("serial_month").value, false);
+    jsonhttp.send();
+}
+
+function changeBatchSelection() {
+    var batch = $("#batch").find("option:selected").text();
+    var jsonhttp = new XMLHttpRequest();
+    jsonhttp.onreadystatechange = function () {
+        if (jsonhttp.readyState == 4 && jsonhttp.status == 200) {
+            var jsonfile = jsonhttp.responseText.toString();
+            document.getElementById("inspector").innerHTML = '';
+            var json = eval('(' + jsonfile + ')');
+            for (var key in json) {
+                var temp = document.createElement("option");
+                temp.innerHTML = json[key];
+                temp.value = key;
+                document.getElementById("inspector").appendChild(temp);
+            }
+        }
+    }
+    jsonhttp.open("GET", '/recheck_update_inspector_by_batch/?' + 'batch=' + batch, false);
     jsonhttp.send();
 }
 
@@ -269,7 +306,7 @@ function onclickconfirm() {
     }
     document.cookie = "batch_of_last=" + document.getElementById('batch').value;
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             document.cookie = "batch_of_last=" + document.getElementById("batch").value;
             xmlfile = xmlhttp.responseText.toString();
@@ -290,7 +327,7 @@ function onclickconfirm() {
             document.getElementById('explorer_index').getElementsByTagName('a')[1].click();
             var bg = flush_measure_list(xmlDoc);
             if (bg) {
-                //bind_to_size();    
+                //bind_to_size();
             } else {
                 activate();
             }
@@ -319,7 +356,7 @@ function flush_measure_list(xmlDoc) {
     for (var i = 0; i < size_list.length; i++) {
         var op = document.createElement('option');
         op.innerHTML = size_list[i].split(',')[0];
-        op.setAttribute("serialno",size_list[i].split(',')[1]);
+        op.setAttribute("serialno", size_list[i].split(',')[1]);
         selectx.appendChild(op);
     }
     selectx.setAttribute('class', 'form-control');
@@ -334,7 +371,7 @@ function flush_measure_list(xmlDoc) {
     div.style.marginTop = '10px';
     div.style.minWidth = "10000px";
     document.getElementById('measure_size').appendChild(div);
-    selectx.onchange = function() {
+    selectx.onchange = function () {
         return get_partition();
     }
     get_partition();
@@ -344,7 +381,7 @@ function flush_measure_list(xmlDoc) {
 function bind_to_size() {
 
     document.getElementById('explorer_index').getElementsByTagName('a')[8].click();
-    $('#explorer_index a').each(function() {
+    $('#explorer_index a').each(function () {
         this.disabled = true;
     });
 }
@@ -357,11 +394,11 @@ function style_measure_illeagl() {
     } catch (e) {
         return true;
     }
-    if (document.getElementById("is_recheck").checked){
+    if (document.getElementById("is_recheck").checked) {
         return true;
     }
     var records = 0;
-    $('a.del_col_a').each(function() {
+    $('a.del_col_a').each(function () {
         records += 1;
         //console.log(1);
     });
@@ -372,8 +409,8 @@ function style_measure_illeagl() {
     }
     var ill = true;
     var re = /^\d+(\.\d+)?$/;
-    $("#measure_res_table input").each(function(){
-        if (!re.test(this.value)){
+    $("#measure_res_table input").each(function () {
+        if (!re.test(this.value)) {
             ill = false;
             return false;
         }
@@ -419,95 +456,96 @@ function onclickfin() {
 }
 var patterm_float = /^\d+(\.\d+)?$/;
 function bind_size_cells() {
-    $('#partion_input td.record').each(function(e) {
+    $('#partion_input td.record').each(function (e) {
         if (this.getElementsByTagName("input").length == 0) {
             var tempN = this;
             $("<input/>").css({
                 border: 'none',
                 width: '40px',
                 "background-color": 'transparent'
-                    //height:'45px'
-            }).appendTo(tempN).on('blur',function(){
+                //height:'45px'
+            }).appendTo(tempN).on('blur', function () {
                 //console.log(patterm_float.test(this.value));
-                if (!patterm_float.test(this.value)){
+                if (!patterm_float.test(this.value)) {
                     $(this).css({
-                        "border":"1px solid red"
+                        "border": "1px solid red"
                         //"padding":"2px 2px 2px 2px"
                     });
-                }else{
+                } else {
                     $(this).css({
-                        "border":"none"
+                        "border": "none"
                     });
                 }
-            }).keydown(function(e){
-                function jump_to_next_row(node,index,is){
-                    if (is == "2"){
-                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function(i){
-                            if (i == index && this.parentNode.getAttribute("colspan") == "2"){
+            }).keydown(function (e) {
+                function jump_to_next_row(node, index, is) {
+                    if (is == "2") {
+                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function (i) {
+                            if (i == index && this.parentNode.getAttribute("colspan") == "2") {
                                 this.focus();
-                            }else if (i == index*2 && this.parentNode.getAttribute("colspan") != "2"){
+                            } else if (i == index * 2 && this.parentNode.getAttribute("colspan") != "2") {
                                 this.focus();
                             }
                         });
-                        if (temp.length == 0){
+                        if (temp.length == 0) {
                             var has_target = false;
-                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function(i){
-                                if (i-1 == index && this.parentNode.getAttribute("colspan") == "2"){
+                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function (i) {
+                                if (i - 1 == index && this.parentNode.getAttribute("colspan") == "2") {
                                     this.focus();
                                     has_target = true;
-                                }else if (i == index*2+2 && this.parentNode.getAttribute("colspan") != "2"){
+                                } else if (i == index * 2 + 2 && this.parentNode.getAttribute("colspan") != "2") {
                                     this.focus();
                                     has_target = true;
                                 }
                             });
-                            if (!has_target){
+                            if (!has_target) {
                                 $("#measure_partition_add_col_button").click();
-                                jump_to_next_row(node,index,is);
+                                jump_to_next_row(node, index, is);
                             }
                             console.log("none");
                         }
-                    }else{
-                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function(i){
-                            if (i == (index-1)/2 && this.parentNode.getAttribute("colspan") == "2"){
+                    } else {
+                        var temp = $(node).parents("tr:first").next("tr:first").find("input").each(function (i) {
+                            if (i == (index - 1) / 2 && this.parentNode.getAttribute("colspan") == "2") {
                                 this.focus();
-                            }else if (i+1 == index && this.parentNode.getAttribute("colspan") != "2"){
+                            } else if (i + 1 == index && this.parentNode.getAttribute("colspan") != "2") {
                                 this.focus();
                             }
                         });
-                        if (temp.length == 0){
+                        if (temp.length == 0) {
                             var has_target = false;
-                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function(i){
-                                if (i-1 == (index-1)/2 && this.parentNode.getAttribute("colspan") == "2"){
+                            $(node).parents("table:first").find("tr:eq(1)").find("input").each(function (i) {
+                                if (i - 1 == (index - 1) / 2 && this.parentNode.getAttribute("colspan") == "2") {
                                     this.focus();
                                     has_target = true;
-                                }else if (i-1 == index && this.parentNode.getAttribute("colspan") != "2"){
+                                } else if (i - 1 == index && this.parentNode.getAttribute("colspan") != "2") {
                                     this.focus();
                                     has_target = true;
                                 }
                             });
-                            if (!has_target){
+                            if (!has_target) {
                                 $("#measure_partition_add_col_button").click();
-                                jump_to_next_row(node,index,is);
+                                jump_to_next_row(node, index, is);
                             }
                         }
                     }
                 }
-                if (e.keyCode == 13){
+
+                if (e.keyCode == 13) {
                     var index;
                     var target_node = this;
-                    $(this).parents("tr:first").find("input").each(function(i){
-                        if (target_node == this){
-                             index = i;
-                             return false;
+                    $(this).parents("tr:first").find("input").each(function (i) {
+                        if (target_node == this) {
+                            index = i;
+                            return false;
                         }
                     });
                     console.log(index);
-                    if (index % 2 != 0 && this.parentNode.getAttribute("colspan") != "2"){
-                        jump_to_next_row(target_node,index,target_node.parentNode.getAttribute("colspan"));
-                    }else if (index % 2 == 0 && this.parentNode.getAttribute("colspan") != "2"){
+                    if (index % 2 != 0 && this.parentNode.getAttribute("colspan") != "2") {
+                        jump_to_next_row(target_node, index, target_node.parentNode.getAttribute("colspan"));
+                    } else if (index % 2 == 0 && this.parentNode.getAttribute("colspan") != "2") {
                         $(this).parents("td:first").next("td:first").find("input").focus();
-                    }else if (this.parentNode.getAttribute("colspan") == "2"){
-                        jump_to_next_row(target_node,index,target_node.parentNode.getAttribute("colspan"));
+                    } else if (this.parentNode.getAttribute("colspan") == "2") {
+                        jump_to_next_row(target_node, index, target_node.parentNode.getAttribute("colspan"));
                     }
                 }
             });
@@ -530,29 +568,29 @@ function bind_size_cells() {
     // });
 }
 
-function flush_style_measuree (xmlDoc) {
+function flush_style_measuree(xmlDoc) {
     var record = xmlDoc.getElementsByTagName("RE");
-    for (var i=0;i<record.length;i++){
-        if (i>0){
-                document.getElementById("measure_partition_add_col_button").click();
-    
-            }
+    for (var i = 0; i < record.length; i++) {
+        if (i > 0) {
+            document.getElementById("measure_partition_add_col_button").click();
+
+        }
         var recc = record[i].getElementsByTagName("record");
-        for (var k=0;k<recc.length;k++){
-            
+        for (var k = 0; k < recc.length; k++) {
+
             var temp = [];
-            if (recc[k].getAttribute("measure_res") != 'none'){
+            if (recc[k].getAttribute("measure_res") != 'none') {
                 temp.push(recc[k].getAttribute("measure_res"));
-            }else{
+            } else {
                 temp.push(recc[k].getAttribute("sym1"));
                 temp.push(recc[k].getAttribute("sym2"));
             }
             console.log(temp);
-            $("#measure_res_table tbody tr").each(function(){
-                if (this.getElementsByTagName("td")[0].innerHTML == recc[k].getAttribute("partition")){
-                    for (var j = 0;j<temp.length;j++){
-                        $(this).find("input").each(function(){
-                            if (this.value == ""){
+            $("#measure_res_table tbody tr").each(function () {
+                if (this.getElementsByTagName("td")[0].innerHTML == recc[k].getAttribute("partition")) {
+                    for (var j = 0; j < temp.length; j++) {
+                        $(this).find("input").each(function () {
+                            if (this.value == "") {
                                 this.value = temp[j];
                                 return false;
                             }
@@ -566,42 +604,42 @@ function flush_style_measuree (xmlDoc) {
 }
 function get_partition() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/get_partition_table/?batch=' + document.getElementById('batch').value + '&size=' + document.getElementById('size_flush_select').value+'&contentid='+window.location.search.split('&')[0].split('=')[1]+'&href='+Math.random(), false);
+    xhr.open('GET', '/get_partition_table/?batch=' + document.getElementById('batch').value + '&size=' + document.getElementById('size_flush_select').value + '&contentid=' + window.location.search.split('&')[0].split('=')[1] + '&href=' + Math.random(), false);
     var x = document.getElementById('size_flush_select').value;
-    xhr.onload = function() {
-            var domParser = new DOMParser();
-            var xmlDoc = domParser.parseFromString(xhr.responseText, 'text/xml');
-            flush_style_measure(xmlDoc);
-            if (window.location.search.length > 0){
-                flush_style_measuree(xmlDoc);
-            }
+    xhr.onload = function () {
+        var domParser = new DOMParser();
+        var xmlDoc = domParser.parseFromString(xhr.responseText, 'text/xml');
+        flush_style_measure(xmlDoc);
+        if (window.location.search.length > 0) {
+            flush_style_measuree(xmlDoc);
         }
-        // if (document.getElementById('partion_input').getElementsByTagName('table').length == 0) {
-        //     xhr.send();
-        // } else {
-        //     if (true) {
-        //         document.getElementById('partion_input').innerHTML = '';
-        //         document.getElementById('measure_size').removeChild(document.getElementById('measure_size').getElementsByTagName('button')[0]);
-        //         xhr.send();
-        //     } else {
-        //         $('#size_flush_select option').each(function() {
-        //             if (this.innerHTML == x) {
-        //                 console.log(x);
-        //                 this.selected = 'selected';
-        //             }
-        //         });
-        //     }
-        // }
+    }
+    // if (document.getElementById('partion_input').getElementsByTagName('table').length == 0) {
+    //     xhr.send();
+    // } else {
+    //     if (true) {
+    //         document.getElementById('partion_input').innerHTML = '';
+    //         document.getElementById('measure_size').removeChild(document.getElementById('measure_size').getElementsByTagName('button')[0]);
+    //         xhr.send();
+    //     } else {
+    //         $('#size_flush_select option').each(function() {
+    //             if (this.innerHTML == x) {
+    //                 console.log(x);
+    //                 this.selected = 'selected';
+    //             }
+    //         });
+    //     }
+    // }
     xhr.send();
 }
 
 function flush_style_measure(xmlDoc) {
     if (document.getElementById("measure_size").getElementsByTagName("table").length == 0) {
         var div = document.createElement("div");
-        $(div).css({"float":"left","display":"inline","min-width":"1000px"});
+        $(div).css({"float": "left", "display": "inline", "min-width": "1000px", "padding-bottom": "20px"});
         var table = document.createElement('table');
         table.id = "measure_res_table";
-        $(table).css({"display":"inline"});
+        $(table).css({"display": "inline"});
         table.setAttribute('class', 'table table-bordered');
         table.style.border = 'none';
         table.style.width = '100px';
@@ -619,6 +657,7 @@ function flush_style_measure(xmlDoc) {
             td0.style.maxWidth = '120px';
             //td0.setAttribute("");
             td0.innerHTML = str[i].getAttribute('partition');
+            td0.setAttribute("hint", str[i].getAttribute('note'));
             td0.style.backgroundColor = 'rgba(238, 238, 238, 0.8)';
             var td1 = document.createElement('td');
             td1.innerHTML = str[i].getAttribute('measure_res');
@@ -635,7 +674,7 @@ function flush_style_measure(xmlDoc) {
             var btn = document.createElement('button');
             btn.setAttribute('class', 'btn btn-success');
             btn.innerHTML = '尺寸测量完毕，开始录入疵点';
-            btn.onclick = function() {
+            btn.onclick = function () {
                 if (style_measure_illeagl()) {
                     return activate();
                 } else {
@@ -651,7 +690,7 @@ function flush_style_measure(xmlDoc) {
             animation: true,
             html: true,
             title: '<label style="font-size:20px">点击添加一条测量记录</label>'
-        }).click(function() {
+        }).click(function () {
             var rows = table.getElementsByTagName('tr');
             var th = document.createElement('th');
             th.style.border = '#ddd 1px solid';
@@ -689,7 +728,7 @@ function flush_style_measure(xmlDoc) {
                 html: true,
                 title: '<label style="font-size:20px">点击删除本次测量记录</label>',
                 animation: true
-            }).click(function() {
+            }).click(function () {
                 var hh = this.parentNode.parentNode;
                 var index = parseInt(this.parentNode.innerText);
                 var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
@@ -723,31 +762,37 @@ function flush_style_measure(xmlDoc) {
             ts[i].style.minHeight = '45px';
         }
         document.getElementById('measure_partition_add_col_button').click();
-        setTimeout(function(){
+        setTimeout(function () {
             document.getElementById("measure_trigger").click();
             var hint_table = document.createElement("table");
             hint_table.id = "measure_hint_table";
+            $(hint_table).css({"margin-bottom": "20px"});
             var cell_width;
-            $("#measure_size").find("table:first").each(function(){
-                $(this).find("tr").each(function(i){
+            $("#measure_size").find("table:first").each(function () {
+                $(this).find("tr").each(function (i) {
                     var tar_node;
-                    if (i == 0){
+                    if (i == 0) {
                         tar_node = this.getElementsByTagName("th")[0];
                         cell_width = tar_node.offsetWidth;
                         console.log(this.getElementsByTagName("th")[0].offsetWidth);
-                    }else{
-                        tar_node = this.getElementsByTagName("td")[0];;
+                    } else {
+                        tar_node = this.getElementsByTagName("td")[0];
+                        ;
                         console.log(this.getElementsByTagName("td")[0].offsetWidth);
                     }
                     var tr = document.createElement("tr");
                     var td = document.createElement("td");
-                    td.innerHTML = tar_node.innerHTML;
+                    if (i != 0) {
+                        td.innerHTML = tar_node.innerHTML + '<a href="#" class="measure_hint" data-title="' + tar_node.getAttribute("hint") + '" style="cursor:help"> <span class="glyphicon glyphicon-comment "></span></a>';
+                    } else {
+                        td.innerHTML = tar_node.innerHTML;
+                    }
                     $(td).css({
-                        "max-width":tar_node.offsetWidth,
-                        "height":parseInt(tar_node.offsetHeight)+1,
-                        "background":"rgba(238, 238, 238, 1)",
-                        "border-top":"0px solid #fff",
-                        "min-width":tar_node.offsetWidth
+                        "max-width": tar_node.offsetWidth,
+                        "height": parseInt(tar_node.offsetHeight) + 1,
+                        "background": "rgba(238, 238, 238, 1)",
+                        "border-top": "0px solid #fff",
+                        "min-width": tar_node.offsetWidth
                     }).addClass("table table-bordered");
                     //td.style.width = tar_node.offsetWidth;
                     //td.style.minWidth = tar_node.offsetWidth;
@@ -761,62 +806,62 @@ function flush_style_measure(xmlDoc) {
                 });
 
             });
-            
+
             $(hint_table).css({
-                "display":"inline"
+                "display": "inline"
             });
             var temp_div = document.createElement("div");
             $(temp_div).css({
                 //"display":"inline"
-                
+
             });
             temp_div.appendChild(hint_table);
-            document.getElementById("partion_input").insertBefore(temp_div,document.getElementById("measure_res_table").parentNode);
-            $("#measure_res_table tr").each(function(i){
+            document.getElementById("partion_input").insertBefore(temp_div, document.getElementById("measure_res_table").parentNode);
+            $("#measure_res_table tr").each(function (i) {
 
                 $(this).find("td:first").css({
-                    "visibility":"hidden"
+                    "visibility": "hidden"
                 });
                 $(this).find("th:first").css({
-                    "visibility":"hidden"
+                    "visibility": "hidden"
                 });
-            }); 
+            });
             var temp_res_table;
             var temp_res_table_width;
             console.log("-----");
-            $("#measure_hint_table").parent().each(function(){
+            $("#measure_hint_table").parent().each(function () {
                 console.log(this.offsetHeight);
                 temp_res_table = this.offsetHeight;
                 temp_res_table_width = this.offsetWidth;
             });
             console.log("-----");
             $("#measure_res_table").parent().css({
-                "margin-top":'-'+temp_res_table.toString()+'px',
-                "display":"inline"
+                "margin-top": '-' + temp_res_table.toString() + 'px',
+                "display": "inline"
                 //"margin-left":'-30px'
             });
-            $("#measure_size").on("scroll",function(){
+            $("#measure_size").on("scroll", function () {
                 var value = this.scrollLeft;
                 console.log(this.scrollLeft);
                 $("#measure_hint_table").parent().css({
-                    "margin-left":''+value+'px'
+                    "margin-left": '' + value + 'px'
                 });
             });
             document.getElementById("measure_partition_add_col_button").click();
-            $("#measure_res_table a.del_col_a:last").each(function(){
+            $("#measure_res_table a.del_col_a:last").each(function () {
                 this.click();
             });
-        },100);
+        }, 100);
 
-    }else{
-        $("#measure_res_table").each(function(){
+    } else {
+        $("#measure_res_table").each(function () {
             var table = this;
             var str = xmlDoc.getElementsByTagName('measure');
             var tbody_trs = this.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-            for (var i=0;i<str.length;i++){
-                for (var j=0;j<tbody_trs.length;j++){
+            for (var i = 0; i < str.length; i++) {
+                for (var j = 0; j < tbody_trs.length; j++) {
                     var tds = tbody_trs[j].getElementsByTagName("td");
-                    if ($.trim(tds[0].innerHTML) == $.trim(str[i].getAttribute("partition"))){
+                    if ($.trim(tds[0].innerHTML) == $.trim(str[i].getAttribute("partition"))) {
                         tds[1].innerHTML = str[i].getAttribute('measure_res');
                         tds[2].innerHTML = str[i].getAttribute('common_difference');
                         tds[3].innerHTML = str[i].getAttribute('symmetry');
@@ -842,7 +887,7 @@ function activate() {
         hs[i].disabled = true;
     }
     document.getElementById("program_index").click();
-    $('#explorer_index a').each(function() {
+    $('#explorer_index a').each(function () {
         // body...
         this.disabled = false;
     });
@@ -889,7 +934,7 @@ function flush_catalog_mistake(xmlDoc) {
             button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
             button.setAttribute("name", mistakes[i].getAttribute("code"));
             button.value = mistakes[i].getAttribute("no");
-            button.onclick = function() {
+            button.onclick = function () {
                 to_append_mistake[0] = this.value;
                 to_append_mistake[1] = this.getAttribute("name");
                 var hint = document.getElementById("hint_mistake");
@@ -921,7 +966,7 @@ function flush_catalog_mistake(xmlDoc) {
             button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
             button.setAttribute("name", mistakes[i].getAttribute("code"));
             button.value = mistakes[i].getAttribute("no");
-            button.onclick = function() {
+            button.onclick = function () {
                 to_append_mistake[0] = this.value;
                 to_append_mistake[1] = this.getAttribute("name");
                 //var hint = document.getElementById("hint_label");
@@ -956,7 +1001,7 @@ function flush_catalog_mistake(xmlDoc) {
             button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
             button.setAttribute("name", mistakes[i].getAttribute("code"));
             button.value = mistakes[i].getAttribute("no");
-            button.onclick = function() {
+            button.onclick = function () {
                 to_append_mistake[0] = this.value;
                 to_append_mistake[1] = this.getAttribute("name");
                 //                var hint = document.getElementById("hint_label");
@@ -1001,14 +1046,14 @@ function flush_status() {
         line.appendChild(l4);
         line.appendChild(l5);
         line.value = '0';
-        line.onclick = function() {
+        line.onclick = function () {
             if (typeof(T) != 'undefined') {
                 clearTimeout(T);
             }
             selected_record = this;
             T = setTimeout('onclickrecord()', 200);
         };
-        line.ondblclick = function() {
+        line.ondblclick = function () {
             if (typeof(T) != 'undefined') {
                 clearTimeout(T);
             }
@@ -1110,7 +1155,7 @@ function flush_catalog_program(xmlDoc) {
         button.style.marginTop = '10px';
         button.style.width = button_width;
         button.style.height = '45px';
-        button.onclick = function() {
+        button.onclick = function () {
             to_append_program[0] = this.value;
             to_append_program[1] = this.getAttribute("name");
             to_append_program[2] = this.getAttribute("employee");
@@ -1320,7 +1365,7 @@ function flush_search_area(info) {
                 button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
                 button.setAttribute("name", mistakes[i].getAttribute("code"));
                 button.value = mistakes[i].getAttribute("no");
-                button.onclick = function() {
+                button.onclick = function () {
                     to_append_mistake[0] = this.value;
                     to_append_mistake[1] = this.getAttribute("name");
                     var hint = document.getElementById("hint_mistake");
@@ -1352,7 +1397,7 @@ function flush_search_area(info) {
                 button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
                 button.setAttribute("name", mistakes[i].getAttribute("code"));
                 button.value = mistakes[i].getAttribute("no");
-                button.onclick = function() {
+                button.onclick = function () {
                     to_append_mistake[0] = this.value;
                     to_append_mistake[1] = this.getAttribute("name");
                     var hint = document.getElementById("hint_mistake");
@@ -1383,7 +1428,7 @@ function flush_search_area(info) {
                 button.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + button.innerHTML + "</label>");
                 button.setAttribute("name", mistakes[i].getAttribute("code"));
                 button.value = mistakes[i].getAttribute("no");
-                button.onclick = function() {
+                button.onclick = function () {
                     to_append_mistake[0] = this.value;
                     to_append_mistake[1] = this.getAttribute("name");
                     var hint = document.getElementById("hint_mistake");
@@ -1426,10 +1471,10 @@ function OnCommit() {
             // } else {
             //     alert('有数据不明确或检验次数达不到最低要求');
             // }
-            if (submit()){
+            if (submit()) {
                 initiallize();
             }
-            
+
         } else {
             return;
         }
@@ -1440,14 +1485,14 @@ function OnCommit() {
         // } else {
         //     alert('有数据不明确或检验次数达不到最低要求');
         // }
-        if (submit()){
-                initiallize();
-            }
+        if (submit()) {
+            initiallize();
+        }
     }
 }
 
 function submit() {
-    if (!style_measure_illeagl()){
+    if (!style_measure_illeagl()) {
         alert('尺寸测量数据不足或数据有空缺');
         return false;
     }
@@ -1468,6 +1513,7 @@ function submit() {
     }
     resultxml += '<no>' + $("#batch").find("option:selected").text() + '</no>';
     resultxml += '<inspector_no>' + document.getElementById("inspector").value + '</inspector_no>';
+    resultxml += '<inspector>' + document.getElementById("inspector").options[document.getElementById("inspector").selectedIndex].text + '</inspector>';
     resultxml += '<totalnumber>' + document.getElementById("total_num").value + '</totalnumber>';
     resultxml += '<conclusion>' + conclusion + '</conclusion>';
     resultxml += '<is_recheck>' + document.getElementById('is_recheck').checked + '</is_recheck>';
@@ -1482,7 +1528,7 @@ function submit() {
     }
     resultxml += "</RC></xml>";
     var json = [];
-    $('#partion_input table tbody tr').each(function() {
+    $('#partion_input table tbody tr').each(function () {
         var tds = this.getElementsByTagName('td');
         var data = [];
         if (parseFloat(tds[3].innerHTML) >= 1e-6) {
@@ -1490,64 +1536,64 @@ function submit() {
                 //alert(i)
                 if ($.trim(tds[i].getElementsByTagName("input")[0].value) != '' && $.trim(tds[i + 1].getElementsByTagName("input")[0].value) != '') {
                     json.push({
-                        name:tds[0].innerHTML,
-                        data:[$.trim(tds[i].getElementsByTagName("input")[0].value),$.trim(tds[i + 1].getElementsByTagName("input")[0].value)]
+                        name: tds[0].innerHTML,
+                        data: [$.trim(tds[i].getElementsByTagName("input")[0].value), $.trim(tds[i + 1].getElementsByTagName("input")[0].value)]
                     });
-                    
+
                 }
             }
         } else {
             for (var i = 4; i < tds.length; i++) {
                 if ($.trim(tds[i].getElementsByTagName("input")[0].value) != '') {
                     json.push({
-                        name:tds[0].innerHTML,
-                        data:[$.trim(tds[i].getElementsByTagName("input")[0].value)]
+                        name: tds[0].innerHTML,
+                        data: [$.trim(tds[i].getElementsByTagName("input")[0].value)]
                     });
                 }
             }
         }
     });
     var ser = '';
-    $("#size_flush_select option").each(function(){
-        if (this.selected == true){
+    $("#size_flush_select option").each(function () {
+        if (this.selected == true) {
             ser = this.getAttribute("serialno");
         }
     });
     var re_counter = 0;
-    $(".del_col_a").each(function(){
+    $(".del_col_a").each(function () {
         re_counter += 1;
     });
     var par_counter = 0;
-    $("#measure_size table tbody tr").each(function(){
+    $("#measure_size table tbody tr").each(function () {
         par_counter += 1;
     });
     var temp_json = [];
-    for (var i=0;i<re_counter;i++){
-        for (var j=0;j<par_counter;j++){
-            temp_json.push(json[i+j*re_counter]);
+    for (var i = 0; i < re_counter; i++) {
+        for (var j = 0; j < par_counter; j++) {
+            temp_json.push(json[i + j * re_counter]);
         }
     }
     xmlhttp.send(resultxml);
-    if (document.getElementById("size_flush_select") == null){
+    if (document.getElementById("size_flush_select") == null) {
         return true;
     }
     var total_measure_in = {
-        model:$("#batch").find("option:selected").text(),
-        size:document.getElementById("size_flush_select").value,
-        serialno:ser,
-        res:temp_json
+        model: $("#batch").find("option:selected").text(),
+        size: document.getElementById("size_flush_select").value,
+        serialno: ser,
+        res: temp_json
     };
     //resultxml += JSON.stringify(json);
     //console.log(resultxml);
 
-    
+
     var xml = new XMLHttpRequest();
     xml.open('POST', '/measure_commit/', false);
-    xml.onload = function(){
+    xml.onload = function () {
 
     }
     console.log(content_id);
-    xml.send('JSON=[' + JSON.stringify(total_measure_in)+']&contentid='+content_id);
+    xml.send('JSON=[' + JSON.stringify(total_measure_in) + ']&contentid=' + content_id);
     if (window.location.search.length > 1) {
         //window.close();
     }
@@ -1614,7 +1660,7 @@ function append_bald_to_table() {
     del.href = '#';
     del.style.float = 'right';
     del.innerHTML = '删除此行';
-    del.onclick = function() {
+    del.onclick = function () {
         this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
     };
     count.appendChild(del);
@@ -1649,7 +1695,7 @@ function bald_add() {
         del.href = '#';
         del.style.float = 'right';
         del.innerHTML = '删除此行';
-        del.onclick = function() {
+        del.onclick = function () {
             this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
         };
         exist_row.getElementsByTagName('td')[2].appendChild(del);
@@ -1669,7 +1715,7 @@ function bald_submit() {
     var json = 'json=';
     json += '{"count":["' + parseInt(document.getElementById("bald_count").value) + '"],"record":[';
     var has_record = false;
-    $('#bald_table tbody tr').each(function() {
+    $('#bald_table tbody tr').each(function () {
         has_record = true;
         json += '{"employeeno":"' + this.getAttribute('employee_no') + '",';
         json += '"employeename":"' + this.getAttribute('employee_name') + '",';
@@ -1683,13 +1729,13 @@ function bald_submit() {
     json += ']';
     json += '}';
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                alert('提交成功');
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            alert('提交成功');
 
-            }
         }
-        //alert(json);
+    }
+    //alert(json);
     xmlhttp.open('POST', '/commit_bald_recheck/', true);
     xmlhttp.send(json);
 }

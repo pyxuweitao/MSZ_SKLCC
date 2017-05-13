@@ -1,6 +1,6 @@
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -15,9 +15,10 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'BDDMS_MSZ',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': '626107',                  # Not used with sqlite3.
-        #'HOST':'127.0.0.1,1433',
-        'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
+        #'PASSWORD': '626107',                  # Not used with sqlite3.
+        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
+        'HOST':'127.0.0.1,1433',
+        #'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
         'OPTIONS':{
 	        'host_is_server':True
         }},
@@ -25,9 +26,10 @@ DATABASES = {
         'ENGINE': 'django_pyodbc',         # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'SKLCC',                      # Or path to database file if using sqlite3.
         'USER': 'sa',                      # Not used with sqlite3.
-        'PASSWORD': '626107',                  # Not used with sqlite3.
-        #'HOST':'127.0.0.1,1433',
-        'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
+        #'PASSWORD': '626107',                  # Not used with sqlite3.
+        'PASSWORD': 'sklcc',                  # Not used with sqlite3.
+        'HOST':'127.0.0.1,1433',
+        #'HOST': '192.168.1.89,1433',                      # Set to empty string for localhost. Not used with sqlite3.
         'OPTIONS':{
 	        'host_is_server':True
         }
@@ -126,6 +128,8 @@ MIDDLEWARE_CLASSES = (
     #'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -153,6 +157,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'sklcc',
+    #"debug_toolbar",
 )
 
 # A sample logging configuration. The only tangible logging
@@ -185,3 +190,4 @@ LOGGING = {
 }
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+

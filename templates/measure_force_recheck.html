@@ -65,7 +65,7 @@
             for (var i=4;i<table.getElementsByTagName('tr').length-1;i++){
                 count += 1;
             }
-            this.innerHTML = infos[e].getAttribute('model') + '|' + infos[e].getAttribute('size') +' <span class="badge pull-right">'+count+'</span>';
+            this.innerHTML = infos[e].getAttribute('model') + '|' + infos[e].getAttribute('size') +' <span class="badge pull-right">'+(count-1)+'</span>';
         });
         $('table').each(function (e, i) {
             //console.log()
@@ -78,7 +78,7 @@
         $('table').each(function(){
             var bitmap = this.getElementsByTagName('tfoot')[0].getElementsByTagName('tr')[0].getElementsByTagName('td');
             var rows = this.getElementsByTagName('tr');
-            for (var i=4;i<rows.length - 1;i++){
+            for (var i=5;i<rows.length - 1;i++){
                 var td = rows[i].getElementsByTagName('td');
                 console.log('---------------------'+i+'-----------------------');
                 for (var j=0;j<td.length;j++){
@@ -148,8 +148,8 @@
         $('table').each(function () {
             var tb = this.getElementsByTagName('tbody')[0];
             var trs = this.getElementsByTagName('tr');
-            for (var i = 4; i < trs.length; i++) {
-                trs[i].getElementsByTagName('td')[0].innerHTML = i - 3;
+            for (var i = 5; i < trs.length; i++) {
+                trs[i].getElementsByTagName('td')[0].innerHTML = i - 4;
                 if (i != trs.length - 1) {
 
                     var a = document.createElement('a');
@@ -211,7 +211,7 @@
                 });
             }
             var part_res = [];
-            for (var i = 4; i < trs.length - 1; i++) {
+            for (var i = 5; i < trs.length - 1; i++) {
                 var r_res = trs[i].getElementsByTagName('td');
                 console.log(r_res);
                 var pointer = 1;
@@ -311,16 +311,23 @@
                                             {% endfor %}
                                         </tr>
                                         {% else %}
+                                            {% ifequal forloop.counter 5 %}
+                                            <tr>
+                                                <td>备注</td>
+                                                {% for j in g %}
+                                                    <td colspan='2'>{{j}}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            {% else %}
                                             <tr>
                                                 <td></td>
                                                 {% for j in g %}
-
                                                     {% for i in j %}
-
                                                         <td><input value="{{i}}" class="number_input"/></td>
                                                     {% endfor %}
                                                 {% endfor %}
                                             </tr>
+                                        {% endifequal %}
                                         {% endifequal %}
                                         {% endifequal %}
                             {% endifequal %}

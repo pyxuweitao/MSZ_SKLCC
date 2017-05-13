@@ -487,14 +487,14 @@ t.start()
 def get_personal_miss_history(employeeno, date):
     try:
         Raw = Raw_sql()
-        Raw.sql = "select serialno from sklcc_recheck_info where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
+        Raw.sql = "select serialno from sklcc_recheck_info WITH(NOLOCK) where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
             employeeno, date)
         target_list = Raw.query_all()
         returnlist = []
         if target_list != False:
             for target in target_list:
                 serialno = target[0]
-                Raw.sql = "select sum( returnno ), questionno, questionname from sklcc_recheck_content where serialno = '%s' group by questionno, questionname " % serialno
+                Raw.sql = "select sum( returnno ), questionno, questionname from sklcc_recheck_content WITH(NOLOCK) where serialno = '%s' group by questionno, questionname " % serialno
                 question_list = Raw.query_all()
                 for question in question_list:
                     if question[1] == 0:
@@ -982,8 +982,10 @@ def update_info(request):
         inspector_no = request.session['employeeno']
         barcode = request.GET['code']
         info_ini = get_info(barcode, inspector_no)
-
-
+        #TODO：注释是否引发BUG？
+        # Raw.sql = """INSERT INTO SKLCC_SCAN_LOG WITH(ROWLOCK) (scantime, employeeno, barcode)
+        #           VALUES( GETDATE(), '%s', '%s');"""%(inspector_no, barcode)
+        # Raw.update()
         xml = """"""
         if info_ini['state'] == 0:
             xml += """<state value = "0"></state></info></xml>"""
@@ -1011,6 +1013,10 @@ def update_info(request):
 
         elif info_ini['state'] == 1:
             xml += """<state value = "1"></state>"""
+        # elif info_ini['state'] == 5: #达到100的整数件测量数据不足
+        #     xml += """<state value = "5"></state>"""
+        # elif info_ini['state'] == 8: #换批次和尺码部位测量数据不足
+        #     xml += """<state value = "8"></state>"""
         else:
             xml += """<state value = "3"></state>"""
 
@@ -1022,9 +1028,7 @@ def update_info(request):
         xml += """<scan_total_number>%s</scan_total_number>""" % info_ini['total_number']
         xml += """<scan_package_id>%s</scan_package_id>""" % info_ini['packno']
 
-
         xml += u"""<scan_styleno>%s</scan_styleno>""" % info_ini['styleno']
-
 
         xml += """<scan_measure_count>0</scan_measure_count>"""
         xml += """</info>"""
@@ -1090,7 +1094,7 @@ def update_info(request):
             serialno     = res_list[0][0]
             if res_list[0][6] == 0: #如果有一个returnno是0，那么这个条码只有一个记录，且returnno=0
                 xml += """</RC>"""
-                Raw.sql = "delete from sklcc_info where barcode = '%s' and batch = '%s';" % (
+                Raw.sql = "delete from sklcc_info WITH(ROWLOCK) where barcode = '%s' and batch = '%s';" % (
                     barcode, info_ini['batch'])
                 # TODO:当只有一张条码时应该删去sklcc_record中的记录单
                 Raw.sql += u"update sklcc_record WITH(ROWLOCK)" \
@@ -1112,7 +1116,7 @@ def update_info(request):
                 returnno = Table_target[0] - info_one[6] #删去该条码的数据
                 # if returnno = 0,then delete it,else update it
                 if returnno == 0:
-                    Raw.sql = "delete from sklcc_table where serialno = '%s' and employeeno = '%s' and" \
+                    Raw.sql = "delete from sklcc_table WITH(ROWLOCK) where serialno = '%s' and employeeno = '%s' and" \
                               " questionno = %d and workno = %d" % (info_one[0], info_one[1], info_one[5], info_one[3])
                     Raw.update()
                 else:
@@ -1130,13 +1134,13 @@ def update_info(request):
             totalreturn   = Record_target[1]
             totalreturn  -= returnno_sum
             if totalnumber == 0:
-                Raw.sql = "DELETE FROM sklcc_record WHERE serialno = '%s'" % serialno
+                Raw.sql = "DELETE FROM sklcc_record WITH(ROWLOCK) WHERE serialno = '%s'" % serialno
             else:
                 Raw.sql = "update sklcc_record WITH(ROWLOCK) set totalreturn = %d, totalnumber = %d where serialno = '%s'" % (
                     totalreturn, totalnumber, serialno)
             Raw.update()
             # delete in info table
-            Raw.sql = "delete from sklcc_info where barcode = '%s'" % (barcode)
+            Raw.sql = "delete from sklcc_info WITH(ROWLOCK) where barcode = '%s'" % (barcode)
             Raw.update()
             xml += "</RC>"
         xml += """</xml>"""
@@ -1162,6 +1166,74 @@ def update_info_new_but_slow(request):
     except Exception, e:
         make_log(sys._getframe().f_code.co_name + ">>>" + str(e))
 
+def whether_measure_finished(request):
+    start = time.clock()
+    batch = request.GET.get("batch")
+    size  = request.GET.get("size") if "size" in request.GET else False
+    inspectorno = request.session['employeeno']
+    Raw = Raw_sql()
+
+    Raw.sql = """SELECT measure_check_switch FROM SKLCC_CONFIG WITH(NOLOCK)"""
+    target = Raw.query_one()
+    if target:
+        if not target[0]: #如果尺寸测量检测开关关闭
+            return HttpResponse(simplejson.dumps({"CHECK":False}, ensure_ascii=False))
+
+    today_date = Current_time.get_now_date()
+    # if "batch" in request.session:
+    #     if batch != request.session["batch"] or size != request.session["size"]: #换批次换尺码
+    #         Raw.sql = """SELECT MAX(measure_count) FROM SKLCC_MEASURE_RECORD
+    #                      WHERE BATCH = '%s' AND SIZE = '%s' AND inspector_no = '%s' AND createtime > '%s'"""%(request.session["batch"], request.session["size"], inspectorno, today_date)
+    #         target = Raw.query_one()
+    #         if target:
+    #             if target[0] >= 1:
+    #                 return HttpResponse(simplejson.dumps({"CHECK":True, "SWITCH": True}, ensure_ascii=False))
+    #         return HttpResponse(simplejson.dumps({"CHECK":True, "SWITCH": False}, ensure_ascii=False))
+
+    Raw.sql = "SELECT TOP 1 MEASURE_CHECK_PERCENT FROM sklcc_config WITH(NOLOCK)"
+    target = Raw.query_one()
+
+    #非换批次换码
+    if target:
+        measure_check_percent = float(target[0]) / 100
+        if size: #一检
+            Raw.sql = """SELECT ISNULL(SUM(a.Number),0) size_finish_number
+                      FROM [BDDMS_MSZ].dbo.producepack a JOIN (
+	                    SELECT DISTINCT(barcode), c.batch
+	                    FROM [SKLCC].dbo.sklcc_info c WITH(NOLOCK) JOIN [SKLCC].dbo.sklcc_record d WITH(NOLOCK)
+	                    ON c.serialno = d.serialno
+	                    WHERE inspector_no = '%s' AND createtime > '%s' AND d.batch = '%s' ) b
+	                  ON a.PackTXM = b.barcode
+	                  WHERE a.Size = '%s'
+	                  """%(inspectorno, today_date, batch, size)
+        else:
+            Raw.sql = """SELECT ISNULL(SUM(samplenumber),0) sumnumber
+                         FROM (
+                           select distinct(contentid) contentid_distinct, samplenumber
+                           from sklcc_recheck_info a WITH(NOLOCK) join sklcc_recheck_content b WITH(NOLOCK)
+                           on a.serialno = b.serialno
+                           where a.batch = '%s' AND a.recheckor_no = '%s' AND a.CREATETIME > '%s'
+                         ) as table_temp"""%(batch, inspectorno, today_date )
+        sum_res = Raw.query_one()[0] #注意即便是没有数据也是0而不是没数据
+        if sum_res: #如果查到有当前批次检验数据，就开始计算当前实时部位测量比例
+            if size:#一检
+                Raw.sql = """SELECT measure_count FROM SKLCC_MEASURE_RECORD WITH(NOLOCK)
+                             WHERE BATCH = '%s' AND SIZE = '%s' AND inspector_no = '%s' AND createtime > '%s'"""%(batch, size, inspectorno, today_date)
+            else:
+                Raw.sql = """SELECT SUM(measure_count) FROM SKLCC_MEASURE_RECORD WITH(NOLOCK)
+                             WHERE BATCH = '%s' AND inspector_no = '%s' AND createtime > '%s' AND is_first_check = 0"""%(batch, inspectorno, today_date)
+            target = Raw.query_one()
+            if not target: #没有部位测量数据
+                return HttpResponse(simplejson.dumps({"CHECK":True, "PERCENT": False}, ensure_ascii=False))
+            else:
+                real_time_percent = float(target[0]) / float(sum_res)
+                jsonData = {"CHECK": True, "PERCENT": True} if real_time_percent >= measure_check_percent else {"CHECK":True, "PERCENT": False}
+                return HttpResponse(simplejson.dumps(jsonData, ensure_ascii=False))
+        else: #如果没有当前批次和尺码的检验数据，也检查当前的部位测量的比例
+            return HttpResponse(simplejson.dumps({"CHECK":True, "PERCENT": False}, ensure_ascii=False))
+    else:
+        return HttpResponse(simplejson.dumps({"CHECK":True, "PERCENT": True}, ensure_ascii=False))
+
 
 def get_employee(request):
     departmentno = request.GET['group']
@@ -1178,16 +1250,6 @@ def get_employee(request):
     else:
         return HttpResponse(target[1] + '@' + employeeno)
 
-
-# for xml example
-def print_node(node):
-    print '================='
-    print "node.attrib: %s" % node.attrib
-    # prog,mist,
-    if node.attrib.has_key("prog") > 0:
-        print "node.attrib['prog']:%s" % node.attrib['prog']
-    print "node.tag:%s" % node.tag
-    print "node.text:%s" % node.text
 
 
 def written_info_in_database(serialno="", barcode="", check_id=1, batch="", departmentno="", workno=0,
@@ -1463,6 +1525,10 @@ def commit_res(request):
         insert_info['size'] = request.POST.get('size')
         insert_info['styleno'] = request.POST.get('styleno')
         insert_info['res'] = list()
+        #为一检人员维护一个检验的当前批次和尺码
+        request.session["batch"] = insert_info["batch"]
+        request.session["size"]  = insert_info["size"]
+
         totalreturn = 0
         json = simplejson.loads(request.POST.get('res_json'))
         T = Current_time()
@@ -1536,10 +1602,9 @@ def commit_res(request):
                    u"where serialno = '%s';" % (
                        insert_info['serialno'], insert_info['serialno'], insert_info['serialno'])
         Raw.sql = SQL
-        # print SQL
         Raw.update()
         # 返回检验员当前批号总产量和条码号 防止出现漏刷情况
-        Raw.sql = "SELECT totalnumber FROM sklcc_record WHERE serialno = '%s'" % insert_info['serialno']
+        Raw.sql = "SELECT TOP 1 totalnumber FROM sklcc_record WITH(NOLOCK) WHERE serialno = '%s'" % insert_info['serialno']
         totalnumber = Raw.query_one()
         totalnumber = 0 if totalnumber == False else totalnumber[0]
 
@@ -2464,7 +2529,7 @@ def flush_buttons_recheck(request):
                         RC[0], RC[1], RC[3], RC[2], RC[4])
                 xml += "</RC>"
 
-            Raw.sql = "select TOP 1 samplenumber, totalnumber, inspector_no from sklcc_recheck_content a WITH (NOLOCK) join sklcc_recheck_info b WITH (NOLOCK) on a.serialno = b.serialno where contentid = '%s'" % contentid
+            Raw.sql = "select TOP 1 samplenumber, totalnumber, inspector_no, inspector from sklcc_recheck_content a WITH (NOLOCK) join sklcc_recheck_info b WITH (NOLOCK) on a.serialno = b.serialno where contentid = '%s'" % contentid
             target = Raw.query_one()
             samplenumber = 0
             totalnumber = 0
@@ -2474,7 +2539,7 @@ def flush_buttons_recheck(request):
                 samplenumber = target[0]
                 totalnumber = target[1]
                 inspector_no = target[2]
-                inspector = find_em_name(inspector_no)
+                inspector = target[3]
 
             xml += """<IF>"""
             xml += """<info sample = "%d" total = "%d" employeeno = "%s" employee = "%s" />""" % (
@@ -2502,7 +2567,6 @@ def flush_buttons_recheck(request):
         xml += "</xml>"
         return HttpResponse(xml)
     except Exception, e:
-        # print e
         make_log(sys._getframe().f_code.co_name + ">>>" + str(e))
 
 
@@ -2596,6 +2660,19 @@ def recheck_update_batch_and_inspector(request):
 
     return HttpResponse(simplejson.dumps(json, ensure_ascii=False))
 
+def recheck_update_inspector_by_batch(request):
+    Raw = Raw_sql()
+    Raw.sql = "SELECT distinct(inspector_no), inspector FROM SKLCC_RECORD WITH(NOLOCK) WHERE batch = '%s'"%request.GET.get("batch")
+    target_list = Raw.query_all()
+    if not target_list:
+        Raw.sql = """SELECT DISTINCT(inspector_no), inspector FROM sklcc_employee_authority a WITH(NOLOCK)
+                     JOIN sklcc_employee b WITH(NOLOCK)
+                     ON a.username = b.username
+                     WHERE authorityid = 0 AND b.username != '0000'"""
+        target_list = Raw.query_all()
+    jsonData = dict((inspector_no, inspector) for inspector_no, inspector in target_list) if target_list else {}
+    return HttpResponse(simplejson.dumps(jsonData, ensure_ascii=False))
+
 
 def find_department_no(department):
     Raw = Raw_sql()
@@ -2643,7 +2720,7 @@ def commit_res_recheck(request):
         state = 2
         is_recheck = True if root.getiterator('is_recheck')[0].text == 'true' else False
         inspector_no = root.getiterator('inspector_no')[0].text
-        inspector = find_em_name(inspector_no)
+        inspector = root.getiterator('inspector')[0].text
         recheckor_no = request.session['employeeno']
         recheckor = request.session['employee']
         totalnumber = root.getiterator('totalnumber')[0].text
@@ -3342,7 +3419,7 @@ def management(request):
         em_authority_list = get_em_authority()
 
         Raw.sql = "select top 1  days, price_permin, bald_slowtime, EQ_return_percentage, " \
-                  " form6_money_standard, form7_real_work_time, login_switch from sklcc_config"
+                  " form6_money_standard, form7_real_work_time, login_switch, measure_check_switch, measure_check_percent from sklcc_config"
         target = Raw.query_one()
         days = target[0]
         price_permin = target[1]
@@ -3351,6 +3428,8 @@ def management(request):
         money_standard = target[4]
         real_work_time = target[5]
         login_switch = target[6]
+        measure_check_switch = target[7]
+        measure_check_percent = target[8]
         rule_list = []
         Raw.sql = "select employeeno, employee, typename, typeno from sklcc_employeeno_type"
         type_list = Raw.query_all()
@@ -3493,12 +3572,14 @@ def change_config(request):
     EQ_return_percentage = float(request.GET['EQ_return_percentage'])
     form6_money_standard = float(request.GET['form6_money_standard'])
     form7_money_work_time = float(request.GET['form7_real_work_time'])
+    measure_check_percent = float(request.GET['measure_check_percent'])
     login_switch = 1 if 'open' in request.GET else 0
+    measure_check_switch = 1 if 'measure_check_switch' in request.GET else 0
     Raw = Raw_sql()
     Raw.sql = "update sklcc_config set days = %d, price_permin = %f, bald_slowtime = %f, EQ_return_percentage = %f," \
-              " form6_money_standard = %f, form7_real_work_time = %f, login_switch = %d" % (
+              " form6_money_standard = %f, form7_real_work_time = %f, login_switch = %d, measure_check_percent = %f, measure_check_switch = %d" % (
                   int(days), price_permin, bald_slowtime, EQ_return_percentage, form6_money_standard,
-                  form7_money_work_time, login_switch)
+                  form7_money_work_time, login_switch, measure_check_percent, measure_check_switch)
     Raw.update()
 
     return HttpResponseRedirect('/admini/?修改成功！#0')
@@ -3681,7 +3762,7 @@ def history_table(request):
 
 def get_check_totalnumber(employeeno, date):
     Raw = Raw_sql()
-    Raw.sql = "select totalnumber from sklcc_record where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
+    Raw.sql = "select totalnumber from sklcc_record WITH(NOLOCK) where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
         employeeno, date)
 
     totalnumber = 0
@@ -3695,7 +3776,7 @@ def get_check_totalnumber(employeeno, date):
 
 def get_check_totalreturn(employeeno, date):
     Raw = Raw_sql()
-    Raw.sql = "select totalreturn from sklcc_record where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
+    Raw.sql = "select totalreturn from sklcc_record WITH(NOLOCK) where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
         employeeno, date)
     totalreturn = 0
     target_list = Raw.query_all()
@@ -3709,26 +3790,18 @@ def get_check_totalreturn(employeeno, date):
 
 def get_check_miss(employeeno, date):
     Raw = Raw_sql()
-    Raw.sql = "select serialno from sklcc_recheck_info where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
-        employeeno, date)
-    totalreturn = 0
-    target_list = Raw.query_all()
+    Raw.sql = """SELECT ISNULL(SUM(B.RETURNNO),0) FROM SKLCC_RECHECK_INFO A WITH(NOLOCK)
+                        JOIN sklcc_recheck_content B WITH(NOLOCK)
+                        ON A.serialno = B.serialno
+                        WHERE A.inspector_no = '%s' and left( A.createtime, 10 ) = '%s'"""% (employeeno, date)
 
-    if target_list != False:
-        for target in target_list:
-            serialno = target[0]
-            Raw.sql = "select returnno from sklcc_recheck_content where serialno = '%s'" % serialno
-            returnno_list = Raw.query_all()
-            if returnno_list != False:
-                for returnno in returnno_list:
-                    totalreturn += returnno[0]
+    return Raw.query_one()[0]
 
-    return totalreturn
 
 
 def get_check_miss_totalnumber(employeeno, date):
     Raw = Raw_sql()
-    Raw.sql = "select serialno from sklcc_recheck_info where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
+    Raw.sql = "select serialno from sklcc_recheck_info WITH(NOLOCK) where inspector_no = '%s' and left( createtime, 10 ) = '%s'" % (
         employeeno, date)
 
     totalnumber = 0
@@ -3815,7 +3888,7 @@ def get_recheck_totalreturn(employeeno, date):
 
 def get_myinfo(username):
     Raw = Raw_sql()
-    Raw.sql = "select username, password, employee, employeeno from sklcc_employee where username = '%s'" % username
+    Raw.sql = "select username, password, employee, employeeno from sklcc_employee WITH(NOLOCK) where username = '%s'" % username
     target = Raw.query_one()
     employee = Employee()
 
@@ -3830,7 +3903,7 @@ def get_myinfo(username):
 
 def get_today_bald(employeeno, date):
     Raw = Raw_sql()
-    Raw.sql = "select top 1 totalnumber from sklcc_recheck_bald where recheckor_no = '%s' and left( createtime, 10 ) = '%s'" % (
+    Raw.sql = "select top 1 totalnumber from sklcc_recheck_bald WITH(NOLOCK) where recheckor_no = '%s' and left( createtime, 10 ) = '%s'" % (
         employeeno, date)
     totalnumber = 0
     target = Raw.query_one()
@@ -3843,7 +3916,7 @@ def get_today_bald(employeeno, date):
 
 def get_recheck_department(username):
     Raw = Raw_sql()
-    Raw.sql = "select distinct departmentno from sklcc_employee_authority where username = '%s' and authorityid = 1" % username
+    Raw.sql = "select distinct departmentno from sklcc_employee_authority WITH(NOLOCK) where username = '%s' and authorityid = 1" % username
     target_list = Raw.query_all()
     department_list = []
     if target_list != False:
@@ -3975,8 +4048,40 @@ def myinfo(request):
         for i in range( 0,  len(month_column_list)+2):
             sum_month_list[i] += worktime[i]
 
-    return TemplateResponse(request, html, locals())
+    #获取一检员工分尺码统计信息
+    Raw = Raw_sql()
+    Raw.sql = """SELECT b.batch,
+                        a.Size,
+                        SUM(a.Number) size_finish_number,
+                        ( SELECT TOP 1 sizenum
+                          FROM [BDDMS_MSZ].dbo.funGetBatctSizeNum(b.batch) e
+                          WHERE e.sizename = a.Size ) sizeno
+                  FROM [BDDMS_MSZ].dbo.producepack a WITH(NOLOCK) JOIN (
+	                SELECT DISTINCT(barcode), c.batch
+	                FROM [SKLCC].dbo.sklcc_info c WITH(NOLOCK) JOIN [SKLCC].dbo.sklcc_record d WITH(NOLOCK)
+	                ON c.serialno = d.serialno
+	                WHERE inspector_no = '%s' AND createtime > '%s' ) b
+	              ON a.PackTXM = b.barcode
+	              GROUP BY b.batch, a.Size"""%(em_number, Current_time.get_now_date()[:-3])
 
+    target_list = Raw.query_all()
+    batch_dict = dict()
+    if target_list:
+        for target in target_list:
+            if target[0] not in batch_dict:
+                batch_dict[target[0]] = {"finish_number":target[2],
+                                         "left_number":0,
+                                         "size_dict":{target[1]:{"finish_number": target[2],
+                                                                 "total_number": target[3],
+                                                                 "left_number": target[3] - target[2] if target[3] - target[2] >= 0 else "数据有误，请通知管理员"}}}
+
+            else:
+                batch_dict[target[0]]["finish_number"] += target[2]
+                batch_dict[target[0]]["size_dict"][target[1]]=dict(finish_number=target[2],
+                                                                   total_number=target[3],
+                                                                   left_number=target[3] - target[2] if target[3] - target[2] >= 0 else "数据有误，请通知管理员")
+            batch_dict[target[0]]["left_number"] += target[3] - target[2] if target[3] - target[2] else 0
+    return TemplateResponse(request, html, locals())
 
 
 

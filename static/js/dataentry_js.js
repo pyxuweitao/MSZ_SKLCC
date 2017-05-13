@@ -12,9 +12,9 @@ function size_confirm() {
     }
 }
 window.onload = function () {
-    window.onbeforeunload = function(event){
-        if (document.getElementById("scan_input").value.length != 0){
-            event.returnValue="有数据尚未提交"; 
+    window.onbeforeunload = function (event) {
+        if (document.getElementById("scan_input").value.length != 0) {
+            event.returnValue = "有数据尚未提交";
         }
     }
     number = document.getElementById('scan_input');
@@ -206,10 +206,10 @@ function initiallize() {
     document.getElementById("hint_program").innerHTML = '';
     document.getElementById("hint_employee").innerHTML = '';
     document.getElementById("scan_input").focus();
-    $("button.messenger-close").each(function(){
+    $("button.messenger-close").each(function () {
         this.disabled = false;
     });
-    $("#search_label").on("input",function(){
+    $("#search_label").on("input", function () {
         var base = document.getElementById("mistake_4");
         base.innerHTML = '';
         flush_search_area(xmlfile);
@@ -246,49 +246,49 @@ function flush_info() {
     $.ajax({
         url: '/update_info/' + '?code=' + document.getElementById("scan_input").value,
         success: function (e) {
-            $("div.message-success").each(function(){
-               $(this).find("button.messenger-close").each(function(){
-                   $(this).trigger("click");
-               });
+            $("div.message-success").each(function () {
+                $(this).find("button.messenger-close").each(function () {
+                    $(this).trigger("click");
+                });
             });
             xmlfile = e.toString().replace(new RegExp('unknown', 'gm'), '未知');
             build_page(xmlfile);
             $("a[href='#mistake_2'").parent().hide();
-            $("#program_1 button").each(function(){
-                if ($.trim(this.innerHTML) == '半检' ){
-                    $(this).attr("class"," button button-rounded button-flat-caution button-tiny");
+            $("#program_1 button").each(function () {
+                if ($.trim(this.innerHTML) == '半检') {
+                    $(this).attr("class", " button button-rounded button-flat-caution button-tiny");
                 }
             });
         },
         timeout: 15000,
-        error: function (err,info) {
-            if (info == "timeout"){
+        error: function (err, info) {
+            if (info == "timeout") {
                 Messenger().post({
                     //showCloseButton: true,
                     message: "网络状况不良，请重试",
                     hideAfter: 2,
-                    type:"error"
+                    type: "error"
                     //hideOnNavigate: true
                 });
-            }else{
-                if (err.status == "500"){
+            } else {
+                if (err.status == "500") {
                     Messenger().post({
                         //showCloseButton: true,
                         message: "服务器出错，请点击刷新按钮刷新页面",
                         hideAfter: 2,
-                        type:"error"
-                    //hideOnNavigate: true
+                        type: "error"
+                        //hideOnNavigate: true
                     });
-                }else{
+                } else {
                     Messenger().post({
                         //showCloseButton: true,
                         message: "网络状况不良，请重试",
                         hideAfter: 2,
-                        type:"error"
+                        type: "error"
                         //hideOnNavigate: true
                     });
                 }
-                
+
             }
             initiallize();
         },
@@ -305,10 +305,10 @@ function change_user(account) {
             xml2.onreadystatechange = function () {
                 if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "") {
                     window.location.reload(0);
-                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "notfound"){
+                } else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "notfound") {
                     alert("工号不存在,请重新登录");
                     window.location.href = '/login/';
-                }else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "superuser"){
+                } else if (xml2.readyState == 4 && xml2.status == 200 && xml2.responseText == "superuser") {
                     alert("管理员无法扫码登录,请重新登录");
                     window.location.href = '/login/';
                 }
@@ -460,7 +460,8 @@ function flush_style_measure(xmlDoc) {
     document.getElementById('measure_partition_add_col_button').click();
 }
 
-function activate() {
+function activate(tab_index) {
+    var tab_index = arguments[0] ? arguments[0] : 1;
     $('#explorer_index a').each(function () {
         this.disabled = false;
     });
@@ -468,7 +469,7 @@ function activate() {
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].disabled = false;
     }
-    document.getElementById("explorer_index").getElementsByTagName("a")[1].click();
+    document.getElementById("explorer_index").getElementsByTagName("a")[tab_index].click();
 }
 
 function flush_style_measure_history(xmlDoc) {
@@ -517,6 +518,54 @@ function flush_style_measure_history(xmlDoc) {
         }
     }
 }
+
+//不加强制部位测量的录入界面
+function regular_initialize(xmlDoc) {
+    var tabs = document.getElementById("explorer_content").getElementsByTagName("div");
+    // for (var i = 0; i < tabs.length; i++) {
+    // tabs[i].innerHTML = '';
+    // }
+    iframe = document.createElement('iframe');
+    iframe.src = '/measure_in/?batch=' + xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue + '&size=' + xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue + '&styleno=' + xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue + '&href=' + Math.random();
+    iframe.style.border = 'none';
+    iframe.style.width = '99%';
+    iframe.style.height = '455px';
+    tabs[8].appendChild(iframe);
+    //iframe.onload = function () {
+    flush_state_info(xmlDoc);
+    //};
+
+    flush_catalog_mistake(xmlDoc);
+    flush_catalog_program(xmlDoc);
+    activate();
+    console.log(xmlDoc.getElementsByTagName('measure'));
+}
+
+function measure_percent_not_satisfied_initialized(xmlDoc) {
+    alert('尺寸测量数据量达不到要求，请提交尺寸测量数据后执行其他操作');
+    var tabs = document.getElementById("explorer_content").getElementsByTagName("div");
+    iframe = document.createElement('iframe');
+    iframe.src = '/measure_in/?batch=' + xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue + '&size=' + xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue + '&styleno=' + xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue + '&href=' + Math.random();
+    iframe.style.border = 'none';
+    iframe.style.width = '99%';
+    iframe.style.height = '455px';
+    tabs[8].appendChild(iframe);
+    flush_state_info(xmlDoc);
+    flush_catalog_mistake(xmlDoc);
+    flush_catalog_program(xmlDoc);
+    activate(8);
+    var buttons = document.getElementsByTagName("button");
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
+}
+
+function switch_measure_not_satisfied(xmlDoc) {
+    alert('检测到前一个检验批次、检验尺码的尺寸测量件数不足，请刷入前一个检验批次、尺码的对应条码进行尺寸测量数据的提交！');
+    initiallize();
+    return;
+}
+
 function build_page(info) {
     console.log(info);
     var domParser = new DOMParser();
@@ -533,29 +582,46 @@ function build_page(info) {
         initiallize();
         return;
     } else if (state[0].getAttribute("value") == '1') {
-        var tabs = document.getElementById("explorer_content").getElementsByTagName("div");
-        // for (var i = 0; i < tabs.length; i++) {
-        // tabs[i].innerHTML = '';
-        // }
-        iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&styleno='+xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue+'&href='+Math.random();
-        iframe.style.border = 'none';
-        iframe.style.width = '99%';
-        iframe.style.height = '455px';
-        tabs[8].appendChild(iframe);
-        //iframe.onload = function () {
-            flush_state_info(xmlDoc);
-        //};
-        
-        flush_catalog_mistake(xmlDoc);
-        flush_catalog_program(xmlDoc);
-        activate();
-        console.log(xmlDoc.getElementsByTagName('measure'));
+        //检查该条码目前是否符合部位测量要求
+        $.ajax({
+            url: '/whether_measure_finished/?batch=' + xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue + '&size=' + xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue,
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                jsonData = JSON.parse(data);
+                //判断是否有检查尺寸测量的需求
+                if (jsonData.CHECK) {
+                    if ("PERCENT" in jsonData) {
+                        if (jsonData.PERCENT)
+                            regular_initialize(xmlDoc);
+                        else
+                            measure_percent_not_satisfied_initialized(xmlDoc);
+                    }
+                    else {
+                        if (jsonData.SWITCH)
+                            regular_initialize(xmlDoc);
+                        else
+                            switch_measure_not_satisfied(xmlDoc);
+                    }
+                }
+                else {
+                    regular_initialize(xmlDoc);
+                }
+            },
+            error: function (ajaxobj) {
+                if (ajaxobj.responseText != '')
+                    console.log(ajaxobj.responseText);
+                else
+                    console.log("whether_measure_finished fault!");
+            }
+        });
+
+
     } else if (state[0].getAttribute("value") == '3') {
         alert('已提交，暂时无法编辑');
         initiallize();
         return;
-    }else if (state[0].getAttribute("value") == '7') {
+    } else if (state[0].getAttribute("value") == '7') {
         alert('存在不可信数据，如需修改数据请到查看汇总记录单明细界面修改。');
         initiallize();
         return;
@@ -569,7 +635,7 @@ function build_page(info) {
         // tabs[i].innerHTML = '';
         // }
         iframe = document.createElement('iframe');
-        iframe.src = '/measure_in/?batch='+xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue+'&size='+xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue+'&styleno='+xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue+'&href='+Math.random();
+        iframe.src = '/measure_in/?batch=' + xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue + '&size=' + xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue + '&styleno=' + xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue + '&href=' + Math.random();
         iframe.style.border = 'none';
         iframe.style.width = '99%';
         iframe.style.height = '455px';
@@ -577,14 +643,14 @@ function build_page(info) {
 
         alert('条码已扫描过，进入继续编辑');
         //iframe.onload = function () {
-            flush_state_info(xmlDoc);
+        flush_state_info(xmlDoc);
         //}
         //flush_state_info(xmlDoc);
         flush_catalog_mistake(xmlDoc);
         flush_catalog_program(xmlDoc);
         //flush_style_measure(xmlDoc);
         //flush_style_measure_history(xmlDoc);
-        
+
         var record = xmlDoc.getElementsByTagName("Record");
         for (var i = 0; i < record.length; i++) {
             res_count[i] = record[i].getAttribute("number");
@@ -597,10 +663,31 @@ function build_page(info) {
         }
         flush_status();
         activate();
-
-    } else if (state[0].getAttribute('value') == '5') {
-        alert('尺寸测量数据量达不到要求，请进行尺寸测量');
     }
+
+    // } else if (state[0].getAttribute('value') == '5') {
+    //     alert('尺寸测量数据量达不到要求，请提交尺寸测量数据后执行其他操作');
+    //     var tabs = document.getElementById("explorer_content").getElementsByTagName("div");
+    //     iframe = document.createElement('iframe');
+    //     iframe.src = '/measure_in/?batch=' + xmlDoc.getElementsByTagName('scan_id')[0].firstChild.nodeValue + '&size=' + xmlDoc.getElementsByTagName('scan_model')[0].firstChild.nodeValue + '&styleno=' + xmlDoc.getElementsByTagName('scan_styleno')[0].firstChild.nodeValue + '&href=' + Math.random();
+    //     iframe.style.border = 'none';
+    //     iframe.style.width = '99%';
+    //     iframe.style.height = '455px';
+    //     tabs[8].appendChild(iframe);
+    //     flush_state_info(xmlDoc);
+    //
+    //     flush_catalog_mistake(xmlDoc);
+    //     flush_catalog_program(xmlDoc);
+    //     activate(8);
+    //     var buttons = document.getElementsByTagName("button");
+    //     for (var i = 0; i < buttons.length; i++) {
+    //         buttons[i].disabled = true;
+    //     }
+    // } else if (state[0].getAttribute('value') == '8') {
+    //     alert('检测到前一个检验批次、检验尺码的尺寸测量件数不足，请刷入前一个检验批次、尺码的对应条码进行尺寸测量数据的提交！');
+    //     initiallize();
+    //     return;
+    // }
     var options = {
         animation: true,
         trigger: 'hover', //触发tooltip的事件
@@ -768,13 +855,13 @@ function flush_state_info(xmlDoc) {
     var id1 = document.getElementById("scan_id");
     id1.innerHTML = ele[0].firstChild.nodeValue;
     id1.setAttribute("data-original-title", "<label style = 'font-size:20px'>" + ele[0].firstChild.nodeValue + '</label>');
-    if(document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked && $.trim(document.getElementById("barcode_index").innerHTML) != ''){
-        if (!confirm("此条码不属于"+document.getElementById("barcode_index").innerHTML+'，还要确定扫描吗？')){
+    if (document.getElementById("barcode_index").innerHTML != ele[0].firstChild.nodeValue && document.getElementById("barcode_lock").checked && $.trim(document.getElementById("barcode_index").innerHTML) != '') {
+        if (!confirm("此条码不属于" + document.getElementById("barcode_index").innerHTML + '，还要确定扫描吗？')) {
             initiallize();
             return false;
         }
 
-    }    
+    }
     document.getElementById("barcode_index").innerHTML = ele[0].firstChild.nodeValue;
 
     //id1.style.fontSize = '10px';
@@ -1097,40 +1184,37 @@ function OnClickMinus() {
     num.value = number;
 }
 var number;
-function change_num_2(myField,myValue){
-    if (document.selection) 
-    {
+function change_num_2(myField, myValue) {
+    if (document.selection) {
         myField.focus();
-        sel            = document.selection.createRange();
-        sel.text    = myValue;
+        sel = document.selection.createRange();
+        sel.text = myValue;
         sel.select();
     }
     //MOZILLA/NETSCAPE support
-    else if (myField.selectionStart || myField.selectionStart == '0') 
-    {
-        var startPos      = myField.selectionStart;
-        var endPos        = myField.selectionEnd;
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
         // save scrollTop before insert
-        var restoreTop    = myField.scrollTop;
-        myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
-        if (restoreTop > 0)
-        {
+        var restoreTop = myField.scrollTop;
+        myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+        if (restoreTop > 0) {
             // restore previous scrollTop
             myField.scrollTop = restoreTop;
         }
         myField.focus();
-        myField.selectionStart    = startPos + myValue.toString().length;
-        myField.selectionEnd    = startPos + myValue.toString().length;
+        myField.selectionStart = startPos + myValue.toString().length;
+        myField.selectionEnd = startPos + myValue.toString().length;
         console.log(myValue.length);
     } else {
         myField.value += myValue;
         myField.focus();
-        myField.selectionStart    = startPos + myValue.toString().length;
-        myField.selectionEnd    = startPos + myValue.toString().length;
+        myField.selectionStart = startPos + myValue.toString().length;
+        myField.selectionEnd = startPos + myValue.toString().length;
     }
 }
 function OnClickNum(input) {
-    change_num_2(number,parseInt(input.innerHTML));
+    change_num_2(number, parseInt(input.innerHTML));
     //number.value = num;
     if (number.id == 'search_label') {
         var base = document.getElementById("mistake_4");
@@ -1144,41 +1228,38 @@ function onclicknumclear() {
     number.value = '';
     number.focus();
 }
-function del_2(myField){
-     var myValue = "";
-    if (document.selection) 
-    {
+function del_2(myField) {
+    var myValue = "";
+    if (document.selection) {
         myField.focus();
-        sel            = document.selection.createRange();
-        sel.text    = myValue;
+        sel = document.selection.createRange();
+        sel.text = myValue;
         sel.select();
     }
     //MOZILLA/NETSCAPE support
-    else if (myField.selectionStart || myField.selectionStart == '0') 
-    {
-        var startPos    = myField.selectionStart;
-        var endPos        = myField.selectionEnd;
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
         // save scrollTop before insert
-        var restoreTop    = myField.scrollTop;
-        if (startPos == endPos){
-            myField.value    = myField.value.substring(0, startPos-1) + myValue + myField.value.substring(endPos, myField.value.length);
-        }else{
-            myField.value    = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+        var restoreTop = myField.scrollTop;
+        if (startPos == endPos) {
+            myField.value = myField.value.substring(0, startPos - 1) + myValue + myField.value.substring(endPos, myField.value.length);
+        } else {
+            myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
         }
-        if (restoreTop > 0)
-        {
+        if (restoreTop > 0) {
             // restore previous scrollTop
             myField.scrollTop = restoreTop;
         }
         //myField.focus();
-        if (startPos == endPos){
-            myField.selectionStart    = startPos-1;
-            myField.selectionEnd    = startPos -1;
-        }else{
-            myField.selectionStart    = startPos;
-            myField.selectionEnd    = startPos;
+        if (startPos == endPos) {
+            myField.selectionStart = startPos - 1;
+            myField.selectionEnd = startPos - 1;
+        } else {
+            myField.selectionStart = startPos;
+            myField.selectionEnd = startPos;
         }
-        
+
     } else {
         myField.value += myValue;
         myField.focus();
@@ -1326,13 +1407,13 @@ function OnCommit() {
     //$('.alert').alert()
     submit();
 }
-var last_code ;
+var last_code;
 var commit_cache = [];
 function submit() {
     if ($.trim(document.getElementById("hint_program").innerHTML) != "" &&
         $.trim(document.getElementById("hint_employee").innerHTML) != "" &&
-        $.trim(document.getElementById("hint_mistake").innerHTML) != ""){
-        if (!confirm("缓冲区有数据，是否提交？")){
+        $.trim(document.getElementById("hint_mistake").innerHTML) != "") {
+        if (!confirm("缓冲区有数据，是否提交？")) {
             return 0;
         }
     }
@@ -1364,13 +1445,14 @@ function submit() {
         var mistake_name = $.trim(res_table[i].getElementsByTagName("td")[3].innerHTML);
         var work_name = $.trim(res_table[i].getElementsByTagName("td")[1].innerHTML);
         temp_res_json.push(
-            {work_no:res_program_no[i],
-                mistake_no:res_mistake_no[i],
-                count:res_count[i],
-                employee_name:res_employee[i],
-                employee_no:res_employeeno[i],
-                mistake_name:mistake_name,
-                work_name:work_name
+            {
+                work_no: res_program_no[i],
+                mistake_no: res_mistake_no[i],
+                count: res_count[i],
+                employee_name: res_employee[i],
+                employee_no: res_employeeno[i],
+                mistake_name: mistake_name,
+                work_name: work_name
             }
         );
         //resultxml = resultxml + "<" + 're mist' + '="' + res_mistake_no[i] + '\" prog = \"' + res_program_no[i] + '\" count = \"' + res_count[i] + '\" employeeno=\"' + res_employeeno[i] + '\" employee=\"' + res_employee[i] + '\"/>';
@@ -1380,81 +1462,84 @@ function submit() {
     //resultxml += JSON.stringify(json);
     //resultxml += '&size=' + document.getElementById('scan_model').innerHTML;
     console.log(resultxml);
-    last_code = $.trim(document.getElementById('scan_input').value)+"";
-    if(!window.localStorage){
+    last_code = $.trim(document.getElementById('scan_input').value) + "";
+    if (!window.localStorage) {
         alert("此浏览器不支持本地存储，提示功能可能无法使用")
     }
-    function insert_into_history(){
+    function insert_into_history() {
         var list = window.localStorage["dataentry_history"].split(";");
         var found = false;
-        for (var i = 0;i<list.length;i++){
-            if (list[i] == last_code){
+        for (var i = 0; i < list.length; i++) {
+            if (list[i] == last_code) {
                 found = true;
                 break;
             }
         }
-        if (!found){
-            window.localStorage["dataentry_history"] += ';'+last_code;
+        if (!found) {
+            window.localStorage["dataentry_history"] += ';' + last_code;
         }
     }
-    if (window.localStorage["dataentry_history"] != undefined){
+
+    if (window.localStorage["dataentry_history"] != undefined) {
         insert_into_history()
-    }else{
+    } else {
         window.localStorage["dataentry_history"] = '';
         insert_into_history()
     }
-    function delete_from_history (code) {
+    function delete_from_history(code) {
         var list = window.localStorage["dataentry_history"].split(";");
         window.localStorage["dataentry_history"] = "";
         var found = false;
-        for (var i = 0;i<list.length;i++){
-            if (list[i] != code && list[i] != ""){
-                window.localStorage["dataentry_history"] += ";"+list[i];
+        for (var i = 0; i < list.length; i++) {
+            if (list[i] != code && list[i] != "") {
+                window.localStorage["dataentry_history"] += ";" + list[i];
             }
         }
-        
+
     }
+
     function read_history() {
         var list = window.localStorage["dataentry_history"].split(";");
         var hint_str = "";
-        for (var i = 0;i<list.length;i++){
-            if (list[i] != last_code && list[i] != ""){
-                if(confirm("检测到"+list[i]+"未提交成功，需要取消这张条码的提示吗？")){
+        for (var i = 0; i < list.length; i++) {
+            if (list[i] != last_code && list[i] != "") {
+                if (confirm("检测到" + list[i] + "未提交成功，需要取消这张条码的提示吗？")) {
                     delete_from_history(list[i]);
                 }
             }
         }
     }
-    var x = function(){
+
+    var x = function () {
         var last_code = resultxml.split("&")[0].split("=")[1];
         var msg = Messenger().run(
-        {
-            action: $.ajax,
-            successMessage: last_code+'提交成功',
-            errorMessage: last_code+'网络状况不良',
-            progressMessage: '提交中...',
-            hideAfter:10000,
-            showCloseButton:true
-        },
-        {
-            url: '/commit_res/',
-            type: 'POST',
-            data: resultxml,
-            success: function (e) {
-                delete_from_history(e.split(";")[1]);
-                read_history();
-                return last_code+'提交成功，此批号产量为'+e.split(";")[0];
+            {
+                action: $.ajax,
+                successMessage: last_code + '提交成功',
+                errorMessage: last_code + '网络状况不良',
+                progressMessage: '提交中...',
+                hideAfter: 10000,
+                showCloseButton: true
             },
-            error: function (err,info) {
-                read_history();
-                if (err.status == "500"){
-                    alert("服务器出错，请报告");
-                }
-                return ;
-            },
-            timeout: 15000,
-            async: true
-        });
+            {
+                url: '/commit_res/',
+                type: 'POST',
+                data: resultxml,
+                success: function (e) {
+                    delete_from_history(e.split(";")[1]);
+                    read_history();
+                    return last_code + '提交成功，此批号产量为' + e.split(";")[0];
+                },
+                error: function (err, info) {
+                    read_history();
+                    if (err.status == "500") {
+                        alert("服务器出错，请报告");
+                    }
+                    return;
+                },
+                timeout: 15000,
+                async: true
+            });
     }
 
     x();
@@ -1490,11 +1575,11 @@ function submit() {
 
 
 }
-function clear_cache(codenumber){
-    for (var i=0;i<commit_cache.length;i++){
-        if (commit_cache[i].codenumber == codenumber){
+function clear_cache(codenumber) {
+    for (var i = 0; i < commit_cache.length; i++) {
+        if (commit_cache[i].codenumber == codenumber) {
             alert();
-            commit_cache.splice(i,1); 
+            commit_cache.splice(i, 1);
         }
     }
 }

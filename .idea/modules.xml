@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" filepath="$PROJECT_DIR$/.idea/MSZ_SKLCC.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../sklcc/MSZ_YCL/Server/.idea/MSZ_YCL.iml" filepath="$PROJECT_DIR$/../../sklcc/MSZ_YCL/Server/.idea/MSZ_YCL.iml" />
       <module fileurl="file://$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" filepath="$PROJECT_DIR$/../WebSpider/.idea/WebSpider.iml" />
       <module fileurl="file://$PROJECT_DIR$/../python2.7/.idea/python2.7.iml" filepath="$PROJECT_DIR$/../python2.7/.idea/python2.7.iml" />
     </modules>
   </component>
 </project>
-

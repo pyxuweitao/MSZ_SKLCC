@@ -98,36 +98,12 @@
         //             "sLast": " 最后一页 " }
         //     }
         // });
-
-        //**dataURL to blob**
-        function dataURLtoBlob(dataurl) {
-            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], {type: mime});
-        }
-
-        //**blob to dataURL**
-        function blobToDataURL(blob, callback) {
-            var a = new FileReader();
-            a.onload = function (e) {
-                callback(e.target.result);
-            };
-            a.readAsDataURL(blob);
-        }
-
         $("#download").on('click', function () {
             document.getElementById('copy').style.display = 'block';
             var uri = $("#copy").btechco_excelexport({
                 containerid: "copy", datatype: $datatype.Table, returnUri: true
             });
-            var blob = dataURLtoBlob(uri);
-            console.log(blob);
-            var csvUrl = URL.createObjectURL(blob);
-            console.log(csvUrl);
-            $(this).attr('download', '下载.xls').attr('href', csvUrl).attr('target', '_blank');
+            $(this).attr('download', '下载.xls').attr('href', uri).attr('target', '_blank');
             document.getElementById('copy').style.display = 'none';
         });
     }
@@ -182,7 +158,7 @@
                         {% for temp in mistake_value.res %}
                         <td>{{temp}}</td>
                         {% endfor %}
-                        <td>111</td>
+                        <td></td>
                         {% endfor %}
                     </tr>
                     {% endfor %}

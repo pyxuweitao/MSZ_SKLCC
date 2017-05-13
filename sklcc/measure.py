@@ -341,6 +341,8 @@ def measure_commit(request):
         # written_into_measure_record( dict( serialno = serialno, createtime = createtime, inspector = inspector, inspector_no = inspector_no,
         # batch = batch, styleno = styleno, size = size, measure_count = count_id, departmentno = departmentno ), 'True' )
         Raw.sql = SQL
+        with open("e:\\a.txt", "w") as f:
+            f.write(SQL)
         Raw.update()
 
         return HttpResponse()

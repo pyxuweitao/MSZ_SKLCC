@@ -99,13 +99,29 @@
             <p class="help-block">默认:27000.0</p>
         </div>
         <div>
-            <label for="default_days">扫描条码登录开关</label>
+            <label for="default_days">扫描条码登录开关(勾选表示打开)</label>
             <br>
             {% ifequal login_switch 1 %}
             <input type="checkbox" checked name="open" disabled="disabled" style="zoom:200%;"/>
             {% else %}
             <input type="checkbox" name="open" disabled="disabled" style="zoom:200%;"/>
             {% endifequal %}
+        </div>
+        <div>
+            <label for="default_days">尺寸测量强制录入开关(勾选表示打开)</label>
+            <br>
+            {% ifequal measure_check_switch 1 %}
+            <input type="checkbox" checked name="measure_check_switch" disabled="disabled" style="zoom:200%;"/>
+            {% else %}
+            <input type="checkbox" name="measure_check_switch" disabled="disabled" style="zoom:200%;"/>
+            {% endifequal %}
+        </div>
+        <div class="form-group">
+            <label for="default_days">尺寸测量强制录入百分比</label>
+            <input type="text" class="form-control" id="measure_check_percent" placeholder="measure_check_percent" name="measure_check_percent"
+                   disabled="disabled" value="{{ measure_check_percent }}">
+
+            <p class="help-block">修改请输入不带百分号的纯数字，如欲修改为1.5%，则填写1.5</p>
         </div>
         <button type="button" class="btn btn-default" onclick="return ip_port_change_button(this)">修改
         </button>

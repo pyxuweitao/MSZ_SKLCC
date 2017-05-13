@@ -10,7 +10,10 @@
 
     {% endblock %}
 </head>
+{#防止measure_check_info页面没有x轴滚动条#}
+{% block bodyOverFlow %}
 <body style="overflow-x: hidden">
+{% endblock bodyOverFlow %}
 <datalist id="session_inspector">
     <data value="{{ em_number }}"></data>
     <data value="{{ employeename }}"></data>

@@ -20,13 +20,6 @@
             }else{
 
             }
-            if ($.cookie('destination') != null){
-                //alert();
-                console.log($.cookie('destination'));
-                $('#'+$.cookie('destination')).attr("checked",true);
-            }else{
-                $("#radio_raw").attr("checked",true);
-            }
             // $('.alert').alert();
         };
         $('body').keyup(function(e){
@@ -89,21 +82,10 @@
                         <input type="password" value="" maxlength="100" id="password" class="form-control hint"
                                name="em_password" onfocus=""/>
                     </div>
-                    
-                    <div class="fm-item" style="top:30px">
-                        选择要进入的系统：
-                        <input class="form-label" type="radio"  name="destination" id="radio_raw" onclick="save_choice(this)"/>原材料
-                        <input class="form-label" type="radio"  name="destination" id="radio_product" onclick="save_choice(this)"/>成品
-                        <input class="form-label" type="radio"  name="destination" id="radio_model" onclick="save_choice(this)"/>模压
-                    </div>
-                    <script>
-                        function save_choice(node){
-                            $.cookie("destination",node.getAttribute("id"),{expires:7});
-                        }
-                    </script>
                     <div class="fm-item">
                         <input class="form-label" type="checkbox" id="is_save"/>记住我
                     </div>
+
                     <div class="fm-item">
                         <label class="form-label"> 忘记密码请联系管理员</label>
                         <button type="button" value="" tabindex="4" id="send-btn" class="btn btn-block btn-info" onclick = "return onlogin()">登录

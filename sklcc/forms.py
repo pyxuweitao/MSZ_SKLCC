@@ -687,8 +687,11 @@ def total_strong_question( request ):
 	Raw.sql = '''SELECT LEFT(CREATETIME,10) date, SUM( returnno ) total, questionname, questionno, inspector_no, inspector
   				FROM SKLCC_INFO A JOIN SKLCC_RECORD B ON A.SERIALNO = B.SERIALNO
 				WHERE LEFT( CREATETIME,10 )>='%s' AND LEFT(CREATETIME, 10) <= '%s' AND A.TYPE = 2
+				AND A.questionno in (SELECT distinct QuestionNO FROM [BDDMS_MSZ].dbo.QCQuestion WHERE isStrong = 1)
+				AND B.inspector_no in (select distinct username from sklcc_employee_authority WITH(NOLOCK) where authorityid = 0
+              	except select distinct username from sklcc_employee_authority WITH(NOLOCK) where authorityid = 22)
 				GROUP BY LEFT(CREATETIME,10), questionname, questionno, inspector_no, inspector
-				ORDER BY inspector_no, date  desc'''%(start,end)
+				ORDER BY inspector_no, date desc'''%(start,end)
 	target_list = Raw.query_all()
 
 	if target_list != False:
@@ -1338,7 +1341,7 @@ def form_return_check( request ):
 	target_list            = []
 	return_check_list      = []
 	for departmentno in departmentno_list:
-		Raw.sql = "select distinct a.serialno, inspector_no, inspector, check_id, check_type, real_return, ok, totalreturn, b.batch, " \
+		Raw.sql = "select distinct a.serialno, inspector_no, inspector, check_id, check_type, real_return, ok, b.totalreturn, b.batch, " \
 		          " b.createtime, b.totalnumber from sklcc_return_check a join sklcc_record b on a.serialno = b.serialno where left( b.createtime, 10 ) " \
 		          ">= '%s' and left( b.createtime, 10 ) <= '%s' and departmentno = '%s' and a.state = 1" % (
 		          start, end, departmentno )
@@ -1543,6 +1546,7 @@ def recheckor_total_strong_problem( request ):
 
 	except Exception,e:
 		pass
+
 
 
 
